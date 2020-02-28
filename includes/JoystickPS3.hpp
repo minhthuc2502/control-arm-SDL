@@ -73,10 +73,6 @@ typedef enum{
 class JoystickPS3:public JoystickI, public UdevHandler {
 private:
   SDL_Joystick *joy;
-  int fd_;
-  struct libevdev *dev_;
-  //std::function wrapping a function pointer that point to FindDevnode
-  std::function<bool(udev_device* dev)> pt2FindDevnode;
   arm_event movement_;
 
   arm_event initEvent(arm_event movement);
@@ -84,24 +80,9 @@ private:
     *        treatement to find device Node
     * @param device to Check
     */
-  bool FindDevnode(udev_device* dev);
-  /// @brief this method print all informations get by libevdev
-  void PrintInfo();
-  /** @brief this method print abscisse information (max, min, flat, fuzz, resolution)
-    * @param libevdev device (context of libevdev)
-    * @param enum value corrsponding to an axis (ABS_X, ...)
-    */
-  void PrintAbsBits(struct libevdev *, unsigned int);
-  /** @brief this method print event information (time, type, code, value)
-    * @param pointer to the input_event to print
-    */
   //void PrintEvent(struct input_event*);
   void PrintEvent(SDL_Event*); 
   /// @brief this method allow the device's event configuration
-  bool EvdevConfiguration();
-  /** @brief this method set the movement structure base on event receive
-    * @param pointer to the reveived input_event
-    */
   void SetMovement(SDL_Event*);
   //void SetMovement(struct input_event*)/*, arm_event movement)*/;
   /** @brief this method is a convenient method to reduce switch case size
@@ -118,7 +99,7 @@ private:
   void SetForceFeedback();
 
 public:
-  JoystickPS3(): fd_(-1), dev_(NULL),pt2FindDevnode(std::bind(&JoystickPS3::FindDevnode, this, std::placeholders::_1)), movement_() {};
+  JoystickPS3(){};
   ~JoystickPS3() {
     if(IsOpen()){
       this->Close();

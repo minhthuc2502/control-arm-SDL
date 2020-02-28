@@ -1,21 +1,24 @@
 cmake_minimum_required( VERSION 3.1 )
 set (CMAKE_BUILD_TYPE Debug)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
-
 project (C++_arm_PS3joystick)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/include/SDL2 -D_REENTRANT")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")  #-Werror -D_REENTRANT")
 set(CMAKE_MODULE_PATH $ENV{BUILD_SRC}/CMake)
 
 find_package(Libevdev REQUIRED)
 find_package(Libudev REQUIRED)
 find_package(SDL2 REQUIRED)
 
+#
+# Declare the directories of header file
+#
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes
                     ${EVDEV_INCLUDE_DIRS}
                     ${UDEV_INCLUDE_DIRS}
                     ${SDL2_INCLUDE_DIRS}
                     )
-
+#
+# Add source file
+#
 set(SOURCES
     src/JoystickPS3.cpp
     src/main.cpp
@@ -35,10 +38,17 @@ if(RPI)
   add_definitions(-DRPI)
 endif()
 
+#
+# Define the relation between file execute and source file
+#
 add_executable(armDev ${SOURCES})
 
 set_property(TARGET armDev PROPERTY CXX_STANDARD 11)
 message(STATUS "EVDEV_LEDFLAGS = ${EVDEV_LDFLAGS}")
+
+#
+# Use the library 
+#
 target_link_libraries(armDev
                       ${EVDEV_LIBRARIES} ${EVDEV_LDFLAGS}
                       ${UDEV_LIBRARIES} ${UDEV_LDFLAGS}
