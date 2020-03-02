@@ -73,7 +73,7 @@ typedef enum{
 class JoystickPS3:public JoystickI, public UdevHandler {
 private:
   SDL_Joystick *joy;
-  arm_event movement_;
+  arm_event movement_ = {};
 
   arm_event initEvent(arm_event movement);
   /** @brief this method is call in ProcessDeviceList to apply the proper

@@ -67,6 +67,7 @@ bool ArmAL5D::Write(arm_event move) {
   int rc;
 
   if(move.BtnStatus != 0){
+    printf("TEST IN\n");
     vectorBtnCmd = BtnStatusTranslate(move.BtnStatus);
     for(unsigned int i = 0; i<vectorBtnCmd.size(); i++){
       finalCmd += vectorBtnCmd[i];
@@ -171,7 +172,7 @@ bool ArmAL5D::MoveToInitialPosition() {
   for(int i = 0; i<6; i++) {
     cmd = joints_[i].pinNumber
             + "P" + std::to_string(joints_[i].initPosition)
-                + "T" + std::to_string(10000)
+                + "S" + std::to_string(500)
                     + "\r";
     LOG_D("Initialization cmd --> %s", cmd.c_str());
     if((rc = write(fd_, cmd.c_str(), cmd.size())) == -1){

@@ -149,10 +149,11 @@ void TransmitionQueue::EventConsumer() {
       mutexQueue_.lock();
       writed = useArm_->Write(queue_.front());
       if(writed == false){
-        LOG_E("an error occur when tying to write queue element");
+        LOG_E("an error occur when trying to write queue element");
         mutexQueue_.unlock();
         break;
       }
+      // remove the next command
       queue_.pop();
       mutexQueue_.unlock();
     }
