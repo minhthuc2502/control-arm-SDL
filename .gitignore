@@ -31,3 +31,7 @@
 *.out
 *.app
 out/host/*
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+Makefile

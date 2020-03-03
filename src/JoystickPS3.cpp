@@ -293,10 +293,7 @@ void JoystickPS3::SetMovement(SDL_Event* ev) {  //arm_event movement = initEvent
       #endif
     }
   }
-  printf("Value of previousEventIsMo %d\n", previousEventIsMo);
-
   if(ev->type == SDL_JOYAXISMOTION && previousEventIsMo == 0){
-    printf("Value of previousEventIsMo %d\n", previousEventIsMo);
     if(ev->jaxis.axis == 0) {
       if(ev->jaxis.value > 140) {
         movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_x_left;
