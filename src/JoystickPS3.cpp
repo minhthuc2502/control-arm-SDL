@@ -40,6 +40,7 @@ bool JoystickPS3::Open() {
     
   }
   isOpen = true;
+  previousEventIsMo = false;
   return true;
 }
 
@@ -93,11 +94,11 @@ arm_event JoystickPS3::initEvent(arm_event movement){
 }
 
 void JoystickPS3::PrintEvent(SDL_Event* ev) {
-  /*if(ev->type == SDL_JOYAXISMOTION){
+  if(ev->type == SDL_JOYAXISMOTION){
     printf("Event:  axis %d of joystick value: %d \n",
     ev->jaxis.axis, //return axis correspondant on joystick
     ev->jaxis.value); //return event value
-  }*/
+  }
   if(ev->type == SDL_JOYBUTTONDOWN){
     printf("Event: button %d of joystick down \n",
     ev->jbutton.button); /*return button correspondant on joystick*/
@@ -111,82 +112,100 @@ void JoystickPS3::PrintEvent(SDL_Event* ev) {
 /**
  * Analyse the event and set status of movement
 */
-void JoystickPS3::SetMovement(SDL_Event* ev) {
-  //arm_event movement = initEvent(movement);
+void JoystickPS3::SetMovement(SDL_Event* ev) {  //arm_event movement = initEvent(movement);
   if(ev->type == SDL_JOYBUTTONDOWN){
     if(ev->jbutton.button == 0){
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_south);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == 1) {
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_east);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == 2) {
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_north);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == 3) {
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_west);;
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == 4) {
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_tl);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == 5) {
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_tr);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == 6) {
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_thumbl);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == 7) {
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_thumbr);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == 9) {
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_start);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
+    if(ev->jbutton.button == 10) {
+      previousEventIsMo = true;
+      #ifdef DEBUG
+        LOG_D("event button %d (value=1)", ev->jbutton.button);
+      #endif
+    }
     if(ev->jbutton.button == 13) {
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_dpad_up);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == 14) {
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_dpad_down);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == 15) {
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_dpad_left);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == 16) {
+      previousEventIsMo = false;
       ApplyMask(movement_.BtnStatus, 1, mask_btn_dpad_right);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
@@ -194,7 +213,7 @@ void JoystickPS3::SetMovement(SDL_Event* ev) {
     }
   }
 
-  else if(ev->type == SDL_JOYBUTTONUP){
+  if(ev->type == SDL_JOYBUTTONUP){
     if(ev->jbutton.button == 0){
       ApplyMask(movement_.BtnStatus, 0, mask_btn_south);
       #ifdef DEBUG
@@ -274,8 +293,10 @@ void JoystickPS3::SetMovement(SDL_Event* ev) {
       #endif
     }
   }
-  /*else if(ev->type == SDL_JOYAXISMOTION){
-    printf("Test Begin \n");
+  printf("Value of previousEventIsMo %d\n", previousEventIsMo);
+
+  if(ev->type == SDL_JOYAXISMOTION && previousEventIsMo == 0){
+    printf("Value of previousEventIsMo %d\n", previousEventIsMo);
     if(ev->jaxis.axis == 0) {
       if(ev->jaxis.value > 140) {
         movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_x_left;
@@ -351,7 +372,7 @@ void JoystickPS3::SetMovement(SDL_Event* ev) {
       LOG_D("event ABS_y (value=%d) => %s", ev->jaxis.value, binaire(16, movement_.AbsStatus));
     #endif
   }
-  }*/
+  }
 }
 
 void JoystickPS3::ApplyMask(int32_t& statusRegistre, int value, int mask){

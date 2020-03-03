@@ -17,7 +17,7 @@
 class JoystickI {
 protected:
   bool isOpen;
-
+  bool previousEventIsMo;
 public:
   JoystickI(): isOpen(false){};
   virtual ~JoystickI() {};

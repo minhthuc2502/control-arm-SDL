@@ -67,7 +67,6 @@ bool ArmAL5D::Write(arm_event move) {
   int rc;
 
   if(move.BtnStatus != 0){
-    printf("TEST IN\n");
     vectorBtnCmd = BtnStatusTranslate(move.BtnStatus);
     for(unsigned int i = 0; i<vectorBtnCmd.size(); i++){
       finalCmd += vectorBtnCmd[i];
