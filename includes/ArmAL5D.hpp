@@ -58,7 +58,6 @@
 #define SERVO_5_DEFAULT     1450
 #define SERVO_5_LIMIT_L     600  //left
 
-
 typedef struct {
   std::string pinNumber;
   int actualPosition;

@@ -23,10 +23,24 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <SDL.h>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <string>
+
 #define SUBSYSTEM   "input"
 #define ID_VENDOR_P "ID_VENDOR_ID"
 #define ID_VENDOR_V "054c"
 #define GAMEPAD_P   "ID_INPUT_JOYSTICK"
+
+
+// value of hat in NINTENDO SDL
+#define SDL_HAT_UP_NIN                 1
+#define SDL_HAT_DOWN_NIN               4
+#define SDL_HAT_LEFT_NIN               8 
+#define SDL_HAT_RIGHT_NIN              2
+
+
 
 typedef enum{
   mask_btn_south      = 0b1 << elbow_right,
@@ -75,10 +89,10 @@ private:
   SDL_Joystick *joy;
   arm_event movement_ = {};
 
-  arm_event initEvent(arm_event movement);
-  /** @brief this method is call in ProcessDeviceList to apply the proper
-    *        treatement to find device Node
-    * @param device to Check
+  void init();
+  /** @brief this method is call in joystick open to initialize
+    *        the value of joystick
+    * @param none
     */
   //void PrintEvent(struct input_event*);
   void PrintEvent(SDL_Event*); 
@@ -113,6 +127,10 @@ public:
   /// @brief method inherite from the joystick interface, return next input_event
   arm_event Read();
   /// @brief method inherite from the joystick interface, return value battery
+  bool Getconfig(char*);
+  /** @brief method inherite from the joystick interface, get the parameters configuration
+    * @param char* path of config file
+    */
   int GetBattery();
   /** @brief method inherite from the joystick interface, control physical notification
     * @param structure arm_notification to Process

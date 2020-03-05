@@ -1,3 +1,6 @@
-#!/bin/bash -eu
+#!/bin/sh
 
-$BUILD_SRC/script/buildHelper.sh "$( cd "$( dirname "${BASH_SOURCE[0]}" )" & pwd )" $@
+cd out
+cmake ..
+make
+cd -
