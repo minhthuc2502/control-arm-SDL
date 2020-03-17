@@ -76,8 +76,7 @@ int main(int argc, char *argv[]) {
   }else{
     if(!PS3.Getconfig(pathConfig))
       return 0;
-    else
-      tQueue.SetUseJoystick(&PS3);
+    tQueue.SetUseJoystick(&PS3);
   }
 
   if(AL5D.Open() == false) {

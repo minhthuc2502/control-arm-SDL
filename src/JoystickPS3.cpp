@@ -154,9 +154,13 @@ bool JoystickPS3::Open() {
       isOpen = false;
       return false;
     }
-    
+    isOpen = true;  
   }
-  isOpen = true;
+  else
+  {
+    return false;
+  }
+  
   init();
   return true;
 }
