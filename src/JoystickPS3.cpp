@@ -39,7 +39,7 @@ void JoystickPS3::init(){
 }
 bool JoystickPS3::Getconfig(char* fileConfig){
   // No need to call close
-  std::ifstream cFile (fileConfig);   //"../config/Sony PLAYSTATION(R)3 Controller.cfg"
+  std::ifstream cFile (fileConfig);
   if (cFile.is_open())
   {
       std::string line;
@@ -193,14 +193,6 @@ bool JoystickPS3::Close(){
    }
    newMovement = IsNewEvent();
   return newMovement;
-}
-
-int JoystickPS3::GetBattery() {
-  return 100;
-}
-
-void JoystickPS3::SetNotification(arm_notification notif){
-  //coming soon
 }
 
 //------------------------------------------------------------------------------
@@ -445,83 +437,6 @@ void JoystickPS3::SetMovement(SDL_Event* ev) {
       #endif
     }
   }
-  /*if(ev->type == SDL_JOYAXISMOTION && previousEventIsMo == 0){
-    if(ev->jaxis.axis == 0) {
-      if(ev->jaxis.value > 140) {
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_x_left;
-        movement_.AbsStatus = movement_.AbsStatus |  mask_abs_x_right;
-      }
-      else if(120 < ev->jaxis.value && 140 > ev->jaxis.value){
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_x_left;
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_x_right;
-      }
-      else{
-        movement_.AbsStatus = movement_.AbsStatus |  mask_abs_x_left;
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_x_right;
-      }
-      movement_.valueAbs[BASE] = ev->jaxis.value;
-    #ifdef DEBUG
-      LOG_D("event ABS_x (value=%d) => %s", ev->jaxis.value, binaire(16, movement_.AbsStatus));
-    #endif
-  }
-
-    else if(ev->jaxis.axis == 1) {
-      if(ev->jaxis.value > 140) {
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_y_left;
-        movement_.AbsStatus = movement_.AbsStatus |  mask_abs_y_right;
-      }
-      else if(120 < ev->jaxis.value && 140 > ev->jaxis.value){
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_y_left;
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_y_right;
-      }
-      else{
-        movement_.AbsStatus = movement_.AbsStatus |  mask_abs_y_left;
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_y_right;
-      }
-      movement_.valueAbs[SHOULDER] = ev->jaxis.value;
-    #ifdef DEBUG
-      LOG_D("event ABS_y (value=%d) => %s", ev->jaxis.value, binaire(16, movement_.AbsStatus));
-    #endif
-  }
-
-    else if(ev->jaxis.axis == 3) {
-      if(ev->jaxis.value > 140) {
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_rx_left;
-        movement_.AbsStatus = movement_.AbsStatus |  mask_abs_rx_right;
-      }
-      else if(120 < ev->jaxis.value && 140 > ev->jaxis.value){
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_rx_left;
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_rx_right;
-      }
-      else{
-        movement_.AbsStatus = movement_.AbsStatus |  mask_abs_rx_left;
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_rx_right;
-      }
-      movement_.valueAbs[ELBOW] = ev->jaxis.value;
-    #ifdef DEBUG
-      LOG_D("event ABS_y (value=%d) => %s", ev->jaxis.value, binaire(16, movement_.AbsStatus));
-    #endif
-  }
-
-    else if(ev->jaxis.axis == 4) {
-      if(ev->jaxis.value > 140) {
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_ry_left;
-        movement_.AbsStatus = movement_.AbsStatus |  mask_abs_ry_right;
-      }
-      else if(120 < ev->jaxis.value && 140 > ev->jaxis.value){
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_ry_left;
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_ry_right;
-      }
-      else{
-        movement_.AbsStatus = movement_.AbsStatus |  mask_abs_ry_left;
-        movement_.AbsStatus = movement_.AbsStatus &~ mask_abs_ry_right;
-      }
-      movement_.valueAbs[WRIST] = ev->jaxis.value;
-    #ifdef DEBUG
-      LOG_D("event ABS_y (value=%d) => %s", ev->jaxis.value, binaire(16, movement_.AbsStatus));
-    #endif
-  }
-  }*/
 }
 
 void JoystickPS3::ApplyMask(int32_t& statusRegistre, int value, int mask){

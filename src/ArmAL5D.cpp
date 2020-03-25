@@ -94,11 +94,6 @@ bool ArmAL5D::Write(arm_event move) {
   return true;
 }
 
-arm_notification ArmAL5D::GetNotification() {
-  arm_notification a;
-  return a;
-}
-
 //------------------------------------------------------------------------------
 //  Private methods
 //------------------------------------------------------------------------------

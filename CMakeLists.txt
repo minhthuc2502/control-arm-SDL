@@ -25,6 +25,7 @@ set(SOURCES
     src/ArmAL5D.cpp
     src/TransmitionQueue.cpp
     src/log.cpp
+    src/Server.cpp
     )
 
 option(DEBUG "use debug file" OFF)

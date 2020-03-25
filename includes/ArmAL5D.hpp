@@ -67,7 +67,7 @@ typedef struct {
 }ARM;
 
 class ArmAL5D:public ArmI, public UdevHandler {
-private:
+protected:
   int fd_;
   ARM joints_[6];
   //std::function wrapping a function pointer that point to FindDevnode
@@ -118,8 +118,6 @@ public:
     * @param arm_event wich contain movement's informations
     */
   bool Write(arm_event);
-  /// @brief method inherite from the arm interface, return notification
-  arm_notification GetNotification();
 };
 
 #endif

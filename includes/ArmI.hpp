@@ -102,8 +102,6 @@ public:
   /// @brief virtual method that should recive movements informations and
   ///        convert it into command
   virtual bool Write(arm_event) = 0;
-  /// @brief virtual method that should return SetNotification
-  virtual arm_notification GetNotification() = 0;
 
   //accesor
   bool IsOpen(){return isOpen;};
