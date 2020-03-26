@@ -1,7 +1,0 @@
-/home/minhthuc/Desktop/control-arm/control-arm-SDL/out/CMakeFiles/install/strip.dir
-/home/minhthuc/Desktop/control-arm/control-arm-SDL/out/CMakeFiles/edit_cache.dir
-/home/minhthuc/Desktop/control-arm/control-arm-SDL/out/CMakeFiles/armDev.dir
-/home/minhthuc/Desktop/control-arm/control-arm-SDL/out/CMakeFiles/install.dir
-/home/minhthuc/Desktop/control-arm/control-arm-SDL/out/CMakeFiles/rebuild_cache.dir
-/home/minhthuc/Desktop/control-arm/control-arm-SDL/out/CMakeFiles/list_install_components.dir
-/home/minhthuc/Desktop/control-arm/control-arm-SDL/out/CMakeFiles/install/local.dir
