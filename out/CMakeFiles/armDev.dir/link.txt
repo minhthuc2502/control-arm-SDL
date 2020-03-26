@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall  -rdynamic CMakeFiles/armDev.dir/src/JoystickPS3.cpp.o CMakeFiles/armDev.dir/src/main.cpp.o CMakeFiles/armDev.dir/src/UdevHandler.cpp.o CMakeFiles/armDev.dir/src/ArmAL5D.cpp.o CMakeFiles/armDev.dir/src/TransmitionQueue.cpp.o CMakeFiles/armDev.dir/src/log.cpp.o CMakeFiles/armDev.dir/src/Server.cpp.o  -o armDev -levdev -levdev -ludev -ludev -lSDL2 -lpthread 

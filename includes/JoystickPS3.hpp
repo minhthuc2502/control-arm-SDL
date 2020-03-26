@@ -131,6 +131,11 @@ public:
   /** @brief method inherite from the joystick interface, get the parameters configuration
     * @param char* path of config file
     */
+  int GetBattery();
+  /** @brief method inherite from the joystick interface, control physical notification
+    * @param structure arm_notification to Process
+    */
+  void SetNotification(arm_notification);
 };
 
 #endif

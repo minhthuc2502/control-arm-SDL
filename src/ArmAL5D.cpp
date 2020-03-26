@@ -94,6 +94,11 @@ bool ArmAL5D::Write(arm_event move) {
   return true;
 }
 
+arm_notification ArmAL5D::GetNotification() {
+  arm_notification a;
+  return a;
+}
+
 //------------------------------------------------------------------------------
 //  Private methods
 //------------------------------------------------------------------------------
@@ -375,6 +380,34 @@ std::vector<std::string> ArmAL5D::AbsStatusTranslate(int32_t AbsStatus, int valu
       vectorAbsCmd.push_back(cmd);
     }
   }
+
+  /*if(AbsStatus & (1 << a_gripper_left)){
+    if(joints_[GRIPPER].actualPosition != joints_[GRIPPER].limitHight){
+      joints_[GRIPPER].actualPosition = joints_[GRIPPER].actualPosition + DISTANCE;
+      cmd = SetCmdString(GRIPPER, GetSpeed(valueAbs[GRIPPER]));
+      vectorAbsCmd.push_back(cmd);
+    }
+  }else if(AbsStatus & (1 << a_gripper_right)){
+    if(joints_[GRIPPER].actualPosition != joints_[GRIPPER].limitLow){
+      joints_[GRIPPER].actualPosition = joints_[GRIPPER].actualPosition - DISTANCE;
+      cmd = SetCmdString(GRIPPER, GetSpeed(valueAbs[GRIPPER]));
+      vectorAbsCmd.push_back(cmd);
+    }
+  }
+
+  if(AbsStatus & (1 << a_wrist_rot_left)){
+    if(joints_[WRIST_ROT].actualPosition != joints_[WRIST_ROT].limitLow){
+      joints_[WRIST_ROT].actualPosition = joints_[WRIST_ROT].actualPosition - DISTANCE;
+      cmd = SetCmdString(WRIST_ROT, GetSpeed(valueAbs[WRIST_ROT]));
+      vectorAbsCmd.push_back(cmd);
+    }
+  }else if(AbsStatus & (1 << a_wrist_rot_right)){
+    if(joints_[WRIST_ROT].actualPosition != joints_[WRIST_ROT].limitHight){
+      joints_[WRIST_ROT].actualPosition = joints_[WRIST_ROT].actualPosition + DISTANCE;
+      cmd = SetCmdString(WRIST_ROT, GetSpeed(valueAbs[WRIST_ROT]));
+      vectorAbsCmd.push_back(cmd);
+    }
+  }*/
 
   return vectorAbsCmd;
 }
