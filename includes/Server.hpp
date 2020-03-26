@@ -1,6 +1,16 @@
+//$Header$
+//------------------------------------------------------------------------------
+//                                      ArmAL5D
+//------------------------------------------------------------------------------
+//IIOT_ROBOTIC_ARM_2020
+//author: PHAM Minh Thuc
+//created: 26/03/2020
+/*
+* This class provide to control arm by web server
+*/
+//------------------------------------------------------------------------------
 #ifndef  SERVER_H
 #define SERVER_H
-
 #include "ArmAL5D.hpp"
 #include "JoystickPS3.hpp"
 #include "log.h"

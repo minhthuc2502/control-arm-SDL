@@ -1,3 +1,14 @@
+//$Header$
+//------------------------------------------------------------------------------
+//                                      ArmAL5D
+//------------------------------------------------------------------------------
+//IIOT_ROBOTIC_ARM_2020
+//author: PHAM Minh Thuc
+//created: 26/03/2020
+/*
+* This class provide to control arm by web server
+*/
+//------------------------------------------------------------------------------
 #include "Server.hpp"
 #include <string>
 
@@ -25,6 +36,7 @@ bool Server::MoveElbow(int dir){
             #endif
         }
     }
+    cmd += "\r";
     if((rc = write(fd_, cmd.c_str(), cmd.size())) == -1){
         LOG_E("write -> %s", strerror(rc));
         return false;
@@ -56,6 +68,7 @@ bool Server::MoveShoulder(int dir){
             #endif
         }
     }
+    cmd += "\r";
     if((rc = write(fd_, cmd.c_str(), cmd.size())) == -1){
         LOG_E("write -> %s", strerror(rc));
         return false;
@@ -87,6 +100,7 @@ bool Server::RotateBase(int dir){
             #endif
         }
     }
+    cmd += "\r";
     if((rc = write(fd_, cmd.c_str(), cmd.size())) == -1){
         LOG_E("write -> %s", strerror(rc));
         return false;
@@ -118,6 +132,7 @@ bool Server::rotateWrist(int dir){
             #endif
         }
     }
+    cmd += "\r";
     if((rc = write(fd_, cmd.c_str(), cmd.size())) == -1){
         LOG_E("write -> %s", strerror(rc));
         return false;
@@ -149,6 +164,7 @@ bool Server::MoveGripper(int dir){
             #endif
         }
     }
+    cmd += "\r";
     if((rc = write(fd_, cmd.c_str(), cmd.size())) == -1){
         LOG_E("write -> %s", strerror(rc));
         return false;
@@ -180,6 +196,7 @@ bool Server::MoveWrist(int dir){
             #endif
         }
     }
+    cmd += "\r";
     if((rc = write(fd_, cmd.c_str(), cmd.size())) == -1){
         LOG_E("write -> %s", strerror(rc));
         return false;
