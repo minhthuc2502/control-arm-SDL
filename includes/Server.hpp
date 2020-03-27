@@ -39,5 +39,7 @@ class Server: public ArmAL5D {
         */
         bool MoveWrist(int);
 
+        ARM getjoint(int index);
+
 };
 #endif

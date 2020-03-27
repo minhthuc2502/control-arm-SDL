@@ -5,9 +5,131 @@
 #include "TransmitionQueue.hpp"
 #include "log.h"
 #include "Server.hpp"
+#include "api.hpp"
 #include <getopt.h>
-TransmitionQueue* gPtrTQ;
+#include <microhttpd.h>
+#include <string>
+#include <map>
 
+#define MAXANSWERSIZE   512
+
+using std::map;
+using std::string;
+
+TransmitionQueue* gPtrTQ;
+Server server;
+const char* page = "<html><body><h1>%s</h1></body></html>";
+const char* badpage = "<html><head><title></title></head><body><h1>A error occur on server</h1></body></html>";
+
+static int send_bad_response(struct MHD_Connection * connection)
+{
+  static char * bad_response = (char *)badpage; 
+  int bad_response_len = strlen(bad_response);
+  int ret;
+  struct MHD_Response *response;
+
+  response = MHD_create_response_from_buffer(bad_response_len,bad_response, MHD_RESPMEM_PERSISTENT);
+  if(response ==0)
+  {
+    return MHD_NO;
+  }
+  ret = MHD_queue_response(connection,MHD_HTTP_OK,response);
+  MHD_destroy_response(response);
+  return ret;
+}
+
+//function callback of function get connection value
+//read value in methode get
+static int get_url_arg(void *cls, MHD_ValueKind kind,const char *key, const char * value)
+{
+  map<string, string> * url_arg = static_cast<map<string , string> *> (cls);
+  if (url_arg->find(key) == url_arg->end()){
+    if(!value)
+    {
+      (*url_arg)[key] = ""; 
+    }
+    else
+    {
+      (*url_arg)[key] = value;
+    }
+  }
+  return MHD_YES;
+}
+//function callback when exist a request
+static int AnswerRequest(void* cls, struct MHD_Connection * connection,
+                          const char * url, const char * methode,
+                          const char * version, const char * upload_data,
+                          size_t * upload_data_size, void ** ptr){
+  static int dummy;
+  struct MHD_Response * response;
+  int ret;
+  map<string , string> url_arg;
+  map<string, string>::iterator it;
+  myapi::api callapi;
+  string respdata;
+  char* respbuffer;
+  if(0!= strcmp(methode, "GET")){
+    return MHD_NO;
+  }
+  //ptr is a pointer used to save the state of the function callback for the future call by MHD( this function can be called by many times)
+  if(&dummy != *ptr)
+  {
+    *ptr = &dummy;
+    return MHD_YES;
+  }
+  if(0 != *upload_data_size)
+    return MHD_NO;
+  //get values from url with get methode  
+  if(MHD_get_connection_values(connection,MHD_GET_ARGUMENT_KIND,get_url_arg,&url_arg)<0)
+  {
+    return send_bad_response(connection);
+  }
+  //call api to control arm
+  it = url_arg.find("direction");
+  if( it != url_arg.end())
+  {
+    LOG_I("Catch key");
+    callapi.executeAPI(url,url_arg,respdata,server,it->second.c_str());
+  }
+  /*
+  if(!strcmp(url,"/moveshoulder"))
+  {
+    it = url_arg.find("direction");
+    if( it != url_arg.end() && strcasecmp(it->second.c_str(),"1") == 0)
+    {
+      respbuffer = (char*) malloc(MAXANSWERSIZE);
+      server.MoveShoulder(1);
+      snprintf (respbuffer, MAXANSWERSIZE, page, "Move up the shoulder sucessfully");
+    }
+    else if( it != url_arg.end() && strcasecmp(it->second.c_str(),"0") == 0)
+    {
+      respbuffer = (char*) malloc(MAXANSWERSIZE);
+      server.MoveShoulder(0);
+      snprintf (respbuffer, MAXANSWERSIZE, page, "Move down the shoulder sucessfully");
+    }
+  }*/
+  *ptr = NULL;
+  respbuffer = (char*) malloc(respdata.size()+1);
+  if(respbuffer == 0)
+  {
+    return MHD_NO;
+  }
+  strncpy(respbuffer, respdata.c_str(), respdata.size() + 1);
+  //create response for resquest
+  response = MHD_create_response_from_buffer(strlen(respbuffer), (void *)respbuffer, MHD_RESPMEM_PERSISTENT);
+  if(response == 0)
+  {
+    if(respbuffer != NULL)
+      free(respbuffer);
+    return MHD_NO;
+  }
+  //send response
+  ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
+  //destroy response
+  MHD_destroy_response(response);
+  return ret;
+
+}
 void signalHandler (int signum) {
   printf("\nreceived signal %d \n",signum);
   gPtrTQ->StopWait();
@@ -22,6 +144,8 @@ void usage(){
   printf("-m mode | control by <joystick> or <server-web>\n");
   printf("-h help affiche all options\n");
 }
+
+
 int main(int argc, char *argv[]) {
   char *pathConfig = NULL;
   char *mode = NULL;
@@ -114,7 +238,17 @@ int main(int argc, char *argv[]) {
       TransmitionQueue tQueue;
 
       LOG_I("Launching Server");
-      Server server;
+      // for web service
+      struct MHD_Daemon * d;
+      d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION,
+                          3000, NULL, NULL, &AnswerRequest,
+                          NULL, MHD_OPTION_END);
+      if(d == NULL)
+      {
+        return 1;
+      }
+      (void) getc(stdin);
+      MHD_stop_daemon(d);
       if(server.Open() == false) {
         LOG_E("ERROR opening AL5D file descriptor");
         LOG_I("program need to be run as sudo for the moment");
