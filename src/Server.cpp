@@ -95,7 +95,7 @@ bool Server::RotateBase(int dir){
     return true;
 }
 
-bool Server::rotateWrist(int dir){
+bool Server::RotateWrist(int dir){
     std::string cmd;
     int rc;
     if(dir){

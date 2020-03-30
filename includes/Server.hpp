@@ -27,7 +27,7 @@ class Server: public ArmAL5D {
         /** @brief This methode allow rotate the wrist
         * @param int direction of the mouvement: 1 right, 0 left
         */
-        bool rotateWrist(int);
+        bool RotateWrist(int);
 
         /** @brief This methode allow open/close the gripper
         * @param int direction of the mouvement: 1 open, 0 close

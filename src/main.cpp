@@ -18,7 +18,7 @@ using std::string;
 
 TransmitionQueue* gPtrTQ;
 Server server;
-const char* page = "<html><body><h1>%s</h1></body></html>";
+
 const char* badpage = "<html><head><title></title></head><body><h1>A error occur on server</h1></body></html>";
 
 static int send_bad_response(struct MHD_Connection * connection)
@@ -55,6 +55,7 @@ static int get_url_arg(void *cls, MHD_ValueKind kind,const char *key, const char
   }
   return MHD_YES;
 }
+
 //function callback when exist a request
 static int AnswerRequest(void* cls, struct MHD_Connection * connection,
                           const char * url, const char * methode,
@@ -64,7 +65,6 @@ static int AnswerRequest(void* cls, struct MHD_Connection * connection,
   struct MHD_Response * response;
   int ret;
   map<string , string> url_arg;
-  map<string, string>::iterator it;
   myapi::api callapi;
   string respdata;
   char* respbuffer;
@@ -85,29 +85,7 @@ static int AnswerRequest(void* cls, struct MHD_Connection * connection,
     return send_bad_response(connection);
   }
   //call api to control arm
-  it = url_arg.find("direction");
-  if( it != url_arg.end())
-  {
-    LOG_I("Catch key");
-    callapi.executeAPI(url,url_arg,respdata,server,it->second.c_str());
-  }
-  /*
-  if(!strcmp(url,"/moveshoulder"))
-  {
-    it = url_arg.find("direction");
-    if( it != url_arg.end() && strcasecmp(it->second.c_str(),"1") == 0)
-    {
-      respbuffer = (char*) malloc(MAXANSWERSIZE);
-      server.MoveShoulder(1);
-      snprintf (respbuffer, MAXANSWERSIZE, page, "Move up the shoulder sucessfully");
-    }
-    else if( it != url_arg.end() && strcasecmp(it->second.c_str(),"0") == 0)
-    {
-      respbuffer = (char*) malloc(MAXANSWERSIZE);
-      server.MoveShoulder(0);
-      snprintf (respbuffer, MAXANSWERSIZE, page, "Move down the shoulder sucessfully");
-    }
-  }*/
+  callapi.executeAPI(url,url_arg,respdata,server);
   *ptr = NULL;
   respbuffer = (char*) malloc(respdata.size()+1);
   if(respbuffer == 0)
@@ -127,9 +105,13 @@ static int AnswerRequest(void* cls, struct MHD_Connection * connection,
   ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
   //destroy response
   MHD_destroy_response(response);
+  if(respbuffer == 0)
+  {
+    return MHD_NO;
+  }
   return ret;
-
 }
+
 void signalHandler (int signum) {
   printf("\nreceived signal %d \n",signum);
   gPtrTQ->StopWait();
@@ -249,22 +231,7 @@ int main(int argc, char *argv[]) {
       }
       (void) getc(stdin);
       MHD_stop_daemon(d);
-      if(server.Open() == false) {
-        LOG_E("ERROR opening AL5D file descriptor");
-        LOG_I("program need to be run as sudo for the moment");
-        return EXIT_FAILURE;
-      }
-      if (server.IsOpen())
-      {
-        server.MoveElbow(1);
-        server.MoveElbow(1);
-        server.MoveElbow(1);
-        server.MoveShoulder(1);
-        server.MoveShoulder(1);
-        server.MoveShoulder(1);
-      }
       LOG_I("Program end!");
-      server.Close();
     }
   }
   return EXIT_SUCCESS;

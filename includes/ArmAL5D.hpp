@@ -73,15 +73,13 @@ protected:
   //std::function wrapping a function pointer that point to FindDevnode
   std::function<bool(udev_device* dev)> pt2FindDevnode;
 
+  /// @brief initialise arm, set joints informations
+  bool InitArm();
   /** @brief this method is call in ProcessDeviceList to apply the proper
     *        treatement to find device Node
     * @param device to Check
     */
   bool FindDevnode(udev_device* dev);
-  /// @brief initialise arm, set joints informations
-  bool InitArm();
-  /// @brief this method set arm positon to initial one
-  bool MoveToInitialPosition();
   /* @brief this method translate BtnStatus to a string tab and return it.
    * @param BtnStatus of the received arm_event
    */
@@ -109,7 +107,6 @@ public:
       this->Close();
     }
   };
-
   /// @brief method inherite from the arm interface, open device
   bool Open();
   /// @brief method inherite from the arm interface, close device
@@ -117,6 +114,9 @@ public:
   /** @brief method inherite from the arm interface, control movement
     * @param arm_event wich contain movement's informations
     */
+   
+  /// @brief this method set arm positon to initial one
+  bool MoveToInitialPosition();
   bool Write(arm_event);
 };
 

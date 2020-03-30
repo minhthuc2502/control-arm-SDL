@@ -4,6 +4,9 @@
         "string": "cpp",
         "string_view": "cpp",
         "deque": "cpp",
-        "vector": "cpp"
-    }
+        "vector": "cpp",
+        "iosfwd": "cpp",
+        "*.tcc": "cpp"
+    },
+    "C_Cpp.default.configurationProvider": "vector-of-bool.cmake-tools"
 }
