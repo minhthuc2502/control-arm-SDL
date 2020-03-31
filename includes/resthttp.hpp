@@ -4,23 +4,20 @@
 #include <map>
 #include <string>
 #include <set>
-#include "Server.hpp"
+#include "servercontroller.hpp"
 #include "ArmAL5D.hpp"
 using std::map;
 using std::string;
 using std::set;
 
-namespace myapi
-{
-
-class api
+class RestHttp
 {
 public:
 
     /** @brief This method allow to declare variable api
     * @param none
     */
-    api();
+    RestHttp();
 
     /** @brief This method to analyze url and call api correspondent 
      * @param:  const string& url : endpoint
@@ -28,8 +25,8 @@ public:
      *          string& response : response returned to client
      *          Server& server : server
      */
-    bool executeAPI(const string& url, const map<string, string>& argval, 
-                    string& response, Server& server);
+    bool response_rest_request(const string& url, const map<string, string>& argval, 
+                    string& response, ServerController& server);
 private:
     /** @brief This method to open connection between local machine with robotic arm 
      * @param:  const string& url : endpoint
@@ -37,48 +34,48 @@ private:
      *          string& response : response returned to client
      *          Server& server : server
      */
-    bool _openAPI(const string& url, const map<string, string>& argval, string& response, Server& server);
+    bool _open_arm_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server);
 
     /** @brief This method to call api close connection
      * @param:  as above
      */
-    bool _closeAPI(const string& url, const map<string, string>& argval, string& response, Server& server);
+    bool _close_arm_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server);
 
     /** @brief This method to call api initialize la position of robotic arm
      * @param:  as above
      */
-    bool _initAPI(const string& url, const map<string, string>& argval, string& response, Server& server);
+    bool _init_position_arm_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server);
 
     /** @brief This method to call api control the shoulder
      * @param:  as above
      */
-    bool _shoulderAPI(const string& url, const map<string, string>& argval, string& response, Server& server);
+    bool _control_shoulder_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server);
 
     /** @brief This method to call api control elbow
      * @param:  as above
      */
-    bool _elbowAPI(const string& url, const map<string, string>& argval, string& response, Server& server);
+    bool _control_elbow_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server);
 
     /** @brief This method to call api control the base
      * @param:  as above
      */
-    bool _baseAPI(const string& url, const map<string, string>& argval, string& response, Server& server);
+    bool _control_base_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server);
         
     /** @brief This method to call api control the gripper
      * @param:  as above
      */
-    bool _gripperAPI(const string& url, const map<string, string>& argval, string& response, Server& server);
+    bool _control_gripper_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server);
     
     /** @brief This method to call api control wrist
      * @param:  as above
      */
-    bool _wristAPI(const string& url, const map<string, string>& argval, string& response, Server& server);
+    bool _control_wrist_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server);
     
     /** @brief This method to convert pair key-value to string format json
      * @param:  data : response type ptree
      *          output: string format json
      */
-    void _generateOutput(void *data, string& output);
+    void _generate_json_output(void *data, string& output);
 
     /** @brief This method to verify type of motion in case wrist
      * @param:  data : endpoint and parameter recieved 
@@ -86,9 +83,8 @@ private:
     bool _validate(const void *data);
 
     
-    void _getInvalidResponse(string &response);
+    void _get_invalid_response(string &response);
     map<string, set<string> > _apiparams;
 };
-}
 
 #endif

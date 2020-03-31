@@ -1,7 +1,7 @@
-#include "Server.hpp"
+#include "servercontroller.hpp"
 #include <string>
 
-bool Server::MoveElbow(int dir){
+bool ServerController::move_elbow(int dir){
     std::string cmd;
     int rc;
     if(dir){
@@ -32,7 +32,7 @@ bool Server::MoveElbow(int dir){
     return true;
 }
 
-bool Server::MoveShoulder(int dir){
+bool ServerController::move_shoulder(int dir){
     std::string cmd;
     int rc;
     if(dir){
@@ -64,7 +64,7 @@ bool Server::MoveShoulder(int dir){
     return true;
 }
 
-bool Server::RotateBase(int dir){
+bool ServerController::rotate_base(int dir){
     std::string cmd;
     int rc;
     if(dir){
@@ -95,7 +95,7 @@ bool Server::RotateBase(int dir){
     return true;
 }
 
-bool Server::RotateWrist(int dir){
+bool ServerController::rotate_wrist(int dir){
     std::string cmd;
     int rc;
     if(dir){
@@ -126,7 +126,7 @@ bool Server::RotateWrist(int dir){
     return true;
 }
 
-bool Server::MoveGripper(int dir){
+bool ServerController::move_gripper(int dir){
     std::string cmd;
     int rc;
     if(dir){
@@ -157,7 +157,7 @@ bool Server::MoveGripper(int dir){
     return true;
 }
 
-bool Server::MoveWrist(int dir){
+bool ServerController::move_wrist(int dir){
     std::string cmd;
     int rc;
     if(dir){
@@ -188,7 +188,7 @@ bool Server::MoveWrist(int dir){
     return true;
 }
 
-ARM Server::getjoint(int index)
+ARM ServerController::getjoint(int index)
 {
     return joints_[index];
 }

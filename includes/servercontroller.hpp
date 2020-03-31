@@ -1,43 +1,43 @@
-#ifndef  SERVER_H
-#define SERVER_H
+#ifndef  SERVER_CONTROLLER_ARM_H
+#define SERVER_CONTROLLER_ARM_H
 
 #include "ArmAL5D.hpp"
 #include "JoystickPS3.hpp"
 #include "log.h"
-class Server: public ArmAL5D {
+class ServerController: public ArmAL5D {
     public:
-        Server(){};
-        ~Server(){}; 
+        ServerController(){};
+        ~ServerController(){}; 
 
         /** @brief This methode allow move the elbow
         * @param int direction of the mouvement: 1 up, 0 down
         */
-        bool MoveElbow(int);
+        bool move_elbow(int);
 
         /** @brief This methode allow move the shoulder
         * @param int direction of the mouvement: 1 up, 0 down
         */
-        bool MoveShoulder(int);
+        bool move_shoulder(int);
 
         /** @brief This methode allow rotate the base
         * @param int direction of the mouvement: 1 right, 0 left
         */
-        bool RotateBase(int);
+        bool rotate_base(int);
 
         /** @brief This methode allow rotate the wrist
         * @param int direction of the mouvement: 1 right, 0 left
         */
-        bool RotateWrist(int);
+        bool rotate_wrist(int);
 
         /** @brief This methode allow open/close the gripper
         * @param int direction of the mouvement: 1 open, 0 close
         */
-        bool MoveGripper(int);
+        bool move_gripper(int);
 
         /** @brief This methode allow move the wrist
         * @param int direction of the mouvement: 1 up, 0 down
         */
-        bool MoveWrist(int);
+        bool move_wrist(int);
 
         ARM getjoint(int index);
 

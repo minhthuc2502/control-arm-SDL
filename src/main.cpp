@@ -4,8 +4,8 @@
 #include "ArmAL5D.hpp"
 #include "TransmitionQueue.hpp"
 #include "log.h"
-#include "Server.hpp"
-#include "api.hpp"
+#include "servercontroller.hpp"
+#include "resthttp.hpp"
 #include <getopt.h>
 #include <microhttpd.h>
 #include <string>
@@ -17,7 +17,7 @@ using std::map;
 using std::string;
 
 TransmitionQueue* gPtrTQ;
-Server server;
+ServerController server;
 
 const char* badpage = "<html><head><title></title></head><body><h1>A error occur on server</h1></body></html>";
 
@@ -65,7 +65,7 @@ static int AnswerRequest(void* cls, struct MHD_Connection * connection,
   struct MHD_Response * response;
   int ret;
   map<string , string> url_arg;
-  myapi::api callapi;
+  RestHttp apicontrol;
   string respdata;
   char* respbuffer;
   if(0!= strcmp(methode, "GET")){
@@ -85,7 +85,7 @@ static int AnswerRequest(void* cls, struct MHD_Connection * connection,
     return send_bad_response(connection);
   }
   //call api to control arm
-  callapi.executeAPI(url,url_arg,respdata,server);
+  apicontrol.response_rest_request(url,url_arg,respdata,server);
   *ptr = NULL;
   respbuffer = (char*) malloc(respdata.size()+1);
   if(respbuffer == 0)

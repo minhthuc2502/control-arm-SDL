@@ -1,63 +1,62 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include "../includes/api.hpp"
+#include "../includes/resthttp.hpp"
 #include <vector>
 
 using boost::property_tree::ptree;
 using std::make_pair;
 using std::vector;
 using std::to_string;
-using namespace myapi;
 
 namespace pt = boost::property_tree;
 
 struct validate_data
 {
-    string api;
+    string endpoint;
     set <string>* params;
 };
 
-api::api(){
+RestHttp::RestHttp(){
     string wristparams[] = {"rotate", "move"};
 
     _apiparams["/wrist"] = set<string>(wristparams,wristparams+2);
 }
 
-bool api::executeAPI(const string& url, const map<string, string>& argval, 
-                    string& response, Server& server)
+bool RestHttp::response_rest_request(const string& url, const map<string, string>& argval, 
+                    string& response, ServerController& server)
 {
     bool ret = false;
     if(url == "/initposition")
     {
-        ret = _initAPI(url, argval,response, server);
+        ret = _init_position_arm_rest(url, argval,response, server);
     }
     else if(url == "/shoulder")
     {
-        ret = _shoulderAPI(url, argval, response , server);
+        ret = _control_shoulder_rest(url, argval, response , server);
     }
     else if(url == "/elbow")
     {
-        ret = _elbowAPI(url, argval,response, server);
+        ret = _control_elbow_rest(url, argval,response, server);
     }
     else if(url == "/base")
     {
-        ret = _baseAPI(url, argval,response, server);
+        ret = _control_base_rest(url, argval,response, server);
     }
     else if(url == "/gripper")
     {
-        ret = _gripperAPI(url, argval,response, server);
+        ret = _control_gripper_rest(url, argval,response, server);
     }
     else if(url == "/wrist")
     {
-        ret = _wristAPI(url, argval,response, server);
+        ret = _control_wrist_rest(url, argval,response, server);
     }
     else if(url == "/open")
     {
-        ret = _openAPI(url, argval,response, server);
+        ret = _open_arm_rest(url, argval,response, server);
     }
     else if(url == "/close")
     {
-        ret = _closeAPI(url, argval,response, server);
+        ret = _close_arm_rest(url, argval,response, server);
     }
     else
     {
@@ -66,14 +65,14 @@ bool api::executeAPI(const string& url, const map<string, string>& argval,
         ptree::iterator ptit = executeroot.push_back(make_pair("url", execute ));
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
         ptit->second.push_back(make_pair("error",pt::ptree(string("can't recognize url"))));
-        _generateOutput(&executeroot,response);
+        _generate_json_output(&executeroot,response);
         return false; 
     }
     
     return ret;
 }
 
-bool api::_openAPI(const string& url, const map<string, string>& argval, string& response, Server& server)
+bool RestHttp::_open_arm_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server)
 {
     int ret;
     ptree openroot;
@@ -83,18 +82,18 @@ bool api::_openAPI(const string& url, const map<string, string>& argval, string&
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
         ptit->second.push_back(make_pair("error",pt::ptree(string("try with sudo to run server"))));          
-        _generateOutput(&openroot,response);
+        _generate_json_output(&openroot,response);
         return false;
     }
     else
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
-    _generateOutput(&openroot,response);
+    _generate_json_output(&openroot,response);
     return true;
 }
 
-bool api::_closeAPI(const string& url, const map<string, string>& argval, string& response, Server& server)
+bool RestHttp::_close_arm_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server)
 {
     int ret;
     ptree closeroot;
@@ -103,18 +102,18 @@ bool api::_closeAPI(const string& url, const map<string, string>& argval, string
     if(!(ret = server.Close()))
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
-        _generateOutput(&closeroot,response);
+        _generate_json_output(&closeroot,response);
         return false;
     }
     else
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
-    _generateOutput(&closeroot,response);
+    _generate_json_output(&closeroot,response);
     return true;
 }
 
-bool api::_initAPI(const string& url, const map<string, string>& argval, string& response, Server& server)
+bool RestHttp::_init_position_arm_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server)
 {
     int ret;
     ptree initroot;
@@ -123,7 +122,7 @@ bool api::_initAPI(const string& url, const map<string, string>& argval, string&
     if(!(ret = server.MoveToInitialPosition()))
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
-        _generateOutput(&initroot,response);
+        _generate_json_output(&initroot,response);
         return false;
     }
     else
@@ -136,11 +135,11 @@ bool api::_initAPI(const string& url, const map<string, string>& argval, string&
         ptit->second.push_back(make_pair("wrist rotation", pt::ptree(to_string(server.getjoint(WRIST_ROT).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
-    _generateOutput(&initroot,response);
+    _generate_json_output(&initroot,response);
     return true;
 }
 
-bool api::_shoulderAPI(const string& url, const map<string, string>& argval, string& response, Server& server)
+bool RestHttp::_control_shoulder_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server)
 {
     map<string, string>::const_iterator it;
     int ret;
@@ -155,21 +154,21 @@ bool api::_shoulderAPI(const string& url, const map<string, string>& argval, str
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
         ptit->second.push_back(make_pair("error",pt::ptree(string("can not get direction parameters"))));            
-        _generateOutput(&shoulderroot,response);
+        _generate_json_output(&shoulderroot,response);
         return false;
     }
     else if(strcmp(it->second.c_str(),"0") !=0 && strcmp(it->second.c_str(),"1") != 0)
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
         ptit->second.push_back(make_pair("error",pt::ptree(string("value of direction is wrong"))));            
-        _generateOutput(&shoulderroot,response);
+        _generate_json_output(&shoulderroot,response);
         return false;
     }
-    if(!(ret = server.MoveShoulder(atoi(it->second.c_str()))))
+    if(!(ret = server.move_shoulder(atoi(it->second.c_str()))))
     {
         ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(SHOULDER).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
-        _generateOutput(&shoulderroot,response);
+        _generate_json_output(&shoulderroot,response);
         return false;
     }
     else
@@ -180,11 +179,11 @@ bool api::_shoulderAPI(const string& url, const map<string, string>& argval, str
         ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(SHOULDER).limitLow))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
-    _generateOutput(&shoulderroot,response);
+    _generate_json_output(&shoulderroot,response);
     return true;
 }
 
-bool api::_elbowAPI(const string& url, const map<string, string>& argval, string& response, Server& server)
+bool RestHttp::_control_elbow_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server)
 {
     map<string, string>::const_iterator it;
     int ret;
@@ -199,23 +198,23 @@ bool api::_elbowAPI(const string& url, const map<string, string>& argval, string
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
         ptit->second.push_back(make_pair("error",pt::ptree(string("can not get direction parameters"))));            
-        _generateOutput(&elbowroot,response);
+        _generate_json_output(&elbowroot,response);
         return false;
     }
     else if(strcmp(it->second.c_str(),"0") !=0 && strcmp(it->second.c_str(),"1") != 0)
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
         ptit->second.push_back(make_pair("error",pt::ptree(string("value of direction is wrong"))));            
-        _generateOutput(&elbowroot,response);
+        _generate_json_output(&elbowroot,response);
         return false;
     }
 
     ptit = elbowroot.push_back(make_pair("elbow", elbow ));
-    if(!(ret = server.MoveElbow(atoi(it->second.c_str()))))
+    if(!(ret = server.move_elbow(atoi(it->second.c_str()))))
     {
         ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(ELBOW).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
-        _generateOutput(&elbowroot,response);
+        _generate_json_output(&elbowroot,response);
         return false;
     }
     else
@@ -226,11 +225,11 @@ bool api::_elbowAPI(const string& url, const map<string, string>& argval, string
         ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(ELBOW).limitLow))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
-    _generateOutput(&elbowroot,response);
+    _generate_json_output(&elbowroot,response);
     return true;
 }
 
-bool api::_baseAPI(const string& url, const map<string, string>& argval, string& response, Server& server)
+bool RestHttp::_control_base_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server)
 {
     map<string, string>::const_iterator it;
     int ret;
@@ -245,22 +244,22 @@ bool api::_baseAPI(const string& url, const map<string, string>& argval, string&
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
         ptit->second.push_back(make_pair("error",pt::ptree(string("can not get direction parameters"))));            
-        _generateOutput(&baseroot,response);
+        _generate_json_output(&baseroot,response);
         return false;
     }
     else if(strcmp(it->second.c_str(),"0") !=0 && strcmp(it->second.c_str(),"1") != 0)
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
         ptit->second.push_back(make_pair("error",pt::ptree(string("value of direction is wrong"))));            
-        _generateOutput(&baseroot,response);
+        _generate_json_output(&baseroot,response);
         return false;
     }
 
-    if(!(ret = server.RotateBase(atoi(it->second.c_str()))))
+    if(!(ret = server.rotate_base(atoi(it->second.c_str()))))
     {
         ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(BASE).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
-        _generateOutput(&baseroot,response);
+        _generate_json_output(&baseroot,response);
         return false;
     }
     else
@@ -271,11 +270,11 @@ bool api::_baseAPI(const string& url, const map<string, string>& argval, string&
         ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(BASE).limitLow))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
-    _generateOutput(&baseroot,response);
+    _generate_json_output(&baseroot,response);
     return true;
 }
 
-bool api::_gripperAPI(const string& url, const map<string, string>& argval, string& response, Server& server)
+bool RestHttp::_control_gripper_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server)
 {
     map<string, string>::const_iterator it;
     ptree::iterator ptit;
@@ -290,22 +289,22 @@ bool api::_gripperAPI(const string& url, const map<string, string>& argval, stri
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
         ptit->second.push_back(make_pair("error",pt::ptree(string("can not get direction parameters"))));            
-        _generateOutput(&gripperroot,response);
+        _generate_json_output(&gripperroot,response);
         return false;
     }
     else if(strcmp(it->second.c_str(),"0") !=0 && strcmp(it->second.c_str(),"1") != 0)
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
         ptit->second.push_back(make_pair("error",pt::ptree(string("value of direction is wrong"))));            
-        _generateOutput(&gripperroot,response);
+        _generate_json_output(&gripperroot,response);
         return false;
     }
 
-    if(!(ret = server.MoveGripper(atoi(it->second.c_str()))))
+    if(!(ret = server.move_gripper(atoi(it->second.c_str()))))
     {
         ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(GRIPPER).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
-        _generateOutput(&gripperroot,response);
+        _generate_json_output(&gripperroot,response);
         return false;
     }
     else
@@ -316,11 +315,11 @@ bool api::_gripperAPI(const string& url, const map<string, string>& argval, stri
         ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(GRIPPER).limitLow))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
-    _generateOutput(&gripperroot,response);
+    _generate_json_output(&gripperroot,response);
     return true;
 }
 
-bool api::_wristAPI(const string& url, const map<string, string>& argval, string& response, Server& server)
+bool RestHttp::_control_wrist_rest(const string& url, const map<string, string>& argval, string& response, ServerController& server)
 {
     map<string, string>::const_iterator it;
     ptree::iterator ptit;
@@ -328,7 +327,7 @@ bool api::_wristAPI(const string& url, const map<string, string>& argval, string
     ptree wristroot;
     ptree wrist;
     validate_data vdata;
-    vdata.api = url;
+    vdata.endpoint = url;
     set<string> params;
 
     ptit = wristroot.push_back(make_pair("wristMove", wrist ));
@@ -338,14 +337,14 @@ bool api::_wristAPI(const string& url, const map<string, string>& argval, string
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
         ptit->second.push_back(make_pair("error",pt::ptree(string("can not get direction parameters"))));            
-        _generateOutput(&wristroot,response);
+        _generate_json_output(&wristroot,response);
         return false;
     }
     else if(strcmp(it->second.c_str(),"0") !=0 && strcmp(it->second.c_str(),"1") != 0)
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
         ptit->second.push_back(make_pair("error",pt::ptree(string("value of direction is wrong"))));            
-        _generateOutput(&wristroot,response);
+        _generate_json_output(&wristroot,response);
         return false;
     }
 
@@ -353,24 +352,24 @@ bool api::_wristAPI(const string& url, const map<string, string>& argval, string
 
     if(it2== argval.end())
     {
-        _getInvalidResponse(response);
+        _get_invalid_response(response);
         return false;
     }
     params.insert(it2->second);
     vdata.params = &params;
     if(!_validate(&vdata))
     {
-        _getInvalidResponse(response);
+        _get_invalid_response(response);
         return false;
     }
 
     if(it2->second == "move")
     {
-        if(!(ret = server.MoveWrist(atoi(it->second.c_str()))))
+        if(!(ret = server.move_wrist(atoi(it->second.c_str()))))
         {
             ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(WRIST).actualPosition))));
             ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
-            _generateOutput(&wristroot,response);
+            _generate_json_output(&wristroot,response);
             return false;
         }
         else
@@ -381,15 +380,15 @@ bool api::_wristAPI(const string& url, const map<string, string>& argval, string
             ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(WRIST).limitLow))));
             ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
         }
-        _generateOutput(&wristroot,response);
+        _generate_json_output(&wristroot,response);
     }
     if(it2->second == "rotate")
     {
-        if(!(ret = server.RotateWrist(atoi(it->second.c_str()))))
+        if(!(ret = server.rotate_wrist(atoi(it->second.c_str()))))
         {
             ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(WRIST_ROT).actualPosition))));
             ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
-            _generateOutput(&wristroot,response);
+            _generate_json_output(&wristroot,response);
             return false;
         }
         else
@@ -400,12 +399,12 @@ bool api::_wristAPI(const string& url, const map<string, string>& argval, string
             ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(WRIST_ROT).limitLow))));
             ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
         }
-        _generateOutput(&wristroot,response);
+        _generate_json_output(&wristroot,response);
     }
     return true;
 }
 
-void api::_generateOutput(void *data, string& output)
+void RestHttp::_generate_json_output(void *data, string& output)
 {
     std::ostringstream ostr;
     ptree *pt = (ptree *) data;
@@ -414,10 +413,10 @@ void api::_generateOutput(void *data, string& output)
     output = ostr.str();
 }
 
-bool api::_validate(const void *data)
+bool RestHttp::_validate(const void *data)
 {
     const validate_data *vdata = static_cast<const validate_data *>(data);
-    map<string, set<string>>::const_iterator it = _apiparams.find(vdata->api);
+    map<string, set<string>>::const_iterator it = _apiparams.find(vdata->endpoint);
 
     if(it == _apiparams.end())
         return false;
@@ -432,7 +431,7 @@ bool api::_validate(const void *data)
     return true;
 }
 
-void api::_getInvalidResponse(string &response)
+void RestHttp::_get_invalid_response(string &response)
 {
     response = "Some error in your data";
 }
