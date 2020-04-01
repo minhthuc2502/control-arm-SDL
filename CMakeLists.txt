@@ -6,7 +6,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMake)
 find_package(Libevdev REQUIRED)
 find_package(Libudev REQUIRED)
 find_package(SDL2 REQUIRED)
-
 #
 # Declare the directories of header file
 #
@@ -14,6 +13,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes
                     ${EVDEV_INCLUDE_DIRS}
                     ${UDEV_INCLUDE_DIRS}
                     ${SDL2_INCLUDE_DIRS}
+                    /usr/lib/x86_64-linux-gnu/
                     )
 #
 # Add source file
@@ -25,6 +25,9 @@ set(SOURCES
     src/ArmAL5D.cpp
     src/TransmitionQueue.cpp
     src/log.cpp
+    src/servercontroller.cpp
+    src/resthttp.cpp
+    src/httpserver.cpp
     )
 
 option(DEBUG "use debug file" OFF)
@@ -52,6 +55,7 @@ target_link_libraries(armDev
                       ${EVDEV_LIBRARIES} ${EVDEV_LDFLAGS}
                       ${UDEV_LIBRARIES} ${UDEV_LDFLAGS}
                       ${SDL2_LIBRARIES} ${SDL2_LDFLAGS}
+                      microhttpd
                       pthread
                       )
 
