@@ -16,13 +16,11 @@
 //  Public methods
 //------------------------------------------------------------------------------
 bool ArmAL5D::Open() {
-
   //initialise udev lib environnement to auto-detect related node
   if(!InitUdev()) {
     LOG_E("udev failed us");
     return false;
   }
-
   //make a list of all device connect to the corresponding subsystem
   if(!Enumeration(SUBSYS)){
     LOG_E("Unable to enumerate devices");
@@ -30,7 +28,6 @@ bool ArmAL5D::Open() {
   }
   //Process enumeration list to find the corresponding device and his node
   ProcessDeviceList(pt2FindDevnode);
-  
   if(deviceNode_.empty()) {
     LOG_E("Udev was unable to find a AL5D device");
     return false;
@@ -40,7 +37,6 @@ bool ArmAL5D::Open() {
       isOpen = false;
       return false;
   }
-  
   if(!InitArm()){
     LOG_E("fail setting arm at initial position");
     return false;
@@ -65,7 +61,6 @@ bool ArmAL5D::Write(arm_event move) {
   std::vector<std::string> vectorAbsCmd;
   std::string finalCmd;
   int rc;
-
   if(move.BtnStatus != 0){
     vectorBtnCmd = BtnStatusTranslate(move.BtnStatus);
     for(unsigned int i = 0; i<vectorBtnCmd.size(); i++){
@@ -75,7 +70,6 @@ bool ArmAL5D::Write(arm_event move) {
     LOG_D("finalCmd after Btn = %s", finalCmd.c_str());
 #endif
   }
-
   if(move.AbsStatus != 0){
     vectorAbsCmd = AbsStatusTranslate(move.AbsStatus, move.valueAbs);
     for(unsigned int i = 0; i<vectorAbsCmd.size(); i++){
@@ -85,7 +79,6 @@ bool ArmAL5D::Write(arm_event move) {
     LOG_D("finalCmd after Abs = %s", finalCmd.c_str());
 #endif
   }
-
   finalCmd += "\r";
   if((rc = write(fd_, finalCmd.c_str(), finalCmd.size())) == -1){
     LOG_E("write -> %s", strerror(rc));
@@ -162,7 +155,6 @@ bool ArmAL5D::InitArm(){
 bool ArmAL5D::MoveToInitialPosition() {
   std::string cmd;
   int rc;
-  
   for(int i = 0; i<6; i++) {
     cmd = joints_[i].pinNumber
             + "P" + std::to_string(joints_[i].initPosition)
@@ -180,7 +172,6 @@ bool ArmAL5D::MoveToInitialPosition() {
 
 std::vector<std::string> ArmAL5D::BtnStatusTranslate(int32_t BtnStatus){
   std::vector<std::string> vectorBtnCmd;
-
   for(int i = 0; i<16; i++){
     if(BtnStatus & (1 << i)){
       switch (i) {
@@ -319,7 +310,6 @@ std::vector<std::string> ArmAL5D::BtnStatusTranslate(int32_t BtnStatus){
 std::vector<std::string> ArmAL5D::AbsStatusTranslate(int32_t AbsStatus, int valueAbs[]){
   std::vector<std::string> vectorAbsCmd;
   std::string cmd;
-
   if(AbsStatus & (1 << a_base_left)){
     if(joints_[BASE].actualPosition != joints_[BASE].limitHight){
       joints_[BASE].actualPosition = joints_[BASE].actualPosition + DISTANCE;
@@ -333,7 +323,6 @@ std::vector<std::string> ArmAL5D::AbsStatusTranslate(int32_t AbsStatus, int valu
       vectorAbsCmd.push_back(cmd);
     }
   }
-
   if(AbsStatus & (1 << a_shoulder_left)){
     if(joints_[SHOULDER].actualPosition != joints_[SHOULDER].limitLow){
       joints_[SHOULDER].actualPosition = joints_[SHOULDER].actualPosition - DISTANCE;
@@ -347,7 +336,6 @@ std::vector<std::string> ArmAL5D::AbsStatusTranslate(int32_t AbsStatus, int valu
       vectorAbsCmd.push_back(cmd);
     }
   }
-
   if(AbsStatus & (1 << a_elbow_left)){
     if(joints_[ELBOW].actualPosition != joints_[ELBOW].limitLow){
       joints_[ELBOW].actualPosition = joints_[ELBOW].actualPosition - DISTANCE;
@@ -361,7 +349,6 @@ std::vector<std::string> ArmAL5D::AbsStatusTranslate(int32_t AbsStatus, int valu
       vectorAbsCmd.push_back(cmd);
     }
   }
-
   if(AbsStatus & (1 << a_wrist_left)){
     if(joints_[WRIST].actualPosition != joints_[WRIST].limitLow){
       joints_[WRIST].actualPosition = joints_[WRIST].actualPosition - DISTANCE;
