@@ -102,6 +102,8 @@ static int AnswerRequest(void* cls, struct MHD_Connection * connection,
     return MHD_NO;
   }
   //send response
+  MHD_add_response_header(response, "Access-Control-Allow-Origin", "*");
+	MHD_add_response_header(response, "Vary", "Origin");
   ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
   //destroy response
   MHD_destroy_response(response);
