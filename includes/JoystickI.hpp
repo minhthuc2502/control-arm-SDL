@@ -47,10 +47,6 @@ public:
   virtual bool Close() = 0;
   /// @brief method inherite from the joystick interface, get the parameters configuration
   virtual bool Getconfig(char*) = 0;
-  /// @brief virtual method that should return gamepad's battery
-  virtual int GetBattery() = 0;
-  /// @brief virtual method that should control physical notification
-  virtual void SetNotification(arm_notification) = 0;
   //accesor
   bool IsOpen(){return isOpen;};
 };
