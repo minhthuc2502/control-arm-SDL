@@ -30,7 +30,7 @@ bool ArmAL5D::Open() {
   }
   //Process enumeration list to find the corresponding device and his node
   ProcessDeviceList(pt2FindDevnode);
-
+  
   if(deviceNode_.empty()) {
     LOG_E("Udev was unable to find a AL5D device");
     return false;
@@ -40,7 +40,7 @@ bool ArmAL5D::Open() {
       isOpen = false;
       return false;
   }
-
+  
   if(!InitArm()){
     LOG_E("fail setting arm at initial position");
     return false;
@@ -162,7 +162,7 @@ bool ArmAL5D::InitArm(){
 bool ArmAL5D::MoveToInitialPosition() {
   std::string cmd;
   int rc;
-
+  
   for(int i = 0; i<6; i++) {
     cmd = joints_[i].pinNumber
             + "P" + std::to_string(joints_[i].initPosition)

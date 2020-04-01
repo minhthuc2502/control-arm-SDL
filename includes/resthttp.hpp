@@ -1,5 +1,5 @@
-#ifndef __API_FOR_REST__
-#define __API_FOR_REST__
+#ifndef __REST_HTTP__
+#define __REST_HTTP__
 
 #include <map>
 #include <string>

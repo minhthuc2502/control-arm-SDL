@@ -27,6 +27,7 @@ set(SOURCES
     src/log.cpp
     src/servercontroller.cpp
     src/resthttp.cpp
+    src/httpserver.cpp
     )
 
 option(DEBUG "use debug file" OFF)

@@ -87,6 +87,12 @@ bool RestHttp::_open_arm_rest(const string& url, const map<string, string>& argv
     }
     else
     {
+        ptit->second.push_back(make_pair("shoulder", pt::ptree(to_string(server.getjoint(SHOULDER).actualPosition))));
+        ptit->second.push_back(make_pair("elbow", pt::ptree(to_string(server.getjoint(ELBOW).actualPosition))));
+        ptit->second.push_back(make_pair("base", pt::ptree(to_string(server.getjoint(BASE).actualPosition))));
+        ptit->second.push_back(make_pair("gripper", pt::ptree(to_string(server.getjoint(GRIPPER).actualPosition))));
+        ptit->second.push_back(make_pair("wrist", pt::ptree(to_string(server.getjoint(WRIST).actualPosition))));
+        ptit->second.push_back(make_pair("wristrotation", pt::ptree(to_string(server.getjoint(WRIST_ROT).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
     _generate_json_output(&openroot,response);
@@ -98,7 +104,7 @@ bool RestHttp::_close_arm_rest(const string& url, const map<string, string>& arg
     int ret;
     ptree closeroot;
     ptree close;
-    ptree::iterator ptit = closeroot.push_back(make_pair("open", close ));
+    ptree::iterator ptit = closeroot.push_back(make_pair("close", close ));
     if(!(ret = server.Close()))
     {
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));
@@ -132,7 +138,7 @@ bool RestHttp::_init_position_arm_rest(const string& url, const map<string, stri
         ptit->second.push_back(make_pair("base", pt::ptree(to_string(server.getjoint(BASE).actualPosition))));
         ptit->second.push_back(make_pair("gripper", pt::ptree(to_string(server.getjoint(GRIPPER).actualPosition))));
         ptit->second.push_back(make_pair("wrist", pt::ptree(to_string(server.getjoint(WRIST).actualPosition))));
-        ptit->second.push_back(make_pair("wrist rotation", pt::ptree(to_string(server.getjoint(WRIST_ROT).actualPosition))));
+        ptit->second.push_back(make_pair("wristrotation", pt::ptree(to_string(server.getjoint(WRIST_ROT).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
     _generate_json_output(&initroot,response);
@@ -330,8 +336,29 @@ bool RestHttp::_control_wrist_rest(const string& url, const map<string, string>&
     vdata.endpoint = url;
     set<string> params;
 
-    ptit = wristroot.push_back(make_pair("wristMove", wrist ));
+    map<string, string>::const_iterator it2 = argval.find("type");
 
+    if(it2== argval.end())
+    {
+        _get_invalid_response(response);
+        return false;
+    }
+    params.insert(it2->second);
+    vdata.params = &params;
+    if(!_validate(&vdata))
+    {
+        _get_invalid_response(response);
+        return false;
+    }
+
+    if(it2->second == "move"){
+        ptit = wristroot.push_back(make_pair("wrist", wrist ));
+    }
+    else
+    {
+        ptit = wristroot.push_back(make_pair("wristrotate", wrist ));
+    }
+    
     it = argval.find("direction");
     if( it == argval.end())
     {
@@ -348,23 +375,8 @@ bool RestHttp::_control_wrist_rest(const string& url, const map<string, string>&
         return false;
     }
 
-    map<string, string>::const_iterator it2 = argval.find("type");
-
-    if(it2== argval.end())
-    {
-        _get_invalid_response(response);
-        return false;
-    }
-    params.insert(it2->second);
-    vdata.params = &params;
-    if(!_validate(&vdata))
-    {
-        _get_invalid_response(response);
-        return false;
-    }
-
     if(it2->second == "move")
-    {
+    {   
         if(!(ret = server.move_wrist(atoi(it->second.c_str()))))
         {
             ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(WRIST).actualPosition))));
@@ -380,9 +392,8 @@ bool RestHttp::_control_wrist_rest(const string& url, const map<string, string>&
             ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(WRIST).limitLow))));
             ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
         }
-        _generate_json_output(&wristroot,response);
     }
-    if(it2->second == "rotate")
+    else if(it2->second == "rotate")
     {
         if(!(ret = server.rotate_wrist(atoi(it->second.c_str()))))
         {
@@ -399,8 +410,9 @@ bool RestHttp::_control_wrist_rest(const string& url, const map<string, string>&
             ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(WRIST_ROT).limitLow))));
             ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
         }
-        _generate_json_output(&wristroot,response);
     }
+    _generate_json_output(&wristroot,response);
+
     return true;
 }
 

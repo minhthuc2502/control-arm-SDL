@@ -56,7 +56,7 @@ bool ServerController::move_shoulder(int dir){
             #endif
         }
     }
-
+    
     if((rc = write(fd_, cmd.c_str(), cmd.size())) == -1){
         LOG_E("write -> %s", strerror(rc));
         return false;
