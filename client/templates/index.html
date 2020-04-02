@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Joypad</title>
+        <link rel="icon" href="../public/img/favicon.ico"></link>
+        <link rel="stylesheet" href="../public/css/style.css">
+    </head>
+    <body>
+        <input checked type="radio" id="blue" class="active-bg input-blue"  name="color">
+        <main>
+            <div style="border: 0px solid #000; display:inline" >
+               <img style="padding:10px;width:100px" src="../public/img/logo.png">
+            </div>
+               <br>
+               <div class="text-box">
+                  <a href="#" class="btn btn-white btn-animate" id="start/stop">start</a>
+              </div>
+               <div class="table-position">
+                  <div id='output'>
+                  </div>
+                  <div id='outputfailed'></div>
+               </div>
+           <section class="joystick center">
+              <div class="animations">
+                 <aside class="left-hand">
+                    <div class="controler">
+                       <button class="left" id="bleft"></button>
+                       <button class="top" id="bup"></button>
+                       <button class="right" id="bright"></button>
+                       <button class="bottom" id="bdown"></button>
+                    </div>
+                 </aside>
+        
+                 <div class="body-control">
+                    <button></button>
+                    <button></button> 
+                 </div>
+        
+                 <aside class="right-hand">
+                    <div class="controler">
+        
+                    <div class="actions group1">
+                       <label class="green" id="buttonwest" for="green"></label>
+                       <label class="blue" id="buttoneast" for="blue"></label>
+                    </div>
+                    <div class="actions group2">
+                       <label class="yellow" id="buttonnorth" for="yellow"></label>
+                       <label class="red" id="buttonsouth" for="red"></label>
+                    </div>
+                    </div>
+                 </aside>
+                 <div class="l2 backside-buttons">
+                    <button id="buttonl2">L2</button>
+                 </div>
+                 <div class="l1 backside-buttons">
+                    <button id="buttonl1">L1</button>
+                 </div>
+                 <div class="r2 backside-buttons">
+                    <button id="buttonr2">R2</button>
+                 </div>
+                 <div class="r1 backside-buttons">
+                  <button id="buttonr1">R1</button>
+                  </div>
+                 <div class="stroke-base"></div>
+                 
+              </div>
+           </section>
+        </main>
+        <div class="colors bg-green"></div>
+        <div class="colors bg-blue"></div>
+        <div class="colors bg-yellow"></div>
+        <div class="colors bg-red"></div>
+        <div class="basecolor"></div>
+        <script type="text/javascript" src="../public/js/requestrest.js"></script>
+        <script type="text/javascript" src="../public/js/updateposition.js"></script>
+        <script type="text/javascript" src="../public/js/app.js"></script>
+    </body>
+</html>
