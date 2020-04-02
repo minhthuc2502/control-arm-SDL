@@ -30,7 +30,11 @@ $ sudo ./armDev --mode "server-web"
 - set position initial using `localhost:3000/initposition`
 - control robotic arm using example `localhost:3000/shoulder?direction=1`
 
+<<<<<<< HEAD
 
 
 
 
+=======
+Otherwise, you can control robotic's arm by web application which will call rest api http. This web application give you a joystick virtual.  
+>>>>>>> f15f7c3715520a6a40db91f0245e1967d6ea9640
