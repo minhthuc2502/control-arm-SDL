@@ -1,5 +1,4 @@
 #include "httpserver.hpp"
-<<<<<<< HEAD
 #define SERVERKEYFILE "../server.key"
 #define SERVERCERTFILE "../server.pem"
 
@@ -54,8 +53,6 @@ char * load_file (const char *filename)
   fclose (fp);
   return buffer;
 }
-=======
->>>>>>> f15f7c3715520a6a40db91f0245e1967d6ea9640
 
 ServerController server;
 const char* badpage = "<html><head><title></title></head><body><h1>A error occur on server</h1></body></html>";
@@ -63,7 +60,6 @@ const char* badpage = "<html><head><title></title></head><body><h1>A error occur
 bool HttpServer::http_server_run()
 {
     struct MHD_Daemon * d;
-<<<<<<< HEAD
     char *key_pem;
     char *cert_pem;
 
@@ -93,7 +89,6 @@ bool HttpServer::http_server_run()
     MHD_stop_daemon(d);
     free(key_pem);
     free(cert_pem);
-=======
     d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION,
                           3000, NULL, NULL, &_answer_request,
                           NULL, MHD_OPTION_END);
@@ -103,7 +98,6 @@ bool HttpServer::http_server_run()
     }
     (void) getc(stdin);
     MHD_stop_daemon(d);
->>>>>>> f15f7c3715520a6a40db91f0245e1967d6ea9640
     return true;
 }
 
