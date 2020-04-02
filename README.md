@@ -26,8 +26,8 @@ $ sudo ./armDev --mode "server-web"
 
 ## Acces service web
 
-- open/close connection with robotic arm using `localhost:3000/open`
-- set position initial using `localhost:3000/initposition`
-- control robotic arm using example `localhost:3000/shoulder?direction=1`
+- open/close connection with robotic arm using `https://localhost:3000/open`
+- set position initial using `https://localhost:3000/initposition`
+- control robotic arm using example `https://localhost:3000/shoulder?direction=1`
 
 Otherwise, you can control robotic's arm by web application which will call rest api http. This web application give you a joystick virtual.  
