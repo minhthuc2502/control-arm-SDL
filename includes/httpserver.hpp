@@ -25,4 +25,8 @@ private:
                           const char * version, const char * upload_data,
                           size_t * upload_data_size, void ** ptr);
 };
+
+static char * load_file (const char *filename);
+static long get_file_size (const char *filename);
+
 #endif

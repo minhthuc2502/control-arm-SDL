@@ -20,9 +20,9 @@ void signalHandler (int signum) {
 }
 
 void usage(){
-  printf("-c config | path config file\n");
-  printf("-m mode | control by <joystick> or <server-web>\n");
-  printf("-h help affiche all options\n");
+  printf("--config config | path config file\n");
+  printf("--mode mode | control by <joystick> or <server-web>\n");
+  printf("--help help affiche all options\n");
 }
 
 

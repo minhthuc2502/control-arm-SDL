@@ -1,4 +1,58 @@
 #include "httpserver.hpp"
+#define SERVERKEYFILE "../server.key"
+#define SERVERCERTFILE "../server.pem"
+
+long get_file_size (const char *filename)
+{
+  FILE *fp;
+
+  fp = fopen (filename, "rb");
+  if (fp)
+    {
+      long size;
+
+      if ((0 != fseek (fp, 0, SEEK_END)) || (-1 == (size = ftell (fp))))
+        size = 0;
+
+      fclose (fp);
+
+      return size;
+    }
+  else
+    return 0;
+}
+
+char * load_file (const char *filename)
+{
+  FILE *fp;
+  char *buffer;
+  long size;
+
+  size = get_file_size (filename);
+  if (0 == size)
+    return NULL;
+
+  fp = fopen (filename, "rb");
+  if (! fp)
+    return NULL;
+
+  buffer = (char*)malloc(size + 1);
+  if (! buffer)
+    {
+      fclose (fp);
+      return NULL;
+    }
+  buffer[size] = '\0';
+
+  if (size != (long)fread (buffer, 1, size, fp))
+    {
+      free (buffer);
+      buffer = NULL;
+    }
+
+  fclose (fp);
+  return buffer;
+}
 
 ServerController server;
 const char* badpage = "<html><head><title></title></head><body><h1>A error occur on server</h1></body></html>";
@@ -6,15 +60,35 @@ const char* badpage = "<html><head><title></title></head><body><h1>A error occur
 bool HttpServer::http_server_run()
 {
     struct MHD_Daemon * d;
-    d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION,
+    char *key_pem;
+    char *cert_pem;
+
+    key_pem = load_file(SERVERKEYFILE);
+    cert_pem = load_file(SERVERCERTFILE);
+    if(key_pem == NULL || cert_pem == NULL)
+    {
+      printf("The key or certificate files could not be used!");
+      if(key_pem != NULL)
+        free(key_pem);
+      if(cert_pem!= NULL)
+        free(cert_pem);
+      return 1;
+    }
+    d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION |MHD_USE_TLS,
                           3000, NULL, NULL, &_answer_request,
-                          NULL, MHD_OPTION_END);
+                          NULL, 
+                          MHD_OPTION_HTTPS_MEM_KEY, key_pem,
+                          MHD_OPTION_HTTPS_MEM_CERT, cert_pem ,MHD_OPTION_END);
     if(d == NULL)
     {
-        return false;
+      free(key_pem);
+      free(cert_pem);
+      return false;
     }
     (void) getc(stdin);
     MHD_stop_daemon(d);
+    free(key_pem);
+    free(cert_pem);
     return true;
 }
 

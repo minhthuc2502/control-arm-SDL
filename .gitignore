@@ -30,7 +30,7 @@
 *.exe
 *.out
 *.app
-/out/*
+out/
 
 CMakeCache.txt
 CMakeFiles
