@@ -22,6 +22,7 @@ void signalHandler (int signum) {
 void usage(){
   printf("--config config | path config file\n");
   printf("--mode mode | control by <joystick> or <server-web>\n");
+  printf("--port port | port listening\n");
   printf("--help help affiche all options\n");
 }
 
@@ -29,6 +30,7 @@ void usage(){
 int main(int argc, char *argv[]) {
   char *pathConfig = NULL;
   char *mode = NULL;
+  int port = 0;
   int option_index;
   int index;
   int o;
@@ -38,10 +40,11 @@ int main(int argc, char *argv[]) {
     {"config", required_argument,  0 , 'c'},
     {"help", no_argument,  0 , 'h'},
     {"mode", required_argument, 0, 'm'},
-    {0, 0, 0, 0}
+    {"port", required_argument, 0, 'p'},
+    {0, 0, 0, 0},
   };
 
-  while( (o = getopt_long(argc,argv,"c:h:m",long_options, &option_index)) != -1){
+  while( (o = getopt_long(argc,argv,"c:h:p:m:",long_options, &option_index)) != -1){
       switch (o)
       {
         case 'c':
@@ -50,11 +53,14 @@ int main(int argc, char *argv[]) {
         case 'm':
           mode = optarg;
           break;
+        case 'p':
+          port = atoi(optarg);
+          break;
         case 'h':
           usage();
           return EXIT_SUCCESS;
         case '?':
-          if(optopt == 'c' || optopt == 'm')
+          if(optopt == 'c' || optopt == 'm' || optopt == 'p')
             fprintf(stderr, "Option -%c requires an argument. \n", optopt);
           else if (isprint (optopt))
             fprintf(stderr, "Unknown option -%c.\n",optopt);
@@ -115,10 +121,15 @@ int main(int argc, char *argv[]) {
     }
 
     else if(!strcmp(mode,"server-web")){
+      if(!port)
+      {
+        printf("./armDev --mode 'server-web' --port [Number of port]\n");
+        return 1;
+      }
       LOG_I("Launching Server");
       // for web service
       HttpServer httpserver;
-      httpserver.http_server_run();
+      httpserver.http_server_run(port);
       LOG_I("Program end!");
     }
   }

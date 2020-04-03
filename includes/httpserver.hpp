@@ -18,9 +18,9 @@ public:
     HttpServer(){};
 
     /** @brief this function allows running server on port 3000
-     *  @param none
+     *  @param port listening
     */
-    bool http_server_run();
+    bool http_server_run(int port);
 private:
     /** @brief this function allows send bad response if it occurs problem on server 
      *  @param pointer of the connection

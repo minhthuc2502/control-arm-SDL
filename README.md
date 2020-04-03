@@ -23,13 +23,15 @@ $ sudo ./armDev --mode "joystick" --config ../config/nintendoJoystick.cfg
 > use web server
 
 ```
-$ sudo ./armDev --mode "server-web"
+$ sudo ./armDev --mode "server-web" --port [Number of port listening]
 ```
 
 ## Acces service web
 
-- open/close connection with robotic arm using `https://localhost:3000/open`
-- set position initial using `https://localhost:3000/initposition`
-- control robotic arm using example `https://localhost:3000/shoulder?direction=1`
+- open/close connection with robotic arm using `https://localhost:[port]/open`
+- set position initial using `https://localhost:[port]/initposition`
+- control robotic arm using example `https://localhost:[port]/shoulder?direction=1`
 
 Otherwise, you can control robotic's arm by web application which will call rest api https. This web application give you a joystick virtual.  
+> note
+the port used to be called in web application is 3000. If you want to call rest api https in another port, please change url fetched in `app.js` 
