@@ -6,11 +6,11 @@ function ResquestRestHttpArm(endpoint,direction,mode = ""){
     {
         if(endpoint == "wrist")
         {
-            url = "http://localhost:3000/" + endpoint + "?direction=" + direction + "&type=" + mode;
+            url = "https://localhost:3000/" + endpoint + "?direction=" + direction + "&type=" + mode;
         }
         else
         {
-            url = "http://localhost:3000/" + endpoint + "?direction=" + direction;
+            url = "https://localhost:3000/" + endpoint + "?direction=" + direction;
         }
         fetch(url).then((response) => {
             response.json().then((data) => {
