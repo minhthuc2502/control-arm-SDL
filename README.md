@@ -23,7 +23,7 @@ $ sudo ./armDev --mode "joystick" --config ../config/nintendoJoystick.cfg
 > use web server
 
 ```
-$ sudo ./armDev --mode "server-web" --port [Number of port listening]
+$ sudo ./armDev --mode "server-web" --port [Number of port listening] --standard [http/https]
 ```
 
 ## Acces service web
