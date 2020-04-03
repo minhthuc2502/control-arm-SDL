@@ -23,6 +23,7 @@ void usage(){
   printf("--config config | path config file\n");
   printf("--mode mode | control by <joystick> or <server-web>\n");
   printf("--port port | port listening\n");
+  printf("--protocol protocol | http ou https");
   printf("--help help affiche all options\n");
 }
 
@@ -30,6 +31,7 @@ void usage(){
 int main(int argc, char *argv[]) {
   char *pathConfig = NULL;
   char *mode = NULL;
+  char *standard = NULL;
   int port = 0;
   int option_index;
   int index;
@@ -41,10 +43,11 @@ int main(int argc, char *argv[]) {
     {"help", no_argument,  0 , 'h'},
     {"mode", required_argument, 0, 'm'},
     {"port", required_argument, 0, 'p'},
+    {"standard", required_argument, 0, 's'},
     {0, 0, 0, 0},
   };
 
-  while( (o = getopt_long(argc,argv,"c:h:p:m:",long_options, &option_index)) != -1){
+  while( (o = getopt_long(argc,argv,"c:h:p:m:s:",long_options, &option_index)) != -1){
       switch (o)
       {
         case 'c':
@@ -56,11 +59,14 @@ int main(int argc, char *argv[]) {
         case 'p':
           port = atoi(optarg);
           break;
+        case 's':
+          standard = optarg;
+          break;  
         case 'h':
           usage();
           return EXIT_SUCCESS;
         case '?':
-          if(optopt == 'c' || optopt == 'm' || optopt == 'p')
+          if(optopt == 'c' || optopt == 'm' || optopt == 'p' || optopt == 's')
             fprintf(stderr, "Option -%c requires an argument. \n", optopt);
           else if (isprint (optopt))
             fprintf(stderr, "Unknown option -%c.\n",optopt);
@@ -121,15 +127,15 @@ int main(int argc, char *argv[]) {
     }
 
     else if(!strcmp(mode,"server-web")){
-      if(!port)
+      if(!port || standard == NULL)
       {
-        printf("./armDev --mode 'server-web' --port [Number of port]\n");
+        printf("./armDev --mode 'server-web' --port [Number of port]\n --standard [http/https]");
         return 1;
       }
       LOG_I("Launching Server");
       // for web service
       HttpServer httpserver;
-      httpserver.http_server_run(port);
+      httpserver.http_server_run(port, standard);
       LOG_I("Program end!");
     }
   }

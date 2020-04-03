@@ -19,8 +19,9 @@ public:
 
     /** @brief this function allows running server on port 3000
      *  @param port listening
+     *         protocol http/https
     */
-    bool http_server_run(int port);
+    bool http_server_run(int port, char* standard);
 private:
     /** @brief this function allows send bad response if it occurs problem on server 
      *  @param pointer of the connection
