@@ -57,7 +57,7 @@ static char * load_file (const char *filename)
   return buffer;
 }
 
-bool HttpServer::http_server_run(int port)
+bool HttpServer::http_server_run(int port, char * standard)
 {
     struct MHD_Daemon * d;
     char *key_pem;
@@ -65,38 +65,44 @@ bool HttpServer::http_server_run(int port)
 
     key_pem = load_file(SERVERKEYFILE);
     cert_pem = load_file(SERVERCERTFILE);
-    if(key_pem == NULL || cert_pem == NULL)
+    if(!strcmp(standard,"http"))
     {
-      printf("The key or certificate files could not be used!");
-      if(key_pem != NULL)
-        free(key_pem);
-      if(cert_pem!= NULL)
-        free(cert_pem);
-      return 1;
+      d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION,
+                      port, NULL, NULL, &_answer_request,
+                      NULL,MHD_OPTION_END);
     }
-    d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION |MHD_USE_TLS,
-                          port, NULL, NULL, &_answer_request,
-                          NULL, 
-                          MHD_OPTION_HTTPS_MEM_KEY, key_pem,
-                          MHD_OPTION_HTTPS_MEM_CERT, cert_pem ,MHD_OPTION_END);
+    else if(!strcmp(standard,"https"))
+    {
+      if(key_pem == NULL || cert_pem == NULL)
+      {
+        printf("The key or certificate files could not be used!");
+        if(key_pem != NULL)
+          free(key_pem);
+        if(cert_pem!= NULL)
+          free(cert_pem);
+        return 1;
+      }
+      d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION |MHD_USE_TLS,
+                            port, NULL, NULL, &_answer_request,
+                            NULL, 
+                            MHD_OPTION_HTTPS_MEM_KEY, key_pem,
+                            MHD_OPTION_HTTPS_MEM_CERT, cert_pem ,MHD_OPTION_END);
+    }
     if(d == NULL)
     {
-      free(key_pem);
-      free(cert_pem);
+      if(!strcmp(standard,"https"))
+      {
+        free(key_pem);
+        free(cert_pem);
+      }
       return false;
     }
     (void) getc(stdin);
-    MHD_stop_daemon(d);
-    free(key_pem);
-    free(cert_pem);
-    d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION,
-                          3000, NULL, NULL, &_answer_request,
-                          NULL, MHD_OPTION_END);
-    if(d == NULL)
+    if(!strcmp(standard,"https"))
     {
-        return false;
+      free(key_pem);
+      free(cert_pem);
     }
-    (void) getc(stdin);
     MHD_stop_daemon(d);
     return true;
 }
