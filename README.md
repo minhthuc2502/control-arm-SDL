@@ -5,6 +5,8 @@ The project aims to control a robotic arm with all kind of joystick (home made a
 
 The user-space applications can be built using CMake. Some of them have dependencies that you will need to install first: `libevdev-dev libsdl2-dev libudev-dev libboost-dev libmicrohttpd-dev`
 
+After installing the packages above, if it exists an error not find directory, find directory `libmicrohttpd-dev.so` in your machine and change `include_directories : /usr/lib/x86_64-linux-gnu/` to your directory.
+
 The easiest way to build it is to move to dev/user and run `cmake . && make`. This method allows you to build out of source wherever you want.
 However, in each source directory, a `build.sh` script is provided for the sake of simplicity.
 
@@ -30,4 +32,4 @@ $ sudo ./armDev --mode "server-web"
 - set position initial using `https://localhost:3000/initposition`
 - control robotic arm using example `https://localhost:3000/shoulder?direction=1`
 
-Otherwise, you can control robotic's arm by web application which will call rest api http. This web application give you a joystick virtual.  
+Otherwise, you can control robotic's arm by web application which will call rest api https. This web application give you a joystick virtual.  

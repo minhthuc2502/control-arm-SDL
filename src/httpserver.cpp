@@ -2,7 +2,10 @@
 #define SERVERKEYFILE "../server.key"
 #define SERVERCERTFILE "../server.pem"
 
-long get_file_size (const char *filename)
+ServerController server;
+const char* badpage = "<html><head><title></title></head><body><h1>A error occur on server</h1></body></html>";
+
+static long get_file_size (const char *filename)
 {
   FILE *fp;
 
@@ -22,7 +25,7 @@ long get_file_size (const char *filename)
     return 0;
 }
 
-char * load_file (const char *filename)
+static char * load_file (const char *filename)
 {
   FILE *fp;
   char *buffer;
@@ -53,9 +56,6 @@ char * load_file (const char *filename)
   fclose (fp);
   return buffer;
 }
-
-ServerController server;
-const char* badpage = "<html><head><title></title></head><body><h1>A error occur on server</h1></body></html>";
 
 bool HttpServer::http_server_run()
 {
