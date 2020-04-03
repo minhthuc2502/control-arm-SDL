@@ -57,7 +57,7 @@ static char * load_file (const char *filename)
   return buffer;
 }
 
-bool HttpServer::http_server_run()
+bool HttpServer::http_server_run(int port)
 {
     struct MHD_Daemon * d;
     char *key_pem;
@@ -75,7 +75,7 @@ bool HttpServer::http_server_run()
       return 1;
     }
     d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION |MHD_USE_TLS,
-                          3000, NULL, NULL, &_answer_request,
+                          port, NULL, NULL, &_answer_request,
                           NULL, 
                           MHD_OPTION_HTTPS_MEM_KEY, key_pem,
                           MHD_OPTION_HTTPS_MEM_CERT, cert_pem ,MHD_OPTION_END);
