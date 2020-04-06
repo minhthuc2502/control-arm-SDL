@@ -1,19 +1,8 @@
-//$Header$
-//------------------------------------------------------------------------------
-//                                     ArmAL5D
-//------------------------------------------------------------------------------
-//IIOT_ROBOTIC_ARM_2018
-//author: Quentin Pantostier
-//created: 31/05/2018
-/*
-* This class provide method to control an lynxmotion AL5D robotic arm
-*/
-//------------------------------------------------------------------------------
 #ifndef ARM_AL5D_H
 #define ARM_AL5D_H
 
-#include "ArmI.hpp"
-#include "UdevHandler.hpp"
+#include "armI.hpp"
+#include "udevhandler.hpp"
 #include <string>
 #include <stdio.h>
 #include <sys/types.h>
@@ -97,7 +86,6 @@ protected:
     * @param AccStatus of the received arm_event
     */
   int GetSpeed(int value);
-  //std::vector<std::string> AccStatusTranslate(int32_t);
 
 public:
   ArmAL5D(): fd_(-1), pt2FindDevnode(std::bind(&ArmAL5D::FindDevnode, this, std::placeholders::_1)){
@@ -110,11 +98,7 @@ public:
   /// @brief method inherite from the arm interface, open device
   bool Open();
   /// @brief method inherite from the arm interface, close device
-  bool Close();
-  /** @brief method inherite from the arm interface, control movement
-    * @param arm_event wich contain movement's informations
-    */
-   
+  bool Close(); 
   /// @brief this method set arm positon to initial one
   bool MoveToInitialPosition();
   bool Write(arm_event);

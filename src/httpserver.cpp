@@ -57,7 +57,7 @@ static char * load_file (const char *filename)
   return buffer;
 }
 
-bool HttpServer::http_server_run(int port, char * standard)
+bool HttpServer::HTTPServerRun(int port, char * standard)
 {
     struct MHD_Daemon * d;
     char *key_pem;
@@ -169,7 +169,7 @@ int HttpServer::_answer_request(void* cls, struct MHD_Connection * connection,
     return _send_bad_response(connection);
   }
   //call api to control arm
-  apicontrol.response_rest_request(url,url_arg,respdata,server);
+  apicontrol.ResponseRestRequest(url,url_arg,respdata,server);
   *ptr = NULL;
   respbuffer = (char*) malloc(respdata.size()+1);
   if(respbuffer == 0)

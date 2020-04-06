@@ -1,18 +1,7 @@
-//------------------------------------------------------------------------------
-//                           JoystickInterface
-//------------------------------------------------------------------------------
-//IIOT_ROBOTIC_ARM_2018
-//author: Quentin Pantostier
-//created: 15/05/2018
-/*
-* This class provide method definition that should be use to connect a gamepad
-* to the server
-*/
-//------------------------------------------------------------------------------
 #ifndef JOYSTICK_I_H
 #define JOYSTICK_I_H
 
-#include "ArmI.hpp"
+#include "armI.hpp"
 typedef struct{
   int BNorth;              
   int BSouth;              
@@ -46,7 +35,7 @@ public:
   /// @brief virtual method that should close device
   virtual bool Close() = 0;
   /// @brief method inherite from the joystick interface, get the parameters configuration
-  virtual bool Getconfig(char*) = 0;
+  virtual bool GetConfig(char*) = 0;
   //accesor
   bool IsOpen(){return isOpen;};
 };

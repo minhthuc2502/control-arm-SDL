@@ -2,15 +2,15 @@
 //------------------------------------------------------------------------------
 //                                      JoystickPS3
 //------------------------------------------------------------------------------
-//IIOT_ROBOTIC_ARM_2018
-//author: Quentin Pantostier
-//created: 15/05/2018
+//IIOT_ROBOTIC_ARM_2020
+//author: PHAM Minh Thuc
+//created: 01/04/2020
 /*
 * This class provide access to usb device such as PS3 gamepad
 */
 //------------------------------------------------------------------------------
 
-#include "JoystickPS3.hpp"
+#include "joystickPS3.hpp"
 #include "log.h"
 
 //------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 /**
  * Connect joystick
 */
-void JoystickPS3::init(){
+void JoystickPS3::_init(){
   haveHat = false;
   pconfigJoy.BNorth = 0;
   pconfigJoy.BSouth = 0;
@@ -37,7 +37,7 @@ void JoystickPS3::init(){
   pconfigJoy.BStart = 0;
   pconfigJoy.BHome  = 10;
 }
-bool JoystickPS3::Getconfig(char* fileConfig){
+bool JoystickPS3::GetConfig(char* fileConfig){
   // No need to call close
   std::ifstream cFile (fileConfig);
   if (cFile.is_open())
@@ -161,7 +161,7 @@ bool JoystickPS3::Open() {
     return false;
   }
   
-  init();
+  _init();
   return true;
 }
 
@@ -188,10 +188,10 @@ bool JoystickPS3::Close(){
    // if event is press button or modify axis
    if(event.type == SDL_JOYAXISMOTION || event.type == SDL_JOYBUTTONDOWN || event.type == SDL_JOYBUTTONUP || event.type == SDL_JOYHATMOTION)
    {
-     PrintEvent(&event);
-     SetMovement(&event);
+     _print_event(&event);
+     _set_movement(&event);
    }
-   newMovement = IsNewEvent();
+   newMovement = _is_new_event();
   return newMovement;
 }
 
@@ -199,7 +199,7 @@ bool JoystickPS3::Close(){
 //  Private methods
 //------------------------------------------------------------------------------
 
-void JoystickPS3::PrintEvent(SDL_Event* ev) {
+void JoystickPS3::_print_event(SDL_Event* ev) {
   if(ev->type == SDL_JOYAXISMOTION){
     printf("Event:  axis %d of joystick value: %d \n",
     ev->jaxis.axis, //return axis correspondant on joystick
@@ -218,67 +218,67 @@ void JoystickPS3::PrintEvent(SDL_Event* ev) {
 /**
  * Analyse the event and set status of movement
 */
-void JoystickPS3::SetMovement(SDL_Event* ev) { 
+void JoystickPS3::_set_movement(SDL_Event* ev) { 
   if(ev->type == SDL_JOYBUTTONDOWN){
     // button South
     if(ev->jbutton.button == pconfigJoy.BSouth){
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_south);
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_south);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     // button East
     if(ev->jbutton.button == pconfigJoy.BEast) {
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_east);
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_east);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     // button Nord
     if(ev->jbutton.button == pconfigJoy.BNorth) {
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_north);
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_north);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     // button West
     if(ev->jbutton.button == pconfigJoy.BWest) {
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_west);;
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_west);;
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     // button TL
     if(ev->jbutton.button == pconfigJoy.BTl) {
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_tl);
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_tl);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     // button TR
     if(ev->jbutton.button == pconfigJoy.BTr) {
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_tr);
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_tr);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     // button TL2 ou ZL
     if(ev->jbutton.button == pconfigJoy.BTl1) {
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_thumbl);
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_thumbl);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     // button TR2 ou ZR
     if(ev->jbutton.button == pconfigJoy.BTr1) {
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_thumbr);
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_thumbr);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     // button start
     if(ev->jbutton.button == pconfigJoy.BStart) {
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_start);
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_start);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
@@ -292,28 +292,28 @@ void JoystickPS3::SetMovement(SDL_Event* ev) {
     if(haveHat == false){
       // button Up
       if(ev->jbutton.button == pconfigJoy.BUp) {
-        ApplyMask(movement_.BtnStatus, 1, mask_btn_dpad_up);
+        _apply_mask(movement_.BtnStatus, 1, mask_btn_dpad_up);
         #ifdef DEBUG
           LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
         #endif
       }
       // button Down
       if(ev->jbutton.button == pconfigJoy.BDown) {
-        ApplyMask(movement_.BtnStatus, 1, mask_btn_dpad_down);
+        _apply_mask(movement_.BtnStatus, 1, mask_btn_dpad_down);
         #ifdef DEBUG
           LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
         #endif
       }
       // button Left
       if(ev->jbutton.button == pconfigJoy.BLeft) {
-        ApplyMask(movement_.BtnStatus, 1, mask_btn_dpad_left);
+        _apply_mask(movement_.BtnStatus, 1, mask_btn_dpad_left);
         #ifdef DEBUG
           LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
         #endif
       }
       // button Right
       if(ev->jbutton.button == pconfigJoy.BRight) {
-        ApplyMask(movement_.BtnStatus, 1, mask_btn_dpad_right);
+        _apply_mask(movement_.BtnStatus, 1, mask_btn_dpad_right);
         #ifdef DEBUG
           LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
         #endif
@@ -322,79 +322,79 @@ void JoystickPS3::SetMovement(SDL_Event* ev) {
   }
   if(ev->type == SDL_JOYBUTTONUP){
     if(ev->jbutton.button == pconfigJoy.BSouth){
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_south);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_south);
       #ifdef DEBUG
         LOG_D("event button %d (value=0) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == pconfigJoy.BEast) {
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_east);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_east);
       #ifdef DEBUG
         LOG_D("event button %d (value=0) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == pconfigJoy.BNorth) {
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_north);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_north);
       #ifdef DEBUG
         LOG_D("event button %d (value=0) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == pconfigJoy.BWest) {
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_west);;
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_west);;
       #ifdef DEBUG
         LOG_D("event button %d (value=0) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == pconfigJoy.BTl) {
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_tl);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_tl);
       #ifdef DEBUG
         LOG_D("event button %d (value=0) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == pconfigJoy.BTr) {
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_tr);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_tr);
       #ifdef DEBUG
         LOG_D("event button %d (value=0) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == pconfigJoy.BTl1) {
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_thumbl);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_thumbl);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == pconfigJoy.BTr1) {
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_thumbr);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_thumbr);
       #ifdef DEBUG
         LOG_D("event button %d (value=1) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == pconfigJoy.BStart) {
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_start);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_start);
       #ifdef DEBUG
         LOG_D("event button %d (value=0) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == pconfigJoy.BUp) {
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_dpad_up);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_dpad_up);
       #ifdef DEBUG
         LOG_D("event button %d (value=0) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == pconfigJoy.BDown) {
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_dpad_down);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_dpad_down);
       #ifdef DEBUG
         LOG_D("event button %d (value=0) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == pconfigJoy.BLeft) {
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_dpad_left);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_dpad_left);
       #ifdef DEBUG
         LOG_D("event button %d (value=0) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
     }
     if(ev->jbutton.button == pconfigJoy.BRight) {
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_dpad_right);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_dpad_right);
       #ifdef DEBUG
         LOG_D("event button %d (value=0) => %s", ev->jbutton.button, binaire(16, movement_.BtnStatus));
       #endif
@@ -404,34 +404,34 @@ void JoystickPS3::SetMovement(SDL_Event* ev) {
   {
     printf("TEST\n");
     if(ev->jhat.value == pconfigJoy.BUp ){
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_dpad_up);
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_dpad_up);
       #ifdef DEBUG
         LOG_D("event DPAD UP pressed");
       #endif
     }
     else if(ev->jhat.value == pconfigJoy.BDown ){
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_dpad_down);
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_dpad_down);
       #ifdef DEBUG
         LOG_D("event DPAD DOWN pressed");
       #endif
     }
     else if(ev->jhat.value == pconfigJoy.BLeft ){
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_dpad_left);
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_dpad_left);
       #ifdef DEBUG
         LOG_D("event DPAD LEFT pressed");
       #endif
     }
     else if(ev->jhat.value == pconfigJoy.BRight ){
-      ApplyMask(movement_.BtnStatus, 1, mask_btn_dpad_right);
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_dpad_right);
       #ifdef DEBUG
         LOG_D("event DPAD RIGHT pressed");
       #endif
     }
     else if(ev->jhat.value == 0 ){
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_dpad_up);
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_dpad_down);
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_dpad_left);
-      ApplyMask(movement_.BtnStatus, 0, mask_btn_dpad_right);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_dpad_up);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_dpad_down);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_dpad_left);
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_dpad_right);
       #ifdef DEBUG
         LOG_D("event DPAD RIGHT pressed");
       #endif
@@ -439,7 +439,7 @@ void JoystickPS3::SetMovement(SDL_Event* ev) {
   }
 }
 
-void JoystickPS3::ApplyMask(int32_t& statusRegistre, int value, int mask){
+void JoystickPS3::_apply_mask(int32_t& statusRegistre, int value, int mask){
   if(value != 0){
     statusRegistre = statusRegistre | mask;
   }else
@@ -449,7 +449,7 @@ void JoystickPS3::ApplyMask(int32_t& statusRegistre, int value, int mask){
 /**
  * Catch the new event
 */
-arm_event JoystickPS3::IsNewEvent(){
+arm_event JoystickPS3::_is_new_event(){
   static arm_event previousEvent = {};
   arm_event nullEvent = {};
   if(movement_.BtnStatus != previousEvent.BtnStatus){
@@ -458,8 +458,4 @@ arm_event JoystickPS3::IsNewEvent(){
   }else{
     return nullEvent;
   }
-}
-
-void JoystickPS3::SetForceFeedback() {
-
 }

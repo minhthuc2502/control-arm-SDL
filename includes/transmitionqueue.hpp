@@ -9,8 +9,8 @@
 * This class provide queue functionnality to link arm and joystick
 */
 //------------------------------------------------------------------------------
-#include "JoystickPS3.hpp"
-#include "ArmAL5D.hpp"
+#include "joystickPS3.hpp"
+#include "armAL5D.hpp"
 #include <queue>
 #include <thread>
 #include <mutex>

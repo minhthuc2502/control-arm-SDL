@@ -1,8 +1,8 @@
 #include <csignal>
 #include <execinfo.h>
-#include "JoystickPS3.hpp"
-#include "ArmAL5D.hpp"
-#include "TransmitionQueue.hpp"
+#include "joystickPS3.hpp"
+#include "armAL5D.hpp"
+#include "transmitionqueue.hpp"
 #include "log.h"
 #include "httpserver.hpp"
 #include <getopt.h>
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
         LOG_E("ERROR opening PS3 file descriptor");
         return EXIT_FAILURE;
       }else{
-        if(!PS3.Getconfig(pathConfig))
+        if(!PS3.GetConfig(pathConfig))
           return 0;
         tQueue.SetUseJoystick(&PS3);
       }
@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
       LOG_I("Launching Server");
       // for web service
       HttpServer httpserver;
-      httpserver.http_server_run(port, standard);
+      httpserver.HTTPServerRun(port, standard);
       LOG_I("Program end!");
     }
   }

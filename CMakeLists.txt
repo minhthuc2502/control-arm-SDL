@@ -19,11 +19,11 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/includes
 # Add source file
 #
 set(SOURCES
-    src/JoystickPS3.cpp
+    src/joystickPS3.cpp
     src/main.cpp
-    src/UdevHandler.cpp
-    src/ArmAL5D.cpp
-    src/TransmitionQueue.cpp
+    src/udevhandler.cpp
+    src/armAL5D.cpp
+    src/transmitionqueue.cpp
     src/log.cpp
     src/servercontroller.cpp
     src/resthttp.cpp

@@ -2,9 +2,9 @@
 //------------------------------------------------------------------------------
 //                                      JoystickUSB
 //------------------------------------------------------------------------------
-//IIOT_ROBOTIC_ARM_2018
-//author: Quentin Pantostier
-//created: 15/05/2018
+//IIOT_ROBOTIC_ARM_2020
+//author: PHAM Minh Thuc
+//created: 01/04/2020
 /*
 * This class provide acces to usb device such as PS3 gamepad
 */
@@ -12,9 +12,9 @@
 #ifndef JOYSTICK_PS3_H
 #define JOYSTICK_PS3_H
 
-#include "JoystickI.hpp"
-#include "UdevHandler.hpp"
-#include "ArmI.hpp"
+#include "joystickI.hpp"
+#include "udevhandler.hpp"
+#include "armI.hpp"
 #include <linux/joystick.h>
 #include <libevdev-1.0/libevdev/libevdev.h>
 #include <stdio.h>
@@ -89,28 +89,26 @@ private:
   SDL_Joystick *joy;
   arm_event movement_ = {};
 
-  void init();
+  void _init();
   /** @brief this method is call in joystick open to initialize
     *        the value of joystick
     * @param none
     */
   //void PrintEvent(struct input_event*);
-  void PrintEvent(SDL_Event*); 
+  void _print_event(SDL_Event*); 
   /// @brief this method allow the device's event configuration
-  void SetMovement(SDL_Event*);
+  void _set_movement(SDL_Event*);
   //void SetMovement(struct input_event*)/*, arm_event movement)*/;
   /** @brief this method is a convenient method to reduce switch case size
     * @param arm_event register to change
     * @param 0 to remove mask, other apply mask
     * @param mask to apply
     */
-  void ApplyMask(int32_t&, int, int);
+  void _apply_mask(int32_t&, int, int);
   /** @brief this method avoid event repetition in queue, return null event
     *        or current movment_ value
     */
-  arm_event IsNewEvent();
-  /// @breif this method should control force feedback
-  void SetForceFeedback();
+  arm_event _is_new_event();
 
 public:
   JoystickPS3(){};
@@ -127,7 +125,7 @@ public:
   /// @brief method inherite from the joystick interface, return next input_event
   arm_event Read();
   /// @brief method inherite from the joystick interface, return value battery
-  bool Getconfig(char*);
+  bool GetConfig(char*);
   /** @brief method inherite from the joystick interface, get the parameters configuration
     * @param char* path of config file
     */

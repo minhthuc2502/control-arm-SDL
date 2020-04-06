@@ -2,13 +2,13 @@
 //                                     TransmitionQueue
 //------------------------------------------------------------------------------
 //IIOT_ROBOTIC_ARM_2018
-//author: Quentin Pantostier
-//created: 06/06/2018
+//author: PHAM Minh Thuc
+//created: 01/04/2020
 /*
  * This class provide queue functionnality to link arm and joystick
  */
 //-----------------------------------------------------------------------------
-#include "TransmitionQueue.hpp"
+#include "transmitionqueue.hpp"
 #include "log.h"
 
 //------------------------------------------------------------------------------

@@ -22,7 +22,7 @@ RestHttp::RestHttp(){
     _apiparams["/wrist"] = set<string>(wristparams,wristparams+2);
 }
 
-bool RestHttp::response_rest_request(const string& url, const map<string, string>& argval, 
+bool RestHttp::ResponseRestRequest(const string& url, const map<string, string>& argval, 
                     string& response, ServerController& server)
 {
     bool ret = false;
@@ -87,12 +87,12 @@ bool RestHttp::_open_arm_rest(const string& url, const map<string, string>& argv
     }
     else
     {
-        ptit->second.push_back(make_pair("shoulder", pt::ptree(to_string(server.getjoint(SHOULDER).actualPosition))));
-        ptit->second.push_back(make_pair("elbow", pt::ptree(to_string(server.getjoint(ELBOW).actualPosition))));
-        ptit->second.push_back(make_pair("base", pt::ptree(to_string(server.getjoint(BASE).actualPosition))));
-        ptit->second.push_back(make_pair("gripper", pt::ptree(to_string(server.getjoint(GRIPPER).actualPosition))));
-        ptit->second.push_back(make_pair("wrist", pt::ptree(to_string(server.getjoint(WRIST).actualPosition))));
-        ptit->second.push_back(make_pair("wristrotation", pt::ptree(to_string(server.getjoint(WRIST_ROT).actualPosition))));
+        ptit->second.push_back(make_pair("shoulder", pt::ptree(to_string(server.GetJoint(SHOULDER).actualPosition))));
+        ptit->second.push_back(make_pair("elbow", pt::ptree(to_string(server.GetJoint(ELBOW).actualPosition))));
+        ptit->second.push_back(make_pair("base", pt::ptree(to_string(server.GetJoint(BASE).actualPosition))));
+        ptit->second.push_back(make_pair("gripper", pt::ptree(to_string(server.GetJoint(GRIPPER).actualPosition))));
+        ptit->second.push_back(make_pair("wrist", pt::ptree(to_string(server.GetJoint(WRIST).actualPosition))));
+        ptit->second.push_back(make_pair("wristrotation", pt::ptree(to_string(server.GetJoint(WRIST_ROT).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
     _generate_json_output(&openroot,response);
@@ -133,12 +133,12 @@ bool RestHttp::_init_position_arm_rest(const string& url, const map<string, stri
     }
     else
     {
-        ptit->second.push_back(make_pair("shoulder", pt::ptree(to_string(server.getjoint(SHOULDER).actualPosition))));
-        ptit->second.push_back(make_pair("elbow", pt::ptree(to_string(server.getjoint(ELBOW).actualPosition))));
-        ptit->second.push_back(make_pair("base", pt::ptree(to_string(server.getjoint(BASE).actualPosition))));
-        ptit->second.push_back(make_pair("gripper", pt::ptree(to_string(server.getjoint(GRIPPER).actualPosition))));
-        ptit->second.push_back(make_pair("wrist", pt::ptree(to_string(server.getjoint(WRIST).actualPosition))));
-        ptit->second.push_back(make_pair("wristrotation", pt::ptree(to_string(server.getjoint(WRIST_ROT).actualPosition))));
+        ptit->second.push_back(make_pair("shoulder", pt::ptree(to_string(server.GetJoint(SHOULDER).actualPosition))));
+        ptit->second.push_back(make_pair("elbow", pt::ptree(to_string(server.GetJoint(ELBOW).actualPosition))));
+        ptit->second.push_back(make_pair("base", pt::ptree(to_string(server.GetJoint(BASE).actualPosition))));
+        ptit->second.push_back(make_pair("gripper", pt::ptree(to_string(server.GetJoint(GRIPPER).actualPosition))));
+        ptit->second.push_back(make_pair("wrist", pt::ptree(to_string(server.GetJoint(WRIST).actualPosition))));
+        ptit->second.push_back(make_pair("wristrotation", pt::ptree(to_string(server.GetJoint(WRIST_ROT).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
     _generate_json_output(&initroot,response);
@@ -170,19 +170,19 @@ bool RestHttp::_control_shoulder_rest(const string& url, const map<string, strin
         _generate_json_output(&shoulderroot,response);
         return false;
     }
-    if(!(ret = server.move_shoulder(atoi(it->second.c_str()))))
+    if(!(ret = server.MoveShoulder(atoi(it->second.c_str()))))
     {
-        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(SHOULDER).actualPosition))));
+        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.GetJoint(SHOULDER).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
         _generate_json_output(&shoulderroot,response);
         return false;
     }
     else
     {
-        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(SHOULDER).actualPosition))));
-        ptit->second.push_back(make_pair("positionInit",pt::ptree(to_string(server.getjoint(SHOULDER).initPosition))));
-        ptit->second.push_back(make_pair("hightLimit",pt::ptree(to_string(server.getjoint(SHOULDER).limitHight))));
-        ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(SHOULDER).limitLow))));
+        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.GetJoint(SHOULDER).actualPosition))));
+        ptit->second.push_back(make_pair("positionInit",pt::ptree(to_string(server.GetJoint(SHOULDER).initPosition))));
+        ptit->second.push_back(make_pair("hightLimit",pt::ptree(to_string(server.GetJoint(SHOULDER).limitHight))));
+        ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.GetJoint(SHOULDER).limitLow))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
     _generate_json_output(&shoulderroot,response);
@@ -216,19 +216,19 @@ bool RestHttp::_control_elbow_rest(const string& url, const map<string, string>&
     }
 
     ptit = elbowroot.push_back(make_pair("elbow", elbow ));
-    if(!(ret = server.move_elbow(atoi(it->second.c_str()))))
+    if(!(ret = server.MoveElbow(atoi(it->second.c_str()))))
     {
-        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(ELBOW).actualPosition))));
+        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.GetJoint(ELBOW).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
         _generate_json_output(&elbowroot,response);
         return false;
     }
     else
     {
-        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(ELBOW).actualPosition))));
-        ptit->second.push_back(make_pair("positionInit",pt::ptree(to_string(server.getjoint(ELBOW).initPosition))));
-        ptit->second.push_back(make_pair("hightLimit",pt::ptree(to_string(server.getjoint(ELBOW).limitHight))));
-        ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(ELBOW).limitLow))));
+        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.GetJoint(ELBOW).actualPosition))));
+        ptit->second.push_back(make_pair("positionInit",pt::ptree(to_string(server.GetJoint(ELBOW).initPosition))));
+        ptit->second.push_back(make_pair("hightLimit",pt::ptree(to_string(server.GetJoint(ELBOW).limitHight))));
+        ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.GetJoint(ELBOW).limitLow))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
     _generate_json_output(&elbowroot,response);
@@ -261,19 +261,19 @@ bool RestHttp::_control_base_rest(const string& url, const map<string, string>& 
         return false;
     }
 
-    if(!(ret = server.rotate_base(atoi(it->second.c_str()))))
+    if(!(ret = server.RotateBase(atoi(it->second.c_str()))))
     {
-        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(BASE).actualPosition))));
+        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.GetJoint(BASE).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
         _generate_json_output(&baseroot,response);
         return false;
     }
     else
     {
-        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(BASE).actualPosition))));
-        ptit->second.push_back(make_pair("positionInit",pt::ptree(to_string(server.getjoint(BASE).initPosition))));
-        ptit->second.push_back(make_pair("hightLimit",pt::ptree(to_string(server.getjoint(BASE).limitHight))));
-        ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(BASE).limitLow))));
+        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.GetJoint(BASE).actualPosition))));
+        ptit->second.push_back(make_pair("positionInit",pt::ptree(to_string(server.GetJoint(BASE).initPosition))));
+        ptit->second.push_back(make_pair("hightLimit",pt::ptree(to_string(server.GetJoint(BASE).limitHight))));
+        ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.GetJoint(BASE).limitLow))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
     _generate_json_output(&baseroot,response);
@@ -306,19 +306,19 @@ bool RestHttp::_control_gripper_rest(const string& url, const map<string, string
         return false;
     }
 
-    if(!(ret = server.move_gripper(atoi(it->second.c_str()))))
+    if(!(ret = server.MoveGripper(atoi(it->second.c_str()))))
     {
-        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(GRIPPER).actualPosition))));
+        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.GetJoint(GRIPPER).actualPosition))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
         _generate_json_output(&gripperroot,response);
         return false;
     }
     else
     {
-        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(GRIPPER).actualPosition))));
-        ptit->second.push_back(make_pair("positionInit",pt::ptree(to_string(server.getjoint(GRIPPER).initPosition))));
-        ptit->second.push_back(make_pair("hightLimit",pt::ptree(to_string(server.getjoint(GRIPPER).limitHight))));
-        ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(GRIPPER).limitLow))));
+        ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.GetJoint(GRIPPER).actualPosition))));
+        ptit->second.push_back(make_pair("positionInit",pt::ptree(to_string(server.GetJoint(GRIPPER).initPosition))));
+        ptit->second.push_back(make_pair("hightLimit",pt::ptree(to_string(server.GetJoint(GRIPPER).limitHight))));
+        ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.GetJoint(GRIPPER).limitLow))));
         ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
     }
     _generate_json_output(&gripperroot,response);
@@ -377,37 +377,37 @@ bool RestHttp::_control_wrist_rest(const string& url, const map<string, string>&
 
     if(it2->second == "move")
     {   
-        if(!(ret = server.move_wrist(atoi(it->second.c_str()))))
+        if(!(ret = server.MoveWrist(atoi(it->second.c_str()))))
         {
-            ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(WRIST).actualPosition))));
+            ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.GetJoint(WRIST).actualPosition))));
             ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
             _generate_json_output(&wristroot,response);
             return false;
         }
         else
         {
-            ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(WRIST).actualPosition))));
-            ptit->second.push_back(make_pair("positionInit",pt::ptree(to_string(server.getjoint(WRIST).initPosition))));
-            ptit->second.push_back(make_pair("hightLimit",pt::ptree(to_string(server.getjoint(WRIST).limitHight))));
-            ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(WRIST).limitLow))));
+            ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.GetJoint(WRIST).actualPosition))));
+            ptit->second.push_back(make_pair("positionInit",pt::ptree(to_string(server.GetJoint(WRIST).initPosition))));
+            ptit->second.push_back(make_pair("hightLimit",pt::ptree(to_string(server.GetJoint(WRIST).limitHight))));
+            ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.GetJoint(WRIST).limitLow))));
             ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
         }
     }
     else if(it2->second == "rotate")
     {
-        if(!(ret = server.rotate_wrist(atoi(it->second.c_str()))))
+        if(!(ret = server.RotateWrist(atoi(it->second.c_str()))))
         {
-            ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(WRIST_ROT).actualPosition))));
+            ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.GetJoint(WRIST_ROT).actualPosition))));
             ptit->second.push_back(make_pair("status",pt::ptree(string("Failed"))));            
             _generate_json_output(&wristroot,response);
             return false;
         }
         else
         {
-            ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.getjoint(WRIST_ROT).actualPosition))));
-            ptit->second.push_back(make_pair("positionInit",pt::ptree(to_string(server.getjoint(WRIST_ROT).initPosition))));
-            ptit->second.push_back(make_pair("hightLimit",pt::ptree(to_string(server.getjoint(WRIST_ROT).limitHight))));
-            ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.getjoint(WRIST_ROT).limitLow))));
+            ptit->second.push_back(make_pair("positionCurrent", pt::ptree(to_string(server.GetJoint(WRIST_ROT).actualPosition))));
+            ptit->second.push_back(make_pair("positionInit",pt::ptree(to_string(server.GetJoint(WRIST_ROT).initPosition))));
+            ptit->second.push_back(make_pair("hightLimit",pt::ptree(to_string(server.GetJoint(WRIST_ROT).limitHight))));
+            ptit->second.push_back(make_pair("lowLimit",pt::ptree(to_string(server.GetJoint(WRIST_ROT).limitLow))));
             ptit->second.push_back(make_pair("status",pt::ptree(string("OK"))));
         }
     }
