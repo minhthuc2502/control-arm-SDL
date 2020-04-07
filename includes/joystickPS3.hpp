@@ -1,14 +1,11 @@
-//$Header$
-//------------------------------------------------------------------------------
-//                                      JoystickUSB
-//------------------------------------------------------------------------------
-//IIOT_ROBOTIC_ARM_2020
-//author: PHAM Minh Thuc
-//created: 01/04/2020
-/*
-* This class provide acces to usb device such as PS3 gamepad
-*/
-//------------------------------------------------------------------------------
+/**
+ * @file joystickPS3.hpp
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief File defines class and function to attach joystick and get the event on the joystick.
+ * These event is analyzed and return in final the command corresponding.
+ * play station 3 and nintendo switch
+ */
 #ifndef JOYSTICK_PS3_H
 #define JOYSTICK_PS3_H
 

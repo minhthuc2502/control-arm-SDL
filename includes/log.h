@@ -1,14 +1,9 @@
-//$Header$
-//------------------------------------------------------------------------------
-//                              Log
-//------------------------------------------------------------------------------
-//IIOT_ROBOTIC_ARM_2018
-//author: Quentin Pantostier
-//created: 27/06/2018
-/*
-* This class provide log macros
-*/
-//------------------------------------------------------------------------------
+/**
+ * @file log.h
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief File define log function to log the information in program and debug.
+ */
 #ifndef LOG_H
 #define LOG_H
 

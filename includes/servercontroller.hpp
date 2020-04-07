@@ -1,3 +1,10 @@
+/**
+ * @file servercontroller.h
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief File contains functions which creat the commands speciffied for each part of arm ALD5.
+ * Each function helps us control a part of arm. Using in web service.
+ */
 #ifndef  SERVER_CONTROLLER_ARM_H
 #define SERVER_CONTROLLER_ARM_H
 

@@ -1,3 +1,10 @@
+/**
+ * @file armAL5D.hpp
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief File contains function to connect, initialize and write command to arm robotic ALD5
+ * @see http://www.lynxmotion.com/c-130-al5d.aspx
+ */
 #ifndef ARM_AL5D_H
 #define ARM_AL5D_H
 

@@ -1,16 +1,9 @@
-//$Header$
-//------------------------------------------------------------------------------
-//                                      ArmAL5D
-//------------------------------------------------------------------------------
-//IIOT_ROBOTIC_ARM_2018
-//author: Quentin Pantostier
-//created: 11/06/2018
-/*
-* This class provide log functions.
-* deprecated
-*/
-//------------------------------------------------------------------------------
-
+/**
+ * @file logger.hpp
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief another version of log file. Don't be used.
+ */
 #include "Logger.hpp"
 
 //------------------------------------------------------------------------------

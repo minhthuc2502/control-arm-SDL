@@ -1,3 +1,10 @@
+/**
+ * @file udevhandler.hpp
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief File define class provide node detection and hotplug fonctionnality for arm ALD5.
+ * Using udev library to detect.
+ */
 #include "udevhandler.hpp"
 #include "log.h"
 

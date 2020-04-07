@@ -1,3 +1,10 @@
+/**
+ * @file resthttp.h
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief File contain class and function to define the endpoint and provide a REST API for client.
+ * This REST API give us services web to control arm ALD5 through browers for example.
+ */
 #ifndef __REST_HTTP__
 #define __REST_HTTP__
 

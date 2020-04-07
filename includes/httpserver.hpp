@@ -1,3 +1,10 @@
+/**
+ * @file httpserver.hpp
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief File contains class and function to generate a server http/https. This server 
+ * provide an API REST to control arm ALD5
+ */
 #ifndef __HTTP_SERVER__
 #define __HTTP_SERVER__
 

@@ -1,3 +1,10 @@
+/**
+ * @file joystickI.hpp
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief File defines all features of a joystick (button). In the range of this project, we use 
+ * play station 3 and nintendo switch
+ */
 #ifndef JOYSTICK_I_H
 #define JOYSTICK_I_H
 

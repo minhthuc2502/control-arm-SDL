@@ -1,13 +1,10 @@
-//------------------------------------------------------------------------------
-//                                     TransmitionQueue
-//------------------------------------------------------------------------------
-//IIOT_ROBOTIC_ARM_2018
-//author: PHAM Minh Thuc
-//created: 01/04/2020
-/*
- * This class provide queue functionnality to link arm and joystick
+/**
+ * @file transmitionqueue.hpp
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief File define functions to create an interface in threads. These threads use to get event on joystick and write command to arm ALD5.
+ * These threads use mainly a queue shared containing the commands which need to be handled. 
  */
-//-----------------------------------------------------------------------------
 #include "transmitionqueue.hpp"
 #include "log.h"
 
