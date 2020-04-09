@@ -1,15 +1,10 @@
-//$Header$
-//------------------------------------------------------------------------------
-//                                      UdevHandler
-//------------------------------------------------------------------------------
-//IIOT_ROBOTIC_ARM_2018
-//author: Quentin Pantostier
-//created: 16/05/2018
-/*
-* This class provide node detection and hotplug fonctionnality for gamepad.
-* It use libudev fonctionnality.
-*/
-//------------------------------------------------------------------------------
+/**
+ * @file udevhandler.hpp
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief File define class provide node detection and hotplug fonctionnality for arm ALD5.
+ * Using udev library to detect.
+ */
 #ifndef UDEV_HANDLER_H
 #define UDEV_HANDLER_H
 

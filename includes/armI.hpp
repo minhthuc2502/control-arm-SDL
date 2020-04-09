@@ -1,11 +1,10 @@
-//------------------------------------------------------------------------------
-//                             ArmInterface
-//------------------------------------------------------------------------------
-/*
-* This class provide method definition that should be use to connect a arm to
-* the server
-*/
-//------------------------------------------------------------------------------
+/**
+ * @file armI.hpp
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief File contains class mother of armAL5D and define all features abour arm ALD5
+ * @see http://www.lynxmotion.com/c-130-al5d.aspx
+ */
 #ifndef ARM_I_H
 #define ARM_I_H
 

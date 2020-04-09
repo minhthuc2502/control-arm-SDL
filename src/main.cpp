@@ -1,8 +1,14 @@
+/**
+ * @file main.hpp
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief provide program to control arm robotic ALD5 by joystick or by web browser. 
+ */
 #include <csignal>
 #include <execinfo.h>
-#include "JoystickPS3.hpp"
-#include "ArmAL5D.hpp"
-#include "TransmitionQueue.hpp"
+#include "joystickPS3.hpp"
+#include "armAL5D.hpp"
+#include "transmitionqueue.hpp"
 #include "log.h"
 #include "httpserver.hpp"
 #include <getopt.h>
@@ -47,7 +53,7 @@ int main(int argc, char *argv[]) {
     {0, 0, 0, 0},
   };
 
-  while( (o = getopt_long(argc,argv,"c:h:p:m:s:",long_options, &option_index)) != -1){
+  while((o = getopt_long(argc,argv,"c:h:p:m:s:",long_options, &option_index)) != -1){
       switch (o)
       {
         case 'c':
@@ -66,12 +72,18 @@ int main(int argc, char *argv[]) {
           usage();
           return EXIT_SUCCESS;
         case '?':
-          if(optopt == 'c' || optopt == 'm' || optopt == 'p' || optopt == 's')
-            fprintf(stderr, "Option -%c requires an argument. \n", optopt);
+          if (optopt == 'c' || optopt == 'm' || optopt == 'p' || optopt == 's')
+          {
+            LOG_E("Option -%c requires an argument. \n", optopt);
+          }
           else if (isprint (optopt))
-            fprintf(stderr, "Unknown option -%c.\n",optopt);
+          {
+            LOG_E("Unknown option -%c.\n",optopt);
+          }
           else
-            fprintf(stderr, "Unknown option character \\x%x.\n", optopt);  
+          {
+            LOG_E("Unknown option character \\x%x.\n", optopt);  
+          }
           return 0;
         default:
           abort();
@@ -79,7 +91,7 @@ int main(int argc, char *argv[]) {
   }
   for(index = optind; index < argc; index++)
   {
-    printf("Non-option argument %s \n", argv[index]);
+    LOG_E("Non-option argument %s \n", argv[index]);
     return 0;
   }
   if (mode == NULL){
@@ -97,24 +109,24 @@ int main(int argc, char *argv[]) {
       JoystickPS3 PS3;
       ArmAL5D AL5D;
 
-      if( PS3.Open() == false ) {
+      if (PS3.Open() == false) {
         LOG_E("ERROR opening PS3 file descriptor");
         return EXIT_FAILURE;
-      }else{
-        if(!PS3.Getconfig(pathConfig))
+      } else {
+        if (!PS3.GetConfig(pathConfig))
           return 0;
         tQueue.SetUseJoystick(&PS3);
       }
 
-      if(AL5D.Open() == false) {
+      if (AL5D.Open() == false) {
         LOG_E("ERROR opening AL5D file descriptor");
         LOG_I("program need to be run as sudo for the moment");
         return EXIT_FAILURE;
-      }else{
+      } else {
         tQueue.SetUseArm(&AL5D);
       }
 
-      if(!tQueue.Start()){
+      if (!tQueue.Start()) {
         LOG_E("ERROR starting communication");
         return EXIT_FAILURE;
       }
@@ -124,18 +136,16 @@ int main(int argc, char *argv[]) {
       tQueue.Close();
 
       LOG_I("Program end!");
-    }
-
-    else if(!strcmp(mode,"server-web")){
-      if(!port || standard == NULL)
+    } else if (!strcmp(mode,"server-web")) {
+      if (!port || standard == NULL)
       {
-        printf("./armDev --mode 'server-web' --port [Number of port]\n --standard [http/https]");
+        LOG_I("./armDev --mode 'server-web' --port [Number of port]\n --standard [http/https]");
         return 1;
       }
       LOG_I("Launching Server");
       // for web service
       HttpServer httpserver;
-      httpserver.http_server_run(port, standard);
+      httpserver.HTTPServerRun(port, standard);
       LOG_I("Program end!");
     }
   }

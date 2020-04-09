@@ -1,15 +1,9 @@
-//$Header$
-//------------------------------------------------------------------------------
-//                              Logger
-//------------------------------------------------------------------------------
-//IIOT_ROBOTIC_ARM_2018
-//author: Quentin Pantostier
-//created: 11/06/2018
-/*
-* This class provide log functions
-* Deprecated
-*/
-//------------------------------------------------------------------------------
+/**
+ * @file logger.hpp
+ * @author PHAM Minh Thuc
+ * @date 7 april 2020
+ * @brief another version of log file. Don't be used.
+ */
 #ifndef LOGGER_H
 #define LOGGER_H
 
@@ -19,7 +13,6 @@
 #include <chrono>
 #include <bitset>
 #include <mutex>
-//#include <errno.h>
 
 #define binaire(taille, variable) std::bitset<(taille)>(variable).to_string().c_str()
 
