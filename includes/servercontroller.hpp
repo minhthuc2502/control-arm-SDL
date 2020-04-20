@@ -1,5 +1,5 @@
 /**
- * @file servercontroller.h
+ * @file servercontroller.hpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File contains functions which creat the commands speciffied for each part of arm ALD5.
