@@ -33,8 +33,4 @@
 out/*
 
 dox_control_arm_ALD5
-CMakeCache.txt
-CMakeFiles
-cmake_install.cmake
-Makefile
 .vscode/
