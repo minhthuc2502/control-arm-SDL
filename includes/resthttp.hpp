@@ -1,5 +1,5 @@
 /**
- * @file resthttp.h
+ * @file resthttp.hpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File contain class and function to define the endpoint and provide a REST API for client.
