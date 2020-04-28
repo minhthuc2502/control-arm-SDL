@@ -201,7 +201,6 @@ void JoystickPS3::_set_movement(SDL_Event* ev) {
       #endif
     }
     // button Nord
-
     if (ev->jbutton.button == pconfigJoy.BNorth) {
       _apply_mask(movement_.BtnStatus, 1, mask_btn_north);
       #ifdef DEBUG
