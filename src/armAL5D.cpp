@@ -1,5 +1,5 @@
 /**
- * @file armAL5D.hpp
+ * @file armAL5D.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File contains function to connect, initialize and write command to arm robotic ALD5

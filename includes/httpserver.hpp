@@ -15,23 +15,29 @@
 #include <map>
 #include <microhttpd.h>
 
-#define MAXANSWERSIZE   512
+#define MAXANSWERSIZE   512                 /*!< maximum size of answer */
 
 using std::map;
 using std::string;
 
+/**
+ * @brief HttpServer class for the http/https server
+*/
 class HttpServer {
 public:
+    /** @brief constructor 
+    *  Constructor of class HttpServer
+    */
     HttpServer(){};
 
     /** @brief this function allows running server on port 3000
      *  @param port listening
-     *  @param protocol http/https
+     *  @param standard http/https
     */
     bool HTTPServerRun(int port, char* standard);
 private:
     /** @brief this function allows send bad response if it occurs problem on server 
-     *  @param pointer of the connection
+     *  @param connection pointer of the connection
     */
     static int _send_bad_response(struct MHD_Connection * connection);
     /** @brief this function allows get parameters on the url
@@ -43,9 +49,9 @@ private:
     static int _get_url_arg(void *cls, MHD_ValueKind kind,const char *key, const char * value);
     /** @brief this function response for the request of client
      *  @param cls: custom value selected at callback registration time
-     *  @param coonection
+     *  @param connection
      *  @param url: the URL requested by client
-     *  @param method GET
+     *  @param methode GET
      *  @param version the HTTP version string
      *  @param upload_data the data being uploaded (excluding headers)
      *  @param upload_data_size

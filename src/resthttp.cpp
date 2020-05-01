@@ -1,5 +1,5 @@
 /**
- * @file resthttp.h
+ * @file resthttp.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File contain class and function to define the endpoint and provide a REST API for client.
@@ -17,15 +17,17 @@ using std::to_string;
 
 namespace pt = boost::property_tree;
 
+/**
+ * @brief struct of a validate url, check end point and parameters received
+*/
 struct validate_data
 {
-    string endpoint;
-    set <string>* params;
+    string endpoint;                /*!< end point */
+    set <string>* params;           /*!< parameters corresponding to "type" */
 };
 
 RestHttp::RestHttp(){
     string wristparams[] = {"rotate", "move"};
-
     _apiparams["/wrist"] = set<string>(wristparams,wristparams+2);
 }
 

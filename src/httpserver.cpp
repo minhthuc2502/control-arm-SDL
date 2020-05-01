@@ -1,17 +1,22 @@
 /**
- * @file httpserver.hpp
+ * @file httpserver.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File contains class and function to generate a server http/https. This server 
  * provide an API REST to control arm ALD5
  */
 #include "httpserver.hpp"
-#define SERVERKEYFILE "../server.key"
-#define SERVERCERTFILE "../server.pem"
+#define SERVERKEYFILE "../server.key"         /*!< path of private key */
+#define SERVERCERTFILE "../server.pem"        /*!< path of certificate self-signed */
 
 ServerController server;
-const char* badpage = "<html><head><title></title></head><body><h1>A error occur on server</h1></body></html>";
+const char* badpage = "<html><head><title></title></head><body><h1>A error occur on server</h1></body></html>";   /*!< bad response HTML */
 
+/** @brief this function get size of file
+ *  @param filename file name
+ *  @return 0 if fail to get size
+ *          size if file if get size successfully
+*/
 static long get_file_size (const char *filename)
 {
   FILE *fp;
@@ -31,6 +36,10 @@ static long get_file_size (const char *filename)
     return 0;
 }
 
+/** @brief this function load file to buffer
+ *  @param filename file name
+ *  @return NULL or buffer contains contenu of file
+*/
 static char * load_file (const char *filename)
 {
   FILE *fp;

@@ -1,5 +1,5 @@
 /**
- * @file log.h
+ * @file log.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File define log function to log the information in program and debug.

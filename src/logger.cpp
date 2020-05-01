@@ -1,5 +1,5 @@
 /**
- * @file logger.hpp
+ * @file logger.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief another version of log file. Don't be used.

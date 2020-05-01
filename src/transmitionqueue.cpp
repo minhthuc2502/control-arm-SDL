@@ -1,5 +1,5 @@
 /**
- * @file transmitionqueue.hpp
+ * @file transmitionqueue.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File define functions to create an interface in threads. These threads use to get event on joystick and write command to arm ALD5.

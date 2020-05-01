@@ -1,5 +1,5 @@
 /**
- * @file udevhandler.hpp
+ * @file udevhandler.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File define class provide node detection and hotplug fonctionnality for arm ALD5.

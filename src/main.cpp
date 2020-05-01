@@ -1,5 +1,5 @@
 /**
- * @file main.hpp
+ * @file main.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief provide program to control arm robotic ALD5 by joystick or by web browser. 
@@ -14,8 +14,11 @@
 #include <getopt.h>
 
 
-TransmitionQueue* gPtrTQ;
+TransmitionQueue* gPtrTQ;         /*!< pointer to current queue */
 
+/** @brief function handles signal
+ *  @param signum type of signal
+*/
 void signalHandler (int signum) {
   printf("\nreceived signal %d \n",signum);
   gPtrTQ->StopWait();
@@ -25,6 +28,8 @@ void signalHandler (int signum) {
    */
 }
 
+/** @brief print usage of option
+*/
 void usage(){
   printf("--config config | path config file\n");
   printf("--mode mode | control by <joystick> or <server-web>\n");
@@ -32,7 +37,6 @@ void usage(){
   printf("--protocol protocol | http ou https");
   printf("--help help affiche all options\n");
 }
-
 
 int main(int argc, char *argv[]) {
   char *pathConfig = NULL;
