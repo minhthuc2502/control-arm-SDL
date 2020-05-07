@@ -21,7 +21,7 @@ script:
 deploy:
   provider: pages
   skip_cleanup: true
-  local_dir: dox_control_arm_ALD5/html
+  local_dir: /doxygen/dox_control_arm_ALD5/html
   github_token: $GH_REPO_TOKEN
   on:
     branch: 
