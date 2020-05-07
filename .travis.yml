@@ -6,7 +6,6 @@ sudo: false
 branches:
   only:
     - minh-thuc_dev
-    - master
 
 # Install dependencies
 addons:
@@ -22,9 +21,8 @@ script:
 deploy:
   provider: pages
   skip_cleanup: true
-  local_dir: html
+  local_dir: ${TRAIS_BUILD_DIR}/dox_control_arm_ALD5/html
   github_token: $GH_REPO_TOKEN
   on:
     branch: 
       - minh-thuc_dev
-      - master
