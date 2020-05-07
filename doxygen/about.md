@@ -3,7 +3,7 @@ Introduction                         {#mainpage}
 ### Document
 This is the document for source code C++ which controls arm AL5D by joystick ou deploys a web service in oder to control arm through web application. This is a software developped by the trainee of Elsys-Design as part of a 6 month project.
 
-![Model Control Arm AL5D](../../../client/public/img/model.png)
+![Model Control Arm AL5D](./../../../client/public/img/model.png)
 **Model of controlling robotic arm by joystick and web application**
 
 Doxygen helps you to generate this document in another format like Latex, PDF ... For example to generate file PDF:
