@@ -16,7 +16,7 @@ addons:
 
 # Build your code e.g. by calling make
 script:
-  - doxygen Doxyfile
+  - doxygen ./doxygen/Doxyfile
 
 # Generate and deploy documentation
 deploy:
