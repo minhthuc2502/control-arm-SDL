@@ -39,42 +39,43 @@ private:
   void EventConsumer();             /*!< function attach thread consumer */
 
 public:
-  /** @brief constructor 
+  /** 
+   * @brief constructor 
    *  Constructor of class TransmitionQueue
-    */
+   */
   TransmitionQueue(): stopExec_(false), wait_(true),error_(false){
   };
   /**
    * @brief destructor
    * Destructeur of class TransmitionQueue
-  */
+   */
   ~TransmitionQueue(){};
   /**
    * @brief method stop waiting l'operation of threads
-   * */
+   */
   void StopWait();
   /**
    * @brief method waits threads
-   * */
+   */
   void Wait();
   /**
    * @brief method starts threads, begin controlling the arm by joystick
    * @return true if start sucessfully
    *          false if failed to start 
-   * */
+   */
   bool Start();
   /**
    * @brief method stop threads, close session control arm 
-   * */
+   */
   void Close();
-    /**
+  /**
    * @brief method set joystick to use
    * @param j joystick
-   * */
+   */
   void SetUseJoystick(JoystickI* j);
   /**
    * @brief method set arm to use
    * @param a arm in use
-   * */
+   */
   void SetUseArm(ArmI* a);
 };

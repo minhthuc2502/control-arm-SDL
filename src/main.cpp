@@ -16,9 +16,10 @@
 
 TransmitionQueue* gPtrTQ;         /*!< pointer to current queue */
 
-/** @brief function handles signal
- *  @param signum type of signal
-*/
+/** 
+ * @brief function handles signal
+ * @param signum type of signal
+ */
 void signalHandler (int signum) {
   printf("\nreceived signal %d \n",signum);
   gPtrTQ->StopWait();
@@ -28,8 +29,9 @@ void signalHandler (int signum) {
    */
 }
 
-/** @brief print usage of option
-*/
+/** 
+ * @brief print usage of option
+ */
 void usage(){
   printf("--config config | path config file\n");
   printf("--mode mode | control by <joystick> or <server-web>\n");

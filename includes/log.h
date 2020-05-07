@@ -30,15 +30,15 @@
 #endif
 
 /**
-* @brief method extract file name
-* @param file real path of file
-* @return file name
-* */
+ * @brief method extract file name
+ * @param file real path of file
+ * @return file name
+ */
 const char* ExtractFileName(const char* file);
 
 /**
-* @brief method print time
-* */
+ * @brief method print time
+ */
 void PrintTime();
 
 #endif

@@ -21,15 +21,15 @@
 
 /**
  * @brief list of all articulations of the arm
-*/
+ */
 typedef enum {
   BASE, SHOULDER, ELBOW, WRIST, GRIPPER, WRIST_ROT, NONE
 } E_ARM_TARGET;
 
 /**
  * @brief This enum name all used bit in BtnStatus, 1 bit for 1 button. (As 12 buttons
- *are enough to handle all servos, there 4 specials options)
-*/
+ * are enough to handle all servos, there 4 specials options)
+ */
 typedef enum {
   base_left,                /*!< base left */
   base_right,               /*!< base right */
@@ -51,8 +51,8 @@ typedef enum {
 
 /**
  * @brief This enum name all used bit in AbsStatus, 4 bits asign for each axes
- *(3 to represent 3 possible speed, 1 to indicate sens)
-*/
+ * (3 to represent 3 possible speed, 1 to indicate sens)
+ */
 typedef enum {
   a_base_left,              /*!< analog base left */
   a_base_right,             /*!< analog base right */
@@ -70,7 +70,7 @@ typedef enum {
 
 /**
  * @brief This enum name all used bit in AbsStatus, 4 bits for each axes
-*/
+ */
 typedef enum {
   acc_x_left,               /*!< accelerated x left  */
   acc_x_right,              /*!< accelerated x right  */
@@ -82,7 +82,7 @@ typedef enum {
 
 /**
  * @brief struct of status of arm AL5D's joints
-*/
+ */
 typedef struct {
   int32_t BtnStatus;      /*!< status of pressed button */
   int32_t AbsStatus;      /*!< status of joystick axis event */
@@ -93,31 +93,33 @@ typedef struct {
 
 /**
  * @brief ArmI class for the arm in common
-*/
+ */
 class ArmI {
 protected:
   bool isOpen;            /*!< variable inform status of arm */
 
 public:
-  /** @brief constructor 
-   *  Constructor of class ArmI
-    */
+  /** 
+   * @brief constructor 
+   * Constructor of class ArmI
+   */
   ArmI(): isOpen(false){};
-  /** @brief destructor 
-   *  Destructor of class ArmI
-    */
+  /** 
+   * @brief destructor 
+   * Destructor of class ArmI
+   */
   virtual ~ArmI() {};
   /**
    * @brief virtual method that should open device to be able to use it
    * @return true if open ArmAL5D sucessfully
    *          false if failed to open ArmAL5D 
-   * */
+   */
   virtual bool Open() = 0;
   /**
    * @brief virtual method that should close device
    * @return true if close ArmAL5D sucessfully
    *          false if failed to close ArmAL5D 
-   * */
+   */
   virtual bool Close() = 0;
   /**
    * @brief virtual method that should recive movements informations and
@@ -125,11 +127,12 @@ public:
    * @param move event receive to control arm
    * @return true if write command to file descriptive sucessfully
    *          false if failed to write command to file descriptive
-   * */
+   */
   virtual bool Write(arm_event move) = 0;
 
-  /** @brief getter for variable isOpen
-    */
+  /** 
+   * @brief getter for variable isOpen
+   */
   bool IsOpen(){return isOpen;};
 };
 

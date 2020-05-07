@@ -17,7 +17,7 @@
 
 /**
  * @brief UdevHandler class to catch the devices connected to host by libudev library 
-*/
+ */
 class UdevHandler {
 protected:
   //variables
@@ -30,62 +30,70 @@ protected:
   std::string deviceNode_;                  /*!< (don't use) */
 
 public:
-  /** @brief constructor 
+  /** 
+   * @brief constructor 
    *  Constructor of class UdevHandler
-    */
+   */
   UdevHandler(){
   };
-    /**
+  /**
    * @brief destructor
    * Destructeur of class UdevHandler
-  */
+   */
   virtual ~UdevHandler() {};
 
   /**
    * @brief this method initialise udev object context
    * @return true/false for success or fail
-  */
+   */
   bool InitUdev();
   /**
    * @brief this method unreference udev object
-  */
+   */
   void CloseUdev();
-  /** @brief this method process deviceList and apply the parameter function on
-    *        each device of the list until it find the corresponding device node
-    * @param pt2FindDevnode std::function object that wrap a function pointer wich point on
-    *        the function to use to find the desire device node
-    * @sa FindDevnode
-    */
+  /** 
+   * @brief this method process deviceList and apply the parameter function on
+   *        each device of the list until it find the corresponding device node
+   * @param pt2FindDevnode std::function object that wrap a function pointer wich point on
+   *        the function to use to find the desire device node
+   * @sa FindDevnode
+   */
   void ProcessDeviceList(std::function<bool(udev_device* dev)> pt2FindDevnode);
-  /** @brief this method initialise monitoringThread_
-    * @param subsystem where search for device e.g:input
-    * @note should be call before Enumeration
-    */
+  /** 
+   * @brief this method initialise monitoringThread_
+   * @param subsystem where search for device e.g:input
+   * @note should be call before Enumeration
+   */
   void EnableMonitoring (const char* subsystem);
-  /** @brief this method enumerate all subsystem device connect
-    * @param subsystem where search for device e.g:input
-    * @return true/false for success or fail
-    */
+  /** 
+   * @brief this method enumerate all subsystem device connect
+   * @param subsystem where search for device e.g:input
+   * @return true/false for success or fail
+   */
   bool Enumeration(const char* subsystem);
-  /** @brief this method check if device property value is correcte
-    * @param dev device to Check
-    * @param property name to Check
-    * @param propertyValue value that should be define
-    * @return true/false for success or fail
-    */
+  /** 
+   * @brief this method check if device property value is correcte
+   * @param dev device to Check
+   * @param property name to Check
+   * @param propertyValue value that should be define
+   * @return true/false for success or fail
+   */
   bool CheckProperty(udev_device* dev, const char* property, const char* propertyValue);
-  /** @brief this method check if the device is en ev event (eventX)
-    * @param dev device to Check
-    * @return true/false for success or fail
-    */
+  /** 
+   * @brief this method check if the device is en ev event (eventX)
+   * @param dev device to Check
+   * @return true/false for success or fail
+   */
   bool IsEvent(udev_device* dev);
-  /** @brief this method check if a property existe in device informations*
-    * @param dev device to check
-    * @param property name to find
-    * @return true/false for success or fail
-    */
+  /** 
+   * @brief this method check if a property existe in device informations*
+   * @param dev device to check
+   * @param property name to find
+   * @return true/false for success or fail
+   */
   bool IsProperty(udev_device* dev, const char* property);
-  /** @brief this method print all device informations get by udev
+  /** 
+   * @brief this method print all device informations get by udev
    *  @param dev device to Check
    */
   void PrintUdevInfos(udev_device* dev);

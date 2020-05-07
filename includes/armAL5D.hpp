@@ -72,57 +72,65 @@ class ArmAL5D:public ArmI, public UdevHandler {
 protected:
   int fd_;                /*!< file descriptive of arm AL5D */
   ARM joints_[6];         /*!< characteristic of each joint */
-  /** @brief function wrapping a function pointer that point to FindDevnode
+  /** 
+   * @brief function wrapping a function pointer that point to FindDevnode
    *  @param dev pointer to device which be checked the property
    *  @return true/false ~ success/fail
    *  @sa FindDevnode
    */
   std::function<bool(udev_device* dev)> pt2FindDevnode;
 
-  /** @brief initialise arm, set joints informations
+  /** 
+   * @brief initialise arm, set joints informations
    *  @return true/false ~ success/fail
    */
   bool InitArm();
-  /** @brief this method is call in ProcessDeviceList to apply the proper
-    *        treatement to find device Node
-    * @param dev pointer to device which be checked the property
-    * @return true/false ~ success/fail
-    */
+  /** 
+   * @brief this method is call in ProcessDeviceList to apply the proper
+   *        treatement to find device Node
+   * @param dev pointer to device which be checked the property
+   * @return true/false ~ success/fail
+   */
   bool FindDevnode(udev_device* dev);
-  /** @brief this method translate BtnStatus to a string tab and return it.
-    * @param BtnStatus mask of the received arm_event
-    * @return vector of command arm ALD5 
-    */
+  /** 
+   * @brief this method translate BtnStatus to a string tab and return it.
+   * @param BtnStatus mask of the received arm_event
+   * @return vector of command arm ALD5 
+   */
   std::vector<std::string> BtnStatusTranslate(int32_t BtnStatus);
-  /** @brief this method translate AbsStatus to a string tab and return it.
-    * @param AbsStatus mask of the received arm_event
-    * @param value value analog present the speed
-    * @return vector of command arm ALD5
-    */
+  /** 
+   * @brief this method translate AbsStatus to a string tab and return it.
+   * @param AbsStatus mask of the received arm_event
+   * @param value value analog present the speed
+   * @return vector of command arm ALD5
+   */
   std::vector<std::string> AbsStatusTranslate(int32_t AbsStatus, int value[]);
-  /** @brief this method return the corresponding command
-    * @param joint joint to control, set it to -1 to change only speed
-    * @param speed speed set, could be 0 if only basic cmd needed
-    * @return string of command which will be added to vector
-    */
+  /** 
+   * @brief this method return the corresponding command
+   * @param joint joint to control, set it to -1 to change only speed
+   * @param speed speed set, could be 0 if only basic cmd needed
+   * @return string of command which will be added to vector
+   */
   std::string SetCmdString(int joint, int speed = 0);
-  /** @brief this method translate AccStatus to a string tab and return it.
-    * @param value value analog present the speed
-    * @return speed standard coresponding to value analog
-    */
+  /** 
+   * @brief this method translate AccStatus to a string tab and return it.
+   * @param value value analog present the speed
+   * @return speed standard coresponding to value analog
+   */
   int GetSpeed(int value);
 
 public:
-  /** @brief constructor 
-   *  Constructor of class armAL5D
-    * @sa FindDevnode
-    */
+  /** 
+   * @brief constructor 
+   * Constructor of class armAL5D
+   * @sa FindDevnode
+   */
   ArmAL5D(): fd_(-1), pt2FindDevnode(std::bind(&ArmAL5D::FindDevnode, this, std::placeholders::_1)){
   };
   /**
    * @brief destructor
    * Destructeur of class ArmAL5D
-  */
+   */
   ~ArmAL5D() {
     if(IsOpen()){
       this->Close();
@@ -132,26 +140,26 @@ public:
    * @brief method inherite from the arm interface, open device
    * @return true if open ArmAL5D sucessfully
    *          false if failed to open ArmAL5D 
-   * */
+   */
   bool Open();
   /**
    * @brief method inherite from the arm interface, close device
    * @return true if close ArmAL5D sucessfully
    *          false if failed to close ArmAL5D 
-   * */
+   */
   bool Close(); 
   /**
    * @brief this method set arm positon to initial one
    * @return true if move to position initial sucessfully
    *          false if failed to move to position initial
-   * */
+   */
   bool MoveToInitialPosition();
   /**
    * @brief write command to file descriptive to control arm
    * @param move event receive to control arm
    * @return true if write command to file descriptive sucessfully
    *          false if failed to write command to file descriptive
-   * */
+   */
   bool Write(arm_event move);
 };
 

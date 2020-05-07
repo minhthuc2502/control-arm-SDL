@@ -12,11 +12,12 @@
 ServerController server;
 const char* badpage = "<html><head><title></title></head><body><h1>A error occur on server</h1></body></html>";   /*!< bad response HTML */
 
-/** @brief this function get size of file
- *  @param filename file name
- *  @return 0 if fail to get size
+/** 
+ * @brief this function get size of file
+ * @param filename file name
+ * @return 0 if fail to get size
  *          size if file if get size successfully
-*/
+ */
 static long get_file_size (const char *filename)
 {
   FILE *fp;
@@ -36,10 +37,11 @@ static long get_file_size (const char *filename)
     return 0;
 }
 
-/** @brief this function load file to buffer
+/** 
+ * @brief this function load file to buffer
  *  @param filename file name
  *  @return NULL or buffer contains contenu of file
-*/
+ */
 static char * load_file (const char *filename)
 {
   FILE *fp;

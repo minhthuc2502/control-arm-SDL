@@ -37,7 +37,7 @@
 
 /**
  * @brief mask of all joystick's buttons
-*/
+ */
 typedef enum{
   mask_btn_south      = 0b1 << elbow_right,     /*!< mask of button south */
   mask_btn_east       = 0b1 << wrist_right,     /*!< mask of button east */
@@ -57,7 +57,7 @@ typedef enum{
 
 /**
  * @brief mask of all joystick's abs 
-*/
+ */
 typedef enum{
   mask_abs_x_left     = 0b1 << a_base_left,     /*!< mask of abs x left  */
   mask_abs_x_right    = 0b1 << a_base_right,    /*!< mask of abs x right  */
@@ -75,7 +75,7 @@ typedef enum{
 
 /**
  * @brief mask of all joystick's acc 
-*/
+ */
 typedef enum{
   mask_acc_x_left     = 0b1 << acc_x_left,       /*!< mask of acc x left  */
   mask_acc_x_right    = 0b1 << acc_x_right,      /*!< mask of acc x right  */
@@ -87,45 +87,51 @@ typedef enum{
 
 /**
  * @brief JoystickPS3 class for the joystick PS3 or nintendo
-*/
+ */
 class JoystickPS3:public JoystickI {
 private:
   SDL_Joystick *joy;          /*!< joy object defined in SDL library */
   arm_event movement_ = {};   /*!< movement set by signal on joystick */
 
-  /** @brief this method is call in joystick open to initialize
-    *        the value of joystick
-    */
+  /** 
+   * @brief this method is call in joystick open to initialize
+   *        the value of joystick
+   */
   void _init();
-  /** @brief function print all events catched by joystick
-   *  @param ev event catched
-    */
+  /** 
+   * @brief function print all events catched by joystick
+   * @param ev event catched
+   */
   void _print_event(SDL_Event* ev); 
-  /** @brief this method allow to apply mask for each event
+  /**
+   *  @brief this method allow to apply mask for each event
    *  @param ev event catched
-    */
+   */
   void _set_movement(SDL_Event* ev);
-  /** @brief this method is a convenient method to reduce switch case size
-    * @param statusRegistre register contains mask
-    * @param value remove mask, other apply mask
-    * @param mask to apply
-    */
+  /** 
+   * @brief this method is a convenient method to reduce switch case size
+   * @param statusRegistre register contains mask
+   * @param value remove mask, other apply mask
+   * @param mask to apply
+   */
   void _apply_mask(int32_t& statusRegistre, int value, int mask);
-  /** @brief this method avoid event repetition in queue, return null event
-    *        or current movment_ value
-    * @return new event
-    */
+  /** 
+   * @brief this method avoid event repetition in queue, return null event
+   *        or current movment_ value
+   * @return new event
+   */
   arm_event _is_new_event();
 
 public:
-  /** @brief constructor 
+  /** 
+   * @brief constructor 
    *  Constructor of class JoystickPS3
-    */
+   */
   JoystickPS3(){};
   /**
    * @brief destructor
    * Destructeur of class JoystickPS3
-  */
+   */
   ~JoystickPS3() {
     if(IsOpen()){
       this->Close();
@@ -136,22 +142,23 @@ public:
    * @brief method inherite from the joystick interface, open device
    * @return true if open Joystick sucessfully
    *          false if failed to open Joystick 
-   * */
+   */
   bool Open();
   /**
    * @brief method inherite from the joystick interface, close device
    * @return true if close Joystick sucessfully
    *          false if failed to close Joystick 
-   * */
+   */
   bool Close();
   /**
    * @brief method inherite from the joystick interface, return next input_event
    * @return event read from joystick
-   * */
+   */
   arm_event Read();
-  /** @brief method inherite from the joystick interface, get the parameters configuration
-    * @param fileConfig pointer to config file
-    */
+  /** 
+   * @brief method inherite from the joystick interface, get the parameters configuration
+   * @param fileConfig pointer to config file
+   */
   bool GetConfig(char* fileConfig);
 };
 
