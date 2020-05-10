@@ -23,6 +23,20 @@ $ sudo ./armDev --mode "joystick" --config ../config/nintendoJoystick.cfg
 $ sudo ./armDev --mode "server-web" --port [Number of port listening] --standard [http/https]
 ```
 
+## Run with Docker
+- I also integrate Docker to this project. This allows users can run easly the application without know which packages supported and how to install them.
+- First of all, you need to install docker in this link: [https://docs.docker.com/engine/install/ubuntu/](https://docs.docker.com/engine/install/ubuntu/)
+- You can use dockerfile to generate image and run the container:
+
+```
+# Build docker image
+$ docker build -t devminhthuc/controlal5d .
+# Run container
+$ docker run -it -p 3000:3000 devminhthuc/controlal5d
+```
+- You can also pull the docker image on my dockerhub from this link:
+[https://hub.docker.com/r/devminhthuc/controlal5d](https://hub.docker.com/r/devminhthuc/controlal5d)
+
 ## Acces service web
 
 - open/close connection with robotic arm using `https://localhost:[port]/open`
@@ -36,6 +50,7 @@ Otherwise, you can control robotic's arm by web application which will call rest
 - The port used to be called in web application is 3000. If you want to call rest api https in another port, please change url fetched in `app.js` 
 - This example call server on the same host machine, so url is `localhost` . if the server is intalled on another machine, you have to modify the source code to url of server in `app.js` and `requestrest.js`. For example, in this source code, the url is configured with ip address of raspberry PI: `192.168.43.130`.
 - To access the server, client needs to connect to the same network as server.
+- For other options to run docker container, please see in dockerfile to change the execution command `CMD`.
 
 ## Documentation
 
