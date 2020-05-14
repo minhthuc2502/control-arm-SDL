@@ -31,6 +31,6 @@
 *.out
 *.app
 out/*
-
+test/bin/*
 dox_control_arm_ALD5
 .vscode/

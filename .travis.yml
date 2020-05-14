@@ -1,28 +1,48 @@
  
-# This will run on Travis' 'new' container-based infrastructure
-sudo: false 
+# # This will run on Travis' 'new' container-based infrastructure
+# sudo: false 
 
-# Blacklist
-branches:
-  only:
-    - minh-thuc_dev
+# # Blacklist
+# branches:
+#   only:
+#     - minh-thuc_dev
 
-# Install dependencies
-addons:
-  apt:
-    packages:
-      - doxygen
+# # Install dependencies
+# addons:
+#   apt:
+#     packages:
+#       - doxygen
 
-# Build your code e.g. by calling make
+# # Build your code e.g. by calling make
+# script:
+#   - doxygen ./doxygen/Doxyfile
+
+# # Generate and deploy documentation
+# deploy:
+#   provider: pages
+#   skip_cleanup: true
+#   local_dir: doxygen/dox_control_arm_ALD5/html
+#   github_token: $GH_REPO_TOKEN
+#   on:
+#     branch: 
+#       - minh-thuc_dev
+
+language: cpp
+sudo: required
+
+before_install:
+  - sudo apt-get install -y cmake
+  - sudo apt-get install -y libevdev-dev
+  - sudo apt-get install -y libsdl2-dev
+  - sudo apt-get install -y libboost-dev
+  - sudo apt-get install -y libboost-test-dev
+  - sudo apt-get install -y libmicrohttpd-dev
+
+install:
+  - ./build.sh
+  - cd test/
+  - ./run.sh all
+before_script:
+  - cd bin/
 script:
-  - doxygen ./doxygen/Doxyfile
-
-# Generate and deploy documentation
-deploy:
-  provider: pages
-  skip_cleanup: true
-  local_dir: doxygen/dox_control_arm_ALD5/html
-  github_token: $GH_REPO_TOKEN
-  on:
-    branch: 
-      - minh-thuc_dev
+  - ./unittest --log_level=error
