@@ -30,6 +30,7 @@ set(EXECUTABLE_OUTPUT_PATH ./)
 #
 # Use the library 
 #
+string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
 target_link_libraries(unittest
                       ${EVDEV_LIBRARIES} ${EVDEV_LDFLAGS}
                       ${UDEV_LIBRARIES} ${UDEV_LDFLAGS}
