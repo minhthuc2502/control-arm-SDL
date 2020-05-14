@@ -95,7 +95,7 @@ bool HttpServer::HTTPServerRun(int port, char * standard)
           free(cert_pem);
         return 1;
       }
-      d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION |MHD_USE_TLS,
+      d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION | MHD_USE_SSL,
                             port, NULL, NULL, &_answer_request,
                             NULL, 
                             MHD_OPTION_HTTPS_MEM_KEY, key_pem,
