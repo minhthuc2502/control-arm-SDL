@@ -1,5 +1,5 @@
 /**
- * @file joystickPS3.hpp
+ * @file joystickPS3.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File defines class and function to attach joystick and get the event on the joystick.

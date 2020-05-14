@@ -6,11 +6,11 @@ function ResquestRestHttpArm(endpoint,direction,mode = ""){
     {
         if(endpoint == "wrist")
         {
-            url = "https://localhost:3000/" + endpoint + "?direction=" + direction + "&type=" + mode;
+            url = "https://192.168.43.130:3000/" + endpoint + "?direction=" + direction + "&type=" + mode;
         }
         else
         {
-            url = "https://localhost:3000/" + endpoint + "?direction=" + direction;
+            url = "https://192.168.43.130:3000/" + endpoint + "?direction=" + direction;
         }
         fetch(url).then((response) => {
             response.json().then((data) => {
@@ -51,7 +51,7 @@ function ResquestRestHttpArm(endpoint,direction,mode = ""){
                 {
                     if(mode == "move")
                         UpdatePosition(data,message_output,type,"move");
-                    else if(mode = "rotate")
+                    else if(mode == "rotate")
                         UpdatePosition(data,message_output,type,"rotate");
                     else
                         UpdatePosition(data,message_output,type);

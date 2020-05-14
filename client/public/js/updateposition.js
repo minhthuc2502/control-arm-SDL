@@ -25,7 +25,7 @@ function UpdatePosition(data, message_output, type, mode = "")
         if(mode == "move")
             UpdatePosition.wrist = data.wrist.positionCurrent;
         else if (mode == "rotate")
-            UpdatePosition.wristrotation = data.wristrotation.positionCurrent;
+            UpdatePosition.wristrotation = data.wristrotate.positionCurrent;
     }
 
     message_output.innerHTML = '<h3>Position:</h1>base: ' +  UpdatePosition.base + '<br><br>shoulder: ' + UpdatePosition.shoulder

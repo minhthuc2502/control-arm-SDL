@@ -13,15 +13,12 @@ However, in each source directory, a `build.sh` script is provided for the sake 
 ## Run applications
 - After compiling source code, you can run program by 2 method:
 > use play station 3 or nintendo switch
-
 ```
 $ sudo ./armDev --mode "joystick" --config ../config/PS3Joystick.cfg
 or 
 $ sudo ./armDev --mode "joystick" --config ../config/nintendoJoystick.cfg
 ```
-
 > use web server
-
 ```
 $ sudo ./armDev --mode "server-web" --port [Number of port listening] --standard [http/https]
 ```
@@ -32,6 +29,14 @@ $ sudo ./armDev --mode "server-web" --port [Number of port listening] --standard
 - set position initial using `https://localhost:[port]/initposition`
 - control robotic arm using example `https://localhost:[port]/shoulder?direction=1`
 
-Otherwise, you can control robotic's arm by web application which will call rest api https. This web application give you a joystick virtual.  
-> note
-the port used to be called in web application is 3000. If you want to call rest api https in another port, please change url fetched in `app.js` 
+Otherwise, you can control robotic's arm by web application which will call rest api https. This web application give you a joystick virtual.
+
+### Note
+
+- The port used to be called in web application is 3000. If you want to call rest api https in another port, please change url fetched in `app.js` 
+- This example call server on the same host machine, so url is `localhost` . if the server is intalled on another machine, you have to modify the source code to url of server in `app.js` and `requestrest.js`. For example, in this source code, the url is configured with ip address of raspberry PI: `192.168.43.130`.
+- To access the server, client needs to connect to the same network as server.
+
+## Documentation
+
+- [https://minhthuc2502.github.io/control-arm-SDL/](https://minhthuc2502.github.io/control-arm-SDL/)
