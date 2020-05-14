@@ -51,6 +51,7 @@ message(STATUS "EVDEV_LEDFLAGS = ${EVDEV_LDFLAGS}")
 #
 # Use the library 
 #
+string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
 target_link_libraries(armDev
                       ${EVDEV_LIBRARIES} ${EVDEV_LDFLAGS}
                       ${UDEV_LIBRARIES} ${UDEV_LDFLAGS}

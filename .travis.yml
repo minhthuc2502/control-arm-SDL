@@ -45,4 +45,4 @@ install:
 before_script:
   - cd bin/
 script:
-  - ./unittest --log_level=error
+  - ./unittest --log_level=all
