@@ -147,6 +147,7 @@ BOOST_AUTO_TEST_CASE (test4)
     char const *file = "../testcase/config_incomplet.cfg";
     PARAM_CONFIG pconfigJoy = {};
     pconfigJoy.BEast = 0;
+    GetConfig((char*)file, pconfigJoy);
     BOOST_REQUIRE_EQUAL(pconfigJoy.BEast, 2);
 }
 // test a value invalid (> 16 ~ a joystick have 16 buttons max)
