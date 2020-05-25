@@ -1,13 +1,31 @@
-language: python
-
-python:
-  - "3.8"
+language: cpp
+# This will run on Travis' 'new' container-based infrastructure
+sudo: required 
 
 # Install dependencies
+addons:
+  apt:
+    packages:
+      - doxygen
+      - cmake
+      - libevdev-dev
+      - libsdl2-dev
+      - libboost-dev
+      - libboost-test-dev
+      - libmicrohttpd-dev
+# Build code
 install:
-  - pip3 install cpplint
-
-# Build your code e.g. by calling make
+  - ./build.sh
+# generate doxygen/ or try to start the server if you want
 script:
-  - cpplint --recursive --filter=-whitespace/line_length,-runtime/references ./includes
-  - cpplint --recursive --filter=-whitespace/line_length,-runtime/references ./src
+  - doxygen ./doxygen/Doxyfile
+
+# Generate and deploy documentation
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: doxygen/dox_control_arm_ALD5/html
+  github_token: $GH_REPO_TOKEN
+  on:
+    branch: 
+      - master
