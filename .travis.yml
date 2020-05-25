@@ -1,28 +1,13 @@
- 
-# This will run on Travis' 'new' container-based infrastructure
-sudo: false 
+language: python
 
-# Blacklist
-branches:
-  only:
-    - minh-thuc_dev
+python:
+  - "3.8"
 
 # Install dependencies
-addons:
-  apt:
-    packages:
-      - doxygen
+install:
+  - pip3 install cpplint
 
 # Build your code e.g. by calling make
 script:
-  - doxygen ./doxygen/Doxyfile
-
-# Generate and deploy documentation
-deploy:
-  provider: pages
-  skip_cleanup: true
-  local_dir: doxygen/dox_control_arm_ALD5/html
-  github_token: $GH_REPO_TOKEN
-  on:
-    branch: 
-      - minh-thuc_dev
+  - cpplint --recursive --filter=-whitespace/line_length,-runtime/references ./includes
+  - cpplint --recursive --filter=-whitespace/line_length,-runtime/references ./src
