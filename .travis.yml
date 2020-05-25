@@ -2,18 +2,13 @@
 # This will run on Travis' 'new' container-based infrastructure
 sudo: false 
 
-# Blacklist
-branches:
-  only:
-    - minh-thuc_dev
-
 # Install dependencies
 addons:
   apt:
     packages:
       - doxygen
 
-# Build your code e.g. by calling make
+# Build your code
 script:
   - doxygen ./doxygen/Doxyfile
 
@@ -25,4 +20,4 @@ deploy:
   github_token: $GH_REPO_TOKEN
   on:
     branch: 
-      - minh-thuc_dev
+      - master
