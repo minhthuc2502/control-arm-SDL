@@ -1,17 +1,19 @@
 /**
+ * Copyright 2020 PHAM Minh Thuc
  * @file main.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief provide program to control arm robotic ALD5 by joystick or by web browser. 
  */
-#include <csignal>
+#include <getopt.h>
 #include <execinfo.h>
+#include <csignal>
+#include "../includes/log.h"
+#include "httpserver.hpp"
 #include "joystickPS3.hpp"
 #include "armAL5D.hpp"
 #include "transmitionqueue.hpp"
-#include "log.h"
-#include "httpserver.hpp"
-#include <getopt.h>
+
 
 
 TransmitionQueue* gPtrTQ;         /*!< pointer to current queue */
@@ -20,8 +22,8 @@ TransmitionQueue* gPtrTQ;         /*!< pointer to current queue */
  * @brief function handles signal
  * @param signum type of signal
  */
-void signalHandler (int signum) {
-  printf("\nreceived signal %d \n",signum);
+void signalHandler(int signum) {
+  printf("\nreceived signal %d \n", signum);
   gPtrTQ->StopWait();
   /*TODO: interruption signal received but programme won't stop if PS3 connect
    * but not correctly activate ( one led as to be light, to do so press middle
@@ -32,7 +34,7 @@ void signalHandler (int signum) {
 /** 
  * @brief print usage of option
  */
-void usage(){
+void usage() {
   printf("--config config | path config file\n");
   printf("--mode mode | control by <joystick> or <server-web>\n");
   printf("--port port | port listening\n");
@@ -49,8 +51,7 @@ int main(int argc, char *argv[]) {
   int index;
   int o;
 
-  static struct option long_options[] =
-  {
+  static struct option long_options[] = {
     {"config", required_argument,  0 , 'c'},
     {"help", no_argument,  0 , 'h'},
     {"mode", required_argument, 0, 'm'},
@@ -59,9 +60,9 @@ int main(int argc, char *argv[]) {
     {0, 0, 0, 0},
   };
 
-  while((o = getopt_long(argc,argv,"c:h:p:m:s:",long_options, &option_index)) != -1){
-      switch (o)
-      {
+  while ((o = getopt_long(argc, argv, "c:h:p:m:s:",
+                          long_options, &option_index)) != -1) {
+      switch (o) {
         case 'c':
           pathConfig = optarg;
           break;
@@ -73,41 +74,35 @@ int main(int argc, char *argv[]) {
           break;
         case 's':
           standard = optarg;
-          break;  
+          break;
         case 'h':
           usage();
           return EXIT_SUCCESS;
         case '?':
-          if (optopt == 'c' || optopt == 'm' || optopt == 'p' || optopt == 's')
-          {
+          if (optopt == 'c' || optopt == 'm' ||
+              optopt == 'p' || optopt == 's') {
             LOG_E("Option -%c requires an argument. \n", optopt);
-          }
-          else if (isprint (optopt))
-          {
-            LOG_E("Unknown option -%c.\n",optopt);
-          }
-          else
-          {
-            LOG_E("Unknown option character \\x%x.\n", optopt);  
+          } else if (isprint(optopt)) {
+            LOG_E("Unknown option -%c.\n", optopt);
+          } else {
+            LOG_E("Unknown option character \\x%x.\n", optopt);
           }
           return 0;
         default:
           abort();
       }
   }
-  for(index = optind; index < argc; index++)
-  {
+  for (index = optind; index < argc; index++) {
     LOG_E("Non-option argument %s \n", argv[index]);
     return 0;
   }
-  if (mode == NULL){
+  if (mode == NULL) {
     LOG_I("Please add the mode of control. See --help for more options\n");
-  }
-  else{
-    if (!strcmp(mode,"joystick")){
+  } else {
+    if (!strcmp(mode, "joystick")) {
       LOG_I("Launching Server");
       signal(SIGINT, signalHandler);
-      //signal(SIGTERM, signalHandler);
+      // signal(SIGTERM, signalHandler);
 
       TransmitionQueue tQueue;
       gPtrTQ = &tQueue;
@@ -142,9 +137,8 @@ int main(int argc, char *argv[]) {
       tQueue.Close();
 
       LOG_I("Program end!");
-    } else if (!strcmp(mode,"server-web")) {
-      if (!port || standard == NULL)
-      {
+    } else if (!strcmp(mode, "server-web")) {
+      if (!port || standard == NULL) {
         LOG_I("./armDev --mode 'server-web' --port [Number of port]\n --standard [http/https]");
         return 1;
       }

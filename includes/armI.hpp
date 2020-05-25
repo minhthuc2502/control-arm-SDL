@@ -1,12 +1,13 @@
 /**
+ * Copyright 2020 PHAM Minh Thuc
  * @file armI.hpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File contains class mother of armAL5D and define all features abour arm ALD5
  * @see http://www.lynxmotion.com/c-130-al5d.aspx
  */
-#ifndef ARM_I_H
-#define ARM_I_H
+#ifndef INCLUDES_ARMI_HPP_
+#define INCLUDES_ARMI_HPP_
 
 #include <sys/time.h>
 #include <stdint.h>
@@ -95,20 +96,20 @@ typedef struct {
  * @brief ArmI class for the arm in common
  */
 class ArmI {
-protected:
+ protected:
   bool isOpen;            /*!< variable inform status of arm */
 
-public:
+ public:
   /** 
    * @brief constructor 
    * Constructor of class ArmI
    */
-  ArmI(): isOpen(false){};
+  ArmI(): isOpen(false) {}
   /** 
    * @brief destructor 
    * Destructor of class ArmI
    */
-  virtual ~ArmI() {};
+  virtual ~ArmI() {}
   /**
    * @brief virtual method that should open device to be able to use it
    * @return true if open ArmAL5D sucessfully
@@ -133,7 +134,7 @@ public:
   /** 
    * @brief getter for variable isOpen
    */
-  bool IsOpen(){return isOpen;};
+  bool IsOpen(){return isOpen;}
 };
 
-#endif
+#endif  // INCLUDES_ARMI_HPP_

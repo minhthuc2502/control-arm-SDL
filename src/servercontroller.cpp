@@ -1,4 +1,5 @@
 /**
+ * Copyright 2020 PHAM Minh Thuc
  * @file servercontroller.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
@@ -8,10 +9,10 @@
 #include "servercontroller.hpp"
 #include <string>
 
-bool ServerController::MoveElbow(int dir){
+bool ServerController::MoveElbow(int dir) {
     std::string cmd;
     int rc;
-    if (dir){
+    if (dir) {
         if (joints_[ELBOW].actualPosition != joints_[ELBOW].limitHight) {
             joints_[ELBOW].actualPosition = joints_[ELBOW].actualPosition + DISTANCE;
             cmd = SetCmdString(ELBOW, SERVO_SPEED_MEDIUM);
@@ -37,7 +38,7 @@ bool ServerController::MoveElbow(int dir){
     return true;
 }
 
-bool ServerController::MoveShoulder(int dir){
+bool ServerController::MoveShoulder(int dir) {
     std::string cmd;
     int rc;
     if (dir) {
@@ -66,7 +67,7 @@ bool ServerController::MoveShoulder(int dir){
     return true;
 }
 
-bool ServerController::RotateBase(int dir){
+bool ServerController::RotateBase(int dir) {
     std::string cmd;
     int rc;
     if (dir) {
@@ -95,7 +96,7 @@ bool ServerController::RotateBase(int dir){
     return true;
 }
 
-bool ServerController::RotateWrist(int dir){
+bool ServerController::RotateWrist(int dir) {
     std::string cmd;
     int rc;
     if (dir) {
@@ -124,7 +125,7 @@ bool ServerController::RotateWrist(int dir){
     return true;
 }
 
-bool ServerController::MoveGripper(int dir){
+bool ServerController::MoveGripper(int dir) {
     std::string cmd;
     int rc;
     if (dir) {
@@ -153,7 +154,7 @@ bool ServerController::MoveGripper(int dir){
     return true;
 }
 
-bool ServerController::MoveWrist(int dir){
+bool ServerController::MoveWrist(int dir) {
     std::string cmd;
     int rc;
     if (dir) {
@@ -166,7 +167,7 @@ bool ServerController::MoveWrist(int dir){
             #endif
         }
     } else {
-        if(joints_[WRIST].actualPosition != joints_[WRIST].limitLow){
+        if (joints_[WRIST].actualPosition != joints_[WRIST].limitLow) {
             joints_[WRIST].actualPosition = joints_[WRIST].actualPosition - DISTANCE;
             cmd = SetCmdString(WRIST, SERVO_SPEED_MEDIUM);
         } else {
@@ -175,14 +176,13 @@ bool ServerController::MoveWrist(int dir){
             #endif
         }
     }
-    if ((rc = write(fd_, cmd.c_str(), cmd.size())) == -1){
+    if ((rc = write(fd_, cmd.c_str(), cmd.size())) == -1) {
         LOG_E("write -> %s", strerror(rc));
         return false;
     }
     return true;
 }
 
-ARM ServerController::GetJoint(int index)
-{
+ARM ServerController::GetJoint(int index) {
     return joints_[index];
 }

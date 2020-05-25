@@ -1,15 +1,19 @@
 /**
+ * Copyright 2020 PHAM Minh Thuc
  * @file logger.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief another version of log file. Don't be used.
  */
-#include "Logger.hpp"
+
+#include "../includes/logger.hpp"
 
 //------------------------------------------------------------------------------
 //  Public methods
 //------------------------------------------------------------------------------
-void Logger::LogERROR(const char* function, const char* file, long line, const char* msg, ...){
+void Logger::LogERROR(const char* function,
+                      const char* file, int64_t line,
+                      const char* msg, ...) {
   va_list args;
   va_start(args, msg);
   std::string fileName = ExtractFileName(file);
@@ -22,7 +26,9 @@ void Logger::LogERROR(const char* function, const char* file, long line, const c
   va_end(args);
 }
 
-void Logger::LogPERROR(const char* function, const char* file, long line, const char* libFunction){
+void Logger::LogPERROR(const char* function,
+                      const char* file,
+                      int64_t line, const char* libFunction) {
   printfMutex_.lock();
   printf("ERROR!!!: ");
   perror(libFunction);
@@ -32,7 +38,9 @@ void Logger::LogPERROR(const char* function, const char* file, long line, const 
   printfMutex_.unlock();
 }
 
-void Logger::LogDEBUG(const char* function, const char* file, long line, const char* msg, ...){
+void Logger::LogDEBUG(const char* function,
+                      const char* file,
+                      int64_t line, const char* msg, ...) {
   va_list args;
   va_start(args, msg);
   std::string fileName = ExtractFileName(file);
@@ -44,7 +52,7 @@ void Logger::LogDEBUG(const char* function, const char* file, long line, const c
   va_end(args);
 }
 
-void Logger::LogINFO(const char* tag, const char* msg, ...){
+void Logger::LogINFO(const char* tag, const char* msg, ...) {
   va_list args;
   va_start(args, msg);
   printfMutex_.lock();
@@ -56,7 +64,7 @@ void Logger::LogINFO(const char* tag, const char* msg, ...){
 //------------------------------------------------------------------------------
 //  Private methods
 //------------------------------------------------------------------------------
-std::string Logger::ExtractFileName(const char* file){
+std::string Logger::ExtractFileName(const char* file) {
   std::string s = file;
   std::string part;
   std::string delimiter = "/";
@@ -64,7 +72,7 @@ std::string Logger::ExtractFileName(const char* file){
   int start = 0;
   size_t pos = s.find(delimiter);
 
-  while( pos != std::string::npos) {
+  while (pos != std::string::npos) {
     start = pos + delimiter.length();
     pos = s.find(delimiter, start);
   }
@@ -72,7 +80,7 @@ std::string Logger::ExtractFileName(const char* file){
   return part;
 }
 
-void Logger::PrintTime(){
+void Logger::PrintTime() {
   std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
   unsigned int hours = std::chrono::duration_cast<std::chrono::hours>(now.time_since_epoch()).count()%24;
   unsigned int minutes = std::chrono::duration_cast<std::chrono::minutes>(now.time_since_epoch()).count()%60;
@@ -81,4 +89,4 @@ void Logger::PrintTime(){
   printf("%02d:%02d:%02d.%04d, ", hours, minutes, seconds, milliseconds);
 }
 
-//void Logger::LogFile()
+// void Logger::LogFile()

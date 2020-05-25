@@ -1,13 +1,15 @@
 /**
+ * Copyright 2020 PHAM Minh Thuc
  * @file httpserver.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File contains class and function to generate a server http/https. This server 
  * provide an API REST to control arm ALD5
  */
+
 #include "httpserver.hpp"
-#define SERVERKEYFILE "../server.key"         /*!< path of private key */
-#define SERVERCERTFILE "../server.pem"        /*!< path of certificate self-signed */
+#define SERVERKEYFILE "../server.key"   /*!< path of private key */
+#define SERVERCERTFILE "../server.pem"  /*!< path of certificate self-signed */
 
 ServerController server;
 const char* badpage = "<html><head><title></title></head><body><h1>A error occur on server</h1></body></html>";   /*!< bad response HTML */
@@ -18,23 +20,21 @@ const char* badpage = "<html><head><title></title></head><body><h1>A error occur
  * @return 0 if fail to get size
  *          size if file if get size successfully
  */
-static long get_file_size (const char *filename)
-{
+static int64_t get_file_size(const char *filename) {
   FILE *fp;
 
-  fp = fopen (filename, "rb");
+  fp = fopen(filename, "rb");
   if (fp) {
-      long size;
-
+      int64_t size;
       if ((0 != fseek (fp, 0, SEEK_END)) || (-1 == (size = ftell (fp))))
         size = 0;
 
-      fclose (fp);
+      fclose(fp);
 
       return size;
-    }
-  else
+    } else {
     return 0;
+  }
 }
 
 /** 
@@ -42,74 +42,70 @@ static long get_file_size (const char *filename)
  *  @param filename file name
  *  @return NULL or buffer contains contenu of file
  */
-static char * load_file (const char *filename)
-{
+static char * load_file(const char *filename) {
   FILE *fp;
   char *buffer;
-  long size;
+  int64_t size;
 
-  size = get_file_size (filename);
+  size = get_file_size(filename);
   if (0 == size)
     return NULL;
 
-  fp = fopen (filename, "rb");
-  if (! fp)
+  fp = fopen(filename, "rb");
+  if (!fp)
     return NULL;
 
-  buffer = (char*)malloc(size + 1);
-  if (! buffer)
-    {
-      fclose (fp);
+  buffer = reinterpret_cast<char*>(malloc(size + 1));
+  if (!buffer) {
+      fclose(fp);
       return NULL;
     }
   buffer[size] = '\0';
 
-  if (size != (long)fread (buffer, 1, size, fp))
-    {
-      free (buffer);
+  if (size != (int64_t)fread(buffer, 1, size, fp)) {
+      free(buffer);
       buffer = NULL;
     }
 
-  fclose (fp);
+  fclose(fp);
   return buffer;
 }
 
-bool HttpServer::HTTPServerRun(int port, char * standard)
-{
+bool HttpServer::HTTPServerRun(int port, char * standard) {
     struct MHD_Daemon * d;
     char *key_pem;
     char *cert_pem;
 
     key_pem = load_file(SERVERKEYFILE);
     cert_pem = load_file(SERVERCERTFILE);
-    if (!strcmp(standard,"http")){
+    if (!strcmp(standard, "http")) {
       d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION,
                       port, NULL, NULL, &_answer_request,
-                      NULL,MHD_OPTION_END);
-    } else if (!strcmp(standard,"https")) {
+                      NULL, MHD_OPTION_END);
+    } else if (!strcmp(standard, "https")) {
       if (key_pem == NULL || cert_pem == NULL) {
         printf("The key or certificate files could not be used!");
-        if(key_pem != NULL)
+        if (key_pem != NULL)
           free(key_pem);
-        if(cert_pem!= NULL)
+        if (cert_pem!= NULL)
           free(cert_pem);
         return 1;
       }
       d = MHD_start_daemon(MHD_USE_THREAD_PER_CONNECTION |MHD_USE_TLS,
                             port, NULL, NULL, &_answer_request,
-                            NULL, 
-                            MHD_OPTION_HTTPS_MEM_KEY, key_pem,
-                            MHD_OPTION_HTTPS_MEM_CERT, cert_pem ,MHD_OPTION_END);
+                            NULL, MHD_OPTION_HTTPS_MEM_KEY, key_pem,
+                            MHD_OPTION_HTTPS_MEM_CERT,
+                            cert_pem , MHD_OPTION_END);
     }
     if (d == NULL) {
-      if (!strcmp(standard,"https")) {
+      if (!strcmp(standard, "https")) {
         free(key_pem);
         free(cert_pem);
       }
       return false;
     }
     (void) getc(stdin);
-    if (!strcmp(standard,"https")) {
+    if (!strcmp(standard, "https")) {
       free(key_pem);
       free(cert_pem);
     }
@@ -117,28 +113,31 @@ bool HttpServer::HTTPServerRun(int port, char * standard)
     return true;
 }
 
-int HttpServer::_send_bad_response(struct MHD_Connection * connection)
-{
-    static char * bad_response = (char *)badpage; 
+int HttpServer::_send_bad_response(struct MHD_Connection * connection) {
+    static char * bad_response = const_cast<char *>(badpage);
     int bad_response_len = strlen(bad_response);
     int ret;
     struct MHD_Response *response;
 
-    response = MHD_create_response_from_buffer(bad_response_len,bad_response, MHD_RESPMEM_PERSISTENT);
+    response = MHD_create_response_from_buffer(bad_response_len,
+                                              bad_response,
+                                              MHD_RESPMEM_PERSISTENT);
     if (response ==0) {
         return MHD_NO;
     }
-    ret = MHD_queue_response(connection,MHD_HTTP_OK,response);
+    ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
     MHD_destroy_response(response);
     return ret;
 }
 
-int HttpServer::_get_url_arg(void *cls, MHD_ValueKind kind,const char *key, const char * value)
-{
+int HttpServer::_get_url_arg(void *cls,
+                            MHD_ValueKind kind,
+                            const char *key,
+                            const char * value) {
   map<string, string> * url_arg = static_cast<map<string , string> *> (cls);
   if (url_arg->find(key) == url_arg->end()) {
     if (!value) {
-      (*url_arg)[key] = ""; 
+      (*url_arg)[key] = "";
     } else {
       (*url_arg)[key] = value;
     }
@@ -146,11 +145,11 @@ int HttpServer::_get_url_arg(void *cls, MHD_ValueKind kind,const char *key, cons
   return MHD_YES;
 }
 
-//function callback when exist a request
+// function callback when exist a request
 int HttpServer::_answer_request(void* cls, struct MHD_Connection * connection,
                           const char * url, const char * methode,
                           const char * version, const char * upload_data,
-                          size_t * upload_data_size, void ** ptr){
+                          size_t * upload_data_size, void ** ptr) {
   static int dummy;
   struct MHD_Response * response;
   int ret;
@@ -161,37 +160,42 @@ int HttpServer::_answer_request(void* cls, struct MHD_Connection * connection,
   if (0!= strcmp(methode, "GET")) {
     return MHD_NO;
   }
-  //ptr is a pointer used to save the state of the function callback for the future call by MHD( this function can be called by many times)
+  // ptr is a pointer used to save the state of the function callback
+  // for the future call by MHD( this function can be called by many times)
   if (&dummy != *ptr) {
     *ptr = &dummy;
     return MHD_YES;
   }
   if (0 != *upload_data_size)
     return MHD_NO;
-  //get values from url with get methode  
-  if (MHD_get_connection_values(connection,MHD_GET_ARGUMENT_KIND,_get_url_arg,&url_arg)<0) {
+  // get values from url with get methode
+  if (MHD_get_connection_values(connection,
+                                MHD_GET_ARGUMENT_KIND,
+                                _get_url_arg, &url_arg) < 0) {
     return _send_bad_response(connection);
   }
-  //call api to control arm
-  apicontrol.ResponseRestRequest(url,url_arg,respdata,server);
+  // call api to control arm
+  apicontrol.ResponseRestRequest(url, url_arg, respdata, server);
   *ptr = NULL;
-  respbuffer = (char*) malloc(respdata.size()+1);
+  respbuffer = reinterpret_cast<char*>(malloc(respdata.size()+1));
   if (respbuffer == 0) {
     return MHD_NO;
   }
   strncpy(respbuffer, respdata.c_str(), respdata.size() + 1);
-  //create response for resquest
-  response = MHD_create_response_from_buffer(strlen(respbuffer), (void *)respbuffer, MHD_RESPMEM_PERSISTENT);
+  // create response for resquest
+  response = MHD_create_response_from_buffer(strlen(respbuffer),
+                                            (void *)respbuffer,
+                                            MHD_RESPMEM_PERSISTENT);
   if (response == 0) {
     if (respbuffer != NULL)
       free(respbuffer);
     return MHD_NO;
   }
-  //send response
+  // send response
   MHD_add_response_header(response, "Access-Control-Allow-Origin", "*");
-	MHD_add_response_header(response, "Vary", "Origin");
+  MHD_add_response_header(response, "Vary", "Origin");
   ret = MHD_queue_response(connection, MHD_HTTP_OK, response);
-  //destroy response
+  // destroy response
   MHD_destroy_response(response);
   if (respbuffer == 0) {
     return MHD_NO;
