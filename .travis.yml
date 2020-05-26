@@ -4,8 +4,8 @@ sudo: required
 
 jobs:
   include:  
-    - stage: test
-    - name: unittest
+    - stage: tests
+      name: unittest
       # Install dependencies
       addons:
         apt:
