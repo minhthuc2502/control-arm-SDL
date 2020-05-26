@@ -1,32 +1,3 @@
- 
-# # This will run on Travis' 'new' container-based infrastructure
-# sudo: false 
-
-# # Blacklist
-# branches:
-#   only:
-#     - minh-thuc_dev
-
-# # Install dependencies
-# addons:
-#   apt:
-#     packages:
-#       - doxygen
-
-# # Build your code e.g. by calling make
-# script:
-#   - doxygen ./doxygen/Doxyfile
-
-# # Generate and deploy documentation
-# deploy:
-#   provider: pages
-#   skip_cleanup: true
-#   local_dir: doxygen/dox_control_arm_ALD5/html
-#   github_token: $GH_REPO_TOKEN
-#   on:
-#     branch: 
-#       - minh-thuc_dev
-
 language: cpp
 # This will run on Travis' 'new' container-based infrastructure
 sudo: required 
@@ -45,7 +16,7 @@ addons:
 # Build code
 install:
   - ./build.sh
-  - cd test/ && ./run.sh all
+  - cd test/ && ./run.sh all && cd ..
 jobs:
   include:
     - stage: generate doxygen
@@ -64,4 +35,3 @@ jobs:
         on:
           branch: 
             - master
-            
