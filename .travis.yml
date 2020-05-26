@@ -10,7 +10,6 @@ jobs:
       addons:
         apt:
           packages:
-            - doxygen
             - cmake
             - libevdev-dev
             - libsdl2-dev
@@ -22,7 +21,6 @@ jobs:
         - ./build.sh 
         - cd test/ && ./run.sh all && cd ..
       script:
-        - doxygen ./doxygen/Doxyfile
         - cd test/bin/ && ./unittest --log_level=all
     - name: cpplint test coding-style
       language: python
@@ -34,6 +32,13 @@ jobs:
         - cpplint --recursive --filter=-whitespace/line_length,-runtime/references ./src
         - cpplint --recursive --filter=-whitespace/line_length,-runtime/references ./includes
     - stage: deploy
+      # Install dependencies
+      addons:
+        apt:
+          packages:
+            - doxygen
+      script:
+        - doxygen ./doxygen/Doxyfile
       deploy:
         provider: pages
         skip_cleanup: true
