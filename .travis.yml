@@ -13,7 +13,9 @@ addons:
       - libboost-dev
       - libboost-test-dev
       - libmicrohttpd-dev
-
+      - python3
+install:
+  - pip3 install cpplint
 # Build code
 before-script:
   - ./build.sh 
