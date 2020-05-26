@@ -18,8 +18,8 @@ jobs:
             - libboost-test-dev
             - libmicrohttpd-dev
       # Build code
-      install:
-        - ./build.sh
+      script:
+        - ./build.sh 
         - cd test/ && ./run.sh all
     - stage: generate doxygen
       script: doxygen ./doxygen/Doxyfile
