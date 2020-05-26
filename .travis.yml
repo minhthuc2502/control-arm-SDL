@@ -2,30 +2,31 @@ language: cpp
 # This will run on Travis' 'new' container-based infrastructure
 sudo: required 
 
+# Install dependencies
+addons:
+  apt:
+    packages:
+      - doxygen
+      - cmake
+      - libevdev-dev
+      - libsdl2-dev
+      - libboost-dev
+      - libboost-test-dev
+      - libmicrohttpd-dev
+
+# Build code
+before-script:
+  - ./build.sh 
+  - cd test/ && ./run.sh all && cd ..
+script:
+  - doxygen ./doxygen/Doxyfile
+
 jobs:
-  include:
-    - stage: build environment
-      name: install packages
-      # Install dependencies
-      addons:
-        apt:
-          packages:
-            - doxygen
-            - cmake
-            - libevdev-dev
-            - libsdl2-dev
-            - libboost-dev
-            - libboost-test-dev
-            - libmicrohttpd-dev
-      # Build code
-      script:
-        - ./build.sh 
-        - cd test/ && ./run.sh all
-    - stage: generate doxygen
-      script: doxygen ./doxygen/Doxyfile
-    - stage: unit test
-      script: cd /test/bin/ && ./unittest --log_level=all
-    - stage: cpplint test coding-style
+  include:  
+    - stage: test
+    - name: unittest
+      script: cd test/bin/ && ./unittest --log_level=all
+    - name: cpplint test coding-style
       script: cpplint --recursive --filter=-whitespace/line_length,-runtime/references ./src
       script: cpplint --recursive --filter=-whitespace/line_length,-runtime/references ./includes
     - stage: deploy
