@@ -1,4 +1,7 @@
-# Description
+# Control-arm-AL5D
+[![Build Status](https://travis-ci.com/minhthuc2502/control-arm-SDL.svg?branch=master)](https://travis-ci.com/minhthuc2502/control-arm-SDL) [![Build Status](https://img.shields.io/badge/cpplint-0%20error-brightgreen)](https://travis-ci.com/github/minhthuc2502/control-arm-SDL/builds/168084680)
+
+## Description
 The project aims to control a robotic arm with all kind of joystick (home made and commercial ones) or with server web.
 
 ## User-space applications

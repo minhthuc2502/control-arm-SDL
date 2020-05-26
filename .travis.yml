@@ -28,21 +28,40 @@
 #       - minh-thuc_dev
 
 language: cpp
-sudo: required
+# This will run on Travis' 'new' container-based infrastructure
+sudo: required 
 
-before_install:
-  - sudo apt-get install -y cmake
-  - sudo apt-get install -y libevdev-dev
-  - sudo apt-get install -y libsdl2-dev
-  - sudo apt-get install -y libboost-dev
-  - sudo apt-get install -y libboost-test-dev
-  - sudo apt-get install -y libmicrohttpd-dev
-
+# Install dependencies
+addons:
+  apt:
+    packages:
+      - doxygen
+      - cmake
+      - libevdev-dev
+      - libsdl2-dev
+      - libboost-dev
+      - libboost-test-dev
+      - libmicrohttpd-dev
+# Build code
 install:
   - ./build.sh
-  - cd test/
-  - ./run.sh all
-before_script:
-  - cd bin/
-script:
-  - ./unittest --log_level=all
+  - cd test/ && ./run.sh all
+jobs:
+  include:
+    - stage: generate doxygen
+      script: doxygen ./doxygen/Doxyfile
+    - stage: unit test
+      script: cd bin/ && ./unittest --log_level=all
+    - stage: cpplint test coding-style
+      script: cpplint --recursive --filter=-whitespace/line_length,-runtime/references ./src
+      script: cpplint --recursive --filter=-whitespace/line_length,-runtime/references ./includes
+    - stage: deploy
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        local_dir: doxygen/dox_control_arm_ALD5/html
+        github_token: $GH_REPO_TOKEN
+        on:
+          branch: 
+            - master
+            

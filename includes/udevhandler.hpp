@@ -1,46 +1,46 @@
 /**
+ * Copyright 2020 PHAM Minh Thuc
  * @file udevhandler.hpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File define class provide node detection and hotplug fonctionnality for arm ALD5.
  * Using udev library to detect.
  */
-#ifndef UDEV_HANDLER_H
-#define UDEV_HANDLER_H
+#ifndef INCLUDES_UDEVHANDLER_HPP_
+#define INCLUDES_UDEVHANDLER_HPP_
 
 #include <libudev.h>
 #include <locale.h>
 #include <unistd.h>
 #include <string>
-#include <thread>
+#include <thread>       // NOLINT [build/c++11]
 #include <functional>
 
 /**
  * @brief UdevHandler class to catch the devices connected to host by libudev library 
  */
 class UdevHandler {
-protected:
-  //variables
+ protected:
+  // variables
   std::thread monitoringThread_;            /*!< monitor thread */
   struct udev* udev_;                       /*!< udev variable */
-  struct udev_enumerate* enumerate_;        /*!< variable store list udev in sysfs */
+  struct udev_enumerate* enumerate_;  /*!< variable store list udev in sysfs */
   struct udev_list_entry* deviceList_;      /*!< list generated for udev */
   struct udev_monitor *monitor_;            /*!< monitor udev (don't use)*/
-  int monitorFd_;                           /*!< file descriptive of monitor udev (don't use) */
+  int monitorFd_;  /*!< file descriptive of monitor udev (don't use) */
   std::string deviceNode_;                  /*!< (don't use) */
 
-public:
+ public:
   /** 
    * @brief constructor 
    *  Constructor of class UdevHandler
    */
-  UdevHandler(){
-  };
+  UdevHandler() {}
   /**
    * @brief destructor
    * Destructeur of class UdevHandler
    */
-  virtual ~UdevHandler() {};
+  virtual ~UdevHandler() {}
 
   /**
    * @brief this method initialise udev object context
@@ -64,7 +64,7 @@ public:
    * @param subsystem where search for device e.g:input
    * @note should be call before Enumeration
    */
-  void EnableMonitoring (const char* subsystem);
+  void EnableMonitoring(const char* subsystem);
   /** 
    * @brief this method enumerate all subsystem device connect
    * @param subsystem where search for device e.g:input
@@ -78,7 +78,9 @@ public:
    * @param propertyValue value that should be define
    * @return true/false for success or fail
    */
-  bool CheckProperty(udev_device* dev, const char* property, const char* propertyValue);
+  bool CheckProperty(udev_device* dev,
+                    const char* property,
+                    const char* propertyValue);
   /** 
    * @brief this method check if the device is en ev event (eventX)
    * @param dev device to Check
@@ -99,4 +101,4 @@ public:
   void PrintUdevInfos(udev_device* dev);
 };
 
-#endif
+#endif  // INCLUDES_UDEVHANDLER_HPP_

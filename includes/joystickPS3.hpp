@@ -1,4 +1,5 @@
 /**
+ * Copyright 2020 PHAM Minh Thuc
  * @file joystickPS3.hpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
@@ -6,11 +7,9 @@
  * These event is analyzed and return in final the command corresponding.
  * play station 3 and nintendo switch
  */
-#ifndef JOYSTICK_PS3_H
-#define JOYSTICK_PS3_H
+#ifndef INCLUDES_JOYSTICKPS3_HPP_
+#define INCLUDES_JOYSTICKPS3_HPP_
 
-#include "joystickI.hpp"
-#include "armI.hpp"
 #include <linux/joystick.h>
 #include <libevdev-1.0/libevdev/libevdev.h>
 #include <stdio.h>
@@ -23,22 +22,24 @@
 #include <fstream>
 #include <algorithm>
 #include <string>
+#include "joystickI.hpp"
+#include "armI.hpp"
 
 #define SUBSYSTEM   "input"                     /*!< input driver */
 #define ID_VENDOR_P "ID_VENDOR_ID"              /*!< property of ID_VENDOR_ID */
-#define ID_VENDOR_V "054c"                      /*!< value of property ID_VENDOR_ID */
-#define GAMEPAD_P   "ID_INPUT_JOYSTICK"         /*!< property of ID_INPUT_JOYSTICK */ 
+#define ID_VENDOR_V "054c"                /*!< value of property ID_VENDOR_ID */
+#define GAMEPAD_P   "ID_INPUT_JOYSTICK"   /*!< property of ID_INPUT_JOYSTICK */
 
 // value of hat in NINTENDO SDL
-#define SDL_HAT_UP_NIN                 1        /*!< index of hat up (nintendo switch) */
-#define SDL_HAT_DOWN_NIN               4        /*!< index of hat down (nintendo switch) */
-#define SDL_HAT_LEFT_NIN               8        /*!< index of hat left (nintendo switch) */
-#define SDL_HAT_RIGHT_NIN              2        /*!< index of hat right (nintendo switch) */
+#define SDL_HAT_UP_NIN      1        /*!< index of hat up (nintendo switch) */
+#define SDL_HAT_DOWN_NIN    4        /*!< index of hat down (nintendo switch) */
+#define SDL_HAT_LEFT_NIN    8        /*!< index of hat left (nintendo switch) */
+#define SDL_HAT_RIGHT_NIN   2       /*!< index of hat right (nintendo switch) */
 
 /**
  * @brief mask of all joystick's buttons
  */
-typedef enum{
+typedef enum {
   mask_btn_south      = 0b1 << elbow_right,     /*!< mask of button south */
   mask_btn_east       = 0b1 << wrist_right,     /*!< mask of button east */
   mask_btn_north      = 0b1 << elbow_left,      /*!< mask of button north */
@@ -47,18 +48,18 @@ typedef enum{
   mask_btn_tr         = 0b1 << gripper_close,   /*!< mask of button tr */
   mask_btn_select     = 0b1 << option1,         /*!< mask of button select */
   mask_btn_start      = 0b1 << all_home,        /*!< mask of button start */
-  mask_btn_thumbl     = 0b1 << wrist_rot_left,  /*!< mask of button thumbl */  
+  mask_btn_thumbl     = 0b1 << wrist_rot_left,  /*!< mask of button thumbl */
   mask_btn_thumbr     = 0b1 << wrist_rot_right, /*!< mask of button thumbr */
   mask_btn_dpad_up    = 0b1 << shoulder_right,  /*!< mask of button dpad up */
   mask_btn_dpad_down  = 0b1 << shoulder_left,   /*!< mask of button dpad down */
   mask_btn_dpad_left  = 0b1 << base_left,       /*!< mask of button dpad left */
-  mask_btn_dpad_right = 0b1 << base_right       /*!< mask of button dpad right */
+  mask_btn_dpad_right = 0b1 << base_right      /*!< mask of button dpad right */
 }E_BTN_MASK_PS3;
 
 /**
  * @brief mask of all joystick's abs 
  */
-typedef enum{
+typedef enum {
   mask_abs_x_left     = 0b1 << a_base_left,     /*!< mask of abs x left  */
   mask_abs_x_right    = 0b1 << a_base_right,    /*!< mask of abs x right  */
   mask_abs_y_left     = 0b1 << a_shoulder_left, /*!< mask of abs y left  */
@@ -76,7 +77,7 @@ typedef enum{
 /**
  * @brief mask of all joystick's acc 
  */
-typedef enum{
+typedef enum {
   mask_acc_x_left     = 0b1 << acc_x_left,       /*!< mask of acc x left  */
   mask_acc_x_right    = 0b1 << acc_x_right,      /*!< mask of acc x right  */
   mask_acc_y_left     = 0b1 << acc_y_left,       /*!< mask of acc y left  */
@@ -89,7 +90,7 @@ typedef enum{
  * @brief JoystickPS3 class for the joystick PS3 or nintendo
  */
 class JoystickPS3:public JoystickI {
-private:
+ private:
   SDL_Joystick *joy;          /*!< joy object defined in SDL library */
   arm_event movement_ = {};   /*!< movement set by signal on joystick */
 
@@ -102,7 +103,7 @@ private:
    * @brief function print all events catched by joystick
    * @param ev event catched
    */
-  void _print_event(SDL_Event* ev); 
+  void _print_event(SDL_Event* ev);
   /**
    *  @brief this method allow to apply mask for each event
    *  @param ev event catched
@@ -114,7 +115,7 @@ private:
    * @param value remove mask, other apply mask
    * @param mask to apply
    */
-  void _apply_mask(int32_t& statusRegistre, int value, int mask);
+  void _apply_mask(int32_t &statusRegistre, int value, int mask);
   /** 
    * @brief this method avoid event repetition in queue, return null event
    *        or current movment_ value
@@ -122,21 +123,21 @@ private:
    */
   arm_event _is_new_event();
 
-public:
+ public:
   /** 
    * @brief constructor 
    *  Constructor of class JoystickPS3
    */
-  JoystickPS3(){};
+  JoystickPS3() {}
   /**
    * @brief destructor
    * Destructeur of class JoystickPS3
    */
   ~JoystickPS3() {
-    if(IsOpen()){
+    if (IsOpen()) {
       this->Close();
     }
-  };
+  }
 
   /**
    * @brief method inherite from the joystick interface, open device
@@ -162,4 +163,4 @@ public:
   bool GetConfig(char* fileConfig);
 };
 
-#endif
+#endif  // INCLUDES_JOYSTICKPS3_HPP_
