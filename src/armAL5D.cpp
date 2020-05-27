@@ -7,7 +7,6 @@
  * robotic ALD5
  * @see http://www.lynxmotion.com/c-130-al5d.aspx
  */
-#include "../includes/log.h"
 #include "armAL5D.hpp"
 #include "../includes/log.h"
 //------------------------------------------------------------------------------

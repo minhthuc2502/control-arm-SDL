@@ -186,13 +186,8 @@ int HttpServer::_answer_request(void* cls, struct MHD_Connection * connection,
   strncpy(respbuffer, respdata.c_str(), respdata.size() + 1);
   // create response for resquest
   response = MHD_create_response_from_buffer(strlen(respbuffer),
-<<<<<<< HEAD
                                            reinterpret_cast<void *>(respbuffer),
                                            MHD_RESPMEM_PERSISTENT);
-=======
-                                            reinterpret_cast<void *>(respbuffer),
-                                            MHD_RESPMEM_PERSISTENT);
->>>>>>> 4b56fd97ad2d42a3990c731c3cbbec5efd39addb
   if (response == 0) {
     if (respbuffer != NULL)
       free(respbuffer);

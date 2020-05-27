@@ -14,11 +14,6 @@
 #include <chrono>     // NOLINT [build/c++11]
 #include <bitset>
 #include <mutex>      // NOLINT [build/c++11]
-<<<<<<< HEAD
-=======
-
-#define binaire(taille, variable) std::bitset<(taille)>(variable).to_string().c_str()       /*!< bianire  */
->>>>>>> 4b56fd97ad2d42a3990c731c3cbbec5efd39addb
 
 #define binaire(taille, variable)                                              \
   std::bitset<(taille)>(variable).to_string().c_str() /*!< bianire  */
