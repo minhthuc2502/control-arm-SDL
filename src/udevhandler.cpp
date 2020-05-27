@@ -44,8 +44,9 @@ bool UdevHandler::Enumeration(const char* subsystem) {
   return true;
 }
 
-void UdevHandler::ProcessDeviceList(std::function<bool(udev_device* dev)> pt2FindDevnode) {
-// void ArmAL5D::ProcessDeviceList(bool (*pt2FindDevnode)(udev_device* dev)){
+void UdevHandler::ProcessDeviceList(
+    std::function<bool(udev_device *dev)> pt2FindDevnode) {
+  // void ArmAL5D::ProcessDeviceList(bool (*pt2FindDevnode)(udev_device* dev)){
   struct udev_list_entry* listEntry;
   struct udev_device* dev;
 

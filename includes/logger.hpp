@@ -15,8 +15,8 @@
 #include <bitset>
 #include <mutex>      // NOLINT [build/c++11]
 
-#define binaire(taille, variable) std::bitset<(taille)>(variable).to_string().c_str()       /*!< bianire  */
-
+#define binaire(taille, variable)                                              \
+  std::bitset<(taille)>(variable).to_string().c_str() /*!< bianire  */
 /**
  * @brief log class
  */

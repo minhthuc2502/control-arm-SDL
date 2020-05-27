@@ -12,7 +12,9 @@
 #define SERVERCERTFILE "../server.pem"  /*!< path of certificate self-signed */
 
 ServerController server;
-const char* badpage = "<html><head><title></title></head><body><h1>A error occur on server</h1></body></html>";   /*!< bad response HTML */
+const char *badpage =
+    "<html><head><title></title></head><body><h1>A error occur on "
+    "server</h1></body></html>"; /*!< bad response HTML */
 
 /** 
  * @brief this function get size of file
@@ -184,8 +186,8 @@ int HttpServer::_answer_request(void* cls, struct MHD_Connection * connection,
   strncpy(respbuffer, respdata.c_str(), respdata.size() + 1);
   // create response for resquest
   response = MHD_create_response_from_buffer(strlen(respbuffer),
-                                            reinterpret_cast<void *>(respbuffer),
-                                            MHD_RESPMEM_PERSISTENT);
+                                           reinterpret_cast<void *>(respbuffer),
+                                           MHD_RESPMEM_PERSISTENT);
   if (response == 0) {
     if (respbuffer != NULL)
       free(respbuffer);

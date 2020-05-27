@@ -38,7 +38,8 @@ bool TransmitionQueue::Start() {
     consumer_ = std::thread(&TransmitionQueue::EventConsumer, this);
     return true;
   } else {
-    LOG_E("Unable to start communication, one or more devices are not set or correctly open");
+    LOG_E("Unable to start communication, one or more devices are not set or "
+      "correctly open");
     return false;
   }
 }
