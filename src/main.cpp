@@ -139,8 +139,12 @@ int main(int argc, char *argv[]) {
       LOG_I("Program end!");
     } else if (!strcmp(mode, "server-web")) {
       if (!port || standard == NULL) {
+<<<<<<< HEAD
         LOG_I("./armDev --mode 'server-web' --port [Number of port] "
               "--standard [http/https]");
+=======
+        LOG_I("./armDev --mode 'server-web' --port [Number of port]\n --standard [http/https]");
+>>>>>>> 4b56fd97ad2d42a3990c731c3cbbec5efd39addb
         return 1;
       }
       LOG_I("Launching Server");

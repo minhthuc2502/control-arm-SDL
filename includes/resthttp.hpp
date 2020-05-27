@@ -135,8 +135,12 @@ class RestHttp {
      * @param response bad response 
      */
     void _get_invalid_response(string& response);
+<<<<<<< HEAD
     map<string, set<string>>
       _apiparams; /*!< end point of web service and parameter */
+=======
+    map<string, set<string>> _apiparams;  /*!< end point of web service and parameter */
+>>>>>>> 4b56fd97ad2d42a3990c731c3cbbec5efd39addb
 };
 
 #endif  // INCLUDES_RESTHTTP_HPP_
