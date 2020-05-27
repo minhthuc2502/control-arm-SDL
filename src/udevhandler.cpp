@@ -1,4 +1,5 @@
 /**
+ * Copyright 2020 PHAM Minh Thuc
  * @file udevhandler.cpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
@@ -6,7 +7,7 @@
  * Using udev library to detect.
  */
 #include "udevhandler.hpp"
-#include "log.h"
+#include "../includes/log.h"
 
 bool UdevHandler::InitUdev(void) {
   /* Create the udev object (library context) */
@@ -17,7 +18,7 @@ bool UdevHandler::InitUdev(void) {
   }
   return true;
 }
-//not use as
+// not use as
 void UdevHandler::EnableMonitoring(const char* subsystem) {
   monitor_ = udev_monitor_new_from_netlink(udev_, "udev");
   udev_monitor_filter_add_match_subsystem_devtype(monitor_, subsystem, NULL);
@@ -31,11 +32,11 @@ void UdevHandler::CloseUdev() {
 
 bool UdevHandler::Enumeration(const char* subsystem) {
   enumerate_ = udev_enumerate_new(udev_);
-  if(udev_enumerate_add_match_subsystem(enumerate_, subsystem) != 0){
+  if (udev_enumerate_add_match_subsystem(enumerate_, subsystem) != 0) {
     LOG_E("Unable to find subsystem %s", subsystem);
     return false;
   }
-  if (udev_enumerate_scan_devices(enumerate_) != 0){
+  if (udev_enumerate_scan_devices(enumerate_) != 0) {
     LOG_E("Unable to scan existing device");
     return false;
   }
@@ -43,8 +44,8 @@ bool UdevHandler::Enumeration(const char* subsystem) {
   return true;
 }
 
-void UdevHandler::ProcessDeviceList(std::function<bool(udev_device* dev)> pt2FindDevnode){
-//void ArmAL5D::ProcessDeviceList(bool (*pt2FindDevnode)(udev_device* dev)){
+void UdevHandler::ProcessDeviceList(std::function<bool(udev_device* dev)> pt2FindDevnode) {
+// void ArmAL5D::ProcessDeviceList(bool (*pt2FindDevnode)(udev_device* dev)){
   struct udev_list_entry* listEntry;
   struct udev_device* dev;
 
@@ -56,7 +57,7 @@ void UdevHandler::ProcessDeviceList(std::function<bool(udev_device* dev)> pt2Fin
     if (dev == NULL) {
       perror("udev_device_new_from_syspath");
       LOG_E("Error creation with syspath");
-    } else if(pt2FindDevnode(dev)) {
+    } else if (pt2FindDevnode(dev)) {
       break;
     }
     udev_device_unref(dev);
@@ -66,11 +67,10 @@ void UdevHandler::ProcessDeviceList(std::function<bool(udev_device* dev)> pt2Fin
 }
 
 bool UdevHandler::CheckProperty(udev_device* dev, const char* property,
-                                                  const char* propertyValue)
-{
+                                                  const char* propertyValue) {
   if (udev_device_get_property_value(dev, property) != NULL) {
     std::string id(udev_device_get_property_value(dev, property));
-    if(id.compare(propertyValue) == 0) {
+    if (id.compare(propertyValue) == 0) {
       LOG_I("Found %s with autorised value %s", property, propertyValue);
       return true;
     } else {
@@ -84,12 +84,11 @@ bool UdevHandler::CheckProperty(udev_device* dev, const char* property,
   LOG_D("This device node does not have the %s property", property);
 #endif
   return false;
-
 }
 
 bool UdevHandler::IsEvent(udev_device* dev) {
   std::string sysname(udev_device_get_sysname(dev));
-  if(sysname.compare(0,5, "event") != 0) {
+  if (sysname.compare(0, 5, "event") != 0) {
 #ifdef DEBUG
     LOG_D("Is not an evdev node");
 #endif
@@ -122,11 +121,10 @@ void UdevHandler::PrintUdevInfos(udev_device* dev) {
   LOG_I("\nDevcie node path: %s", udev_device_get_devnode(dev));
   udev_list_entry* listEntry;
   udev_list_entry* properties = udev_device_get_properties_list_entry(dev);
-  udev_list_entry_foreach(listEntry, properties){
-    printf("   Property name: %s\n",udev_list_entry_get_name(listEntry));
-    printf("      Property value: %s\n",udev_list_entry_get_value(listEntry));
+  udev_list_entry_foreach(listEntry, properties) {
+    printf("   Property name: %s\n", udev_list_entry_get_name(listEntry));
+    printf("      Property value: %s\n", udev_list_entry_get_value(listEntry));
   }
-
 }
 
 /*void UdevHandler::Monitoring() {
