@@ -13,7 +13,8 @@
 #include <bitset>
 #include <mutex>     // NOLINT [build/c++11]
 
-#define binaire(taille, variable) std::bitset<(taille)>(variable).to_string().c_str()  /*!< bianire  */
+#define binaire(taille, variable)                                              \
+  std::bitset<(taille)>(variable).to_string().c_str() /*!< bianire  */
 
 #define LOG(_l_, _i_, ...) do { \
              printf("| %s | %s[%s, %d]: ", _l_, __FUNCTION__, _i_, __LINE__);\
@@ -22,12 +23,22 @@
           } while (0)                             /*!< Log function */
 #define LOG_TIME() PrintTime();                   /*!< Log time function */
 
-#define LOG_I(...) LOG("INFO", ExtractFileName(__FILE__), __VA_ARGS__)                             /*!< Log info function */
-#define LOG_E(...) LOG_TIME() LOG("ERROR", ExtractFileName(__FILE__), __VA_ARGS__)                 /*!< Log error function */
-#define LOG_W(...) LOG_TIME() LOG("WARNING", ExtractFileName(__FILE__), __VA_ARGS__)               /*!< Log warning function */
+#define LOG_I(...)                                                             \
+  LOG("INFO", ExtractFileName(__FILE__), __VA_ARGS__) /*!< Log info function */
+#define LOG_E(...)                                                             \
+  LOG_TIME()                                                                   \
+  LOG("ERROR", ExtractFileName(__FILE__),                                      \
+      __VA_ARGS__) /*!< Log error function */
+#define LOG_W(...)                                                             \
+  LOG_TIME()                                                                   \
+  LOG("WARNING", ExtractFileName(__FILE__),                                    \
+      __VA_ARGS__) /*!< Log warning function */
 
 #ifdef DEBUG
-#define LOG_D(...) LOG_TIME() LOG("DEBUG", ExtractFileName(__FILE__), __VA_ARGS__)                 /*!< Log debug function */
+#define LOG_D(...)                                                             \
+  LOG_TIME()                                                                   \
+  LOG("DEBUG", ExtractFileName(__FILE__),                                      \
+      __VA_ARGS__) /*!< Log debug function */
 #endif
 
 /**

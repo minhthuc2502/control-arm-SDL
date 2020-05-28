@@ -34,8 +34,8 @@ class TransmitionQueue {
   std::mutex mutexError_;           /*!< mutex to keep ressource error_ */
   std::mutex mutexQueue_;           /*!< mutex to keep ressource queue */
 
-  std::condition_variable condVar_; /*!< condition to verify the changement of wait */
-
+  std::condition_variable
+      condVar_; /*!< condition to verify the changement of wait */
   bool stopExec_;                   /*!< ressource stop excution */
   bool wait_;                       /*!< ressource wait */
   bool error_;                      /*!< ressource error */

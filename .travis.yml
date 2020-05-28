@@ -2,30 +2,45 @@ language: cpp
 # This will run on Travis' 'new' container-based infrastructure
 sudo: required 
 
-# Install dependencies
-addons:
-  apt:
-    packages:
-      - doxygen
-      - cmake
-      - libevdev-dev
-      - libsdl2-dev
-      - libboost-dev
-      - libboost-test-dev
-      - libmicrohttpd-dev
-# Build code
-install:
-  - ./build.sh
-# generate doxygen/ or try to start the server if you want
-script:
-  - doxygen ./doxygen/Doxyfile
-
-# Generate and deploy documentation
-deploy:
-  provider: pages
-  skip_cleanup: true
-  local_dir: doxygen/dox_control_arm_ALD5/html
-  github_token: $GH_REPO_TOKEN
-  on:
-    branch: 
-      - master
+jobs:
+  include:  
+    - stage: tests
+      name: test build
+      # Install dependencies
+      addons:
+        apt:
+          packages:
+            - cmake
+            - libevdev-dev
+            - libsdl2-dev
+            - libboost-dev
+            - libboost-test-dev
+            - libmicrohttpd-dev
+      # Build code
+      script:
+        - ./build.sh 
+    - name: cpplint test coding-style
+      language: python
+      python:
+        - "3.8"
+      install:
+        - pip3 install cpplint
+      script: 
+        - cpplint --recursive --filter=-runtime/references ./src
+        - cpplint --recursive --filter=-runtime/references ./includes
+    - stage: deploy
+      # Install dependencies
+      addons:
+        apt:
+          packages:
+            - doxygen
+      script:
+        - doxygen ./doxygen/Doxyfile
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        local_dir: doxygen/dox_control_arm_ALD5/html
+        github_token: $GH_REPO_TOKEN
+        on:
+          branch: 
+            - master
