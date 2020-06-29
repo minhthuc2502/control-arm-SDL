@@ -51,7 +51,7 @@ Otherwise, you can control robotic's arm by web application which will call rest
 ### Note
 
 - The port used to be called in web application is 3000. If you want to call rest api https in another port, please change url fetched in `app.js` 
-- This example call server on the same host machine, so url is `localhost` . if the server is intalled on another machine, you have to modify the source code to url of server in `app.js` and `requestrest.js`. For example, in this source code, the url is configured with ip address of raspberry PI: `192.168.43.130`.
+- This example call server on the same host machine, so url is `localhost` . if the server is intalled on another machine, you have to modify the source code to url of server in `app.js` and `requestrest.js`. For example, in this source code, you can set the ip address of raspberry PI for: `192.168.43.130`.
 - To access the server, client needs to connect to the same network as server.
 - For other options to run docker container, please see in dockerfile to change the execution command `CMD`.
 

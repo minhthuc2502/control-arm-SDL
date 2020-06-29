@@ -30,6 +30,7 @@ bool ServerController::MoveElbow(int dir){
             #endif
         }
     }
+    cmd += "\r";
     if ((rc = write(fd_, cmd.c_str(), cmd.size())) == -1) {
         LOG_E("write -> %s", strerror(rc));
         return false;
@@ -59,6 +60,7 @@ bool ServerController::MoveShoulder(int dir){
             #endif
         }
     }
+    cmd += "\r";
     if ((rc = write(fd_, cmd.c_str(), cmd.size())) == -1) {
         LOG_E("write -> %s", strerror(rc));
         return false;
@@ -88,6 +90,7 @@ bool ServerController::RotateBase(int dir){
             #endif
         }
     }
+    cmd += "\r";
     if ((rc = write(fd_, cmd.c_str(), cmd.size())) == -1) {
         LOG_E("write -> %s", strerror(rc));
         return false;
@@ -117,6 +120,7 @@ bool ServerController::RotateWrist(int dir){
             #endif
         }
     }
+    cmd += "\r";
     if ((rc = write(fd_, cmd.c_str(), cmd.size())) == -1) {
         LOG_E("write -> %s", strerror(rc));
         return false;
@@ -146,6 +150,7 @@ bool ServerController::MoveGripper(int dir){
             #endif
         }
     }
+    cmd += "\r";
     if ((rc = write(fd_, cmd.c_str(), cmd.size())) == -1) {
         LOG_E("write -> %s", strerror(rc));
         return false;
@@ -175,6 +180,7 @@ bool ServerController::MoveWrist(int dir){
             #endif
         }
     }
+    cmd += "\r";
     if ((rc = write(fd_, cmd.c_str(), cmd.size())) == -1){
         LOG_E("write -> %s", strerror(rc));
         return false;

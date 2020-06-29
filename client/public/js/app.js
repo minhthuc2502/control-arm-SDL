@@ -15,7 +15,7 @@ const message_status    = document.querySelector('#outputfailed');
 const start_stop_button = document.getElementById("start/stop");
 
 var isOpen = false; 
-
+var ipAddr = "https://127.0.0.1:3000";
 command_bleft.onclick = function(){
     ResquestRestHttpArm("base",0);
 }
@@ -67,7 +67,7 @@ command_bwest.onclick = function(){
 start_stop_button.onclick = function(event){
     if(start_stop_button.textContent == "start")
     {
-        const url = "https://192.168.43.130:3000/open";
+        const url = ipAddr + "/open";
         fetch(url).then((response) => {
             response.json().then((data) => {
                 if(data.open.status == "OK"){
@@ -85,7 +85,7 @@ start_stop_button.onclick = function(event){
     }
     else
     {
-        const url = "https://192.168.43.130:3000/close";
+        const url = ipAddr + "/close";
         fetch(url).then((response) => {
             response.json().then((data) => {
                 if(data.close.status == "OK"){

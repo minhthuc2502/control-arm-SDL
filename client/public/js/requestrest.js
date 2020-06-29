@@ -6,11 +6,11 @@ function ResquestRestHttpArm(endpoint,direction,mode = ""){
     {
         if(endpoint == "wrist")
         {
-            url = "https://192.168.43.130:3000/" + endpoint + "?direction=" + direction + "&type=" + mode;
+            url = ipAddr + "/" + endpoint + "?direction=" + direction + "&type=" + mode;
         }
         else
         {
-            url = "https://192.168.43.130:3000/" + endpoint + "?direction=" + direction;
+            url = ipAddr + "/" + endpoint + "?direction=" + direction;
         }
         fetch(url).then((response) => {
             response.json().then((data) => {
