@@ -1,31 +1,32 @@
 /**
+ * Copyright 2020 PHAM Minh Thuc
  * @file logger.hpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief another version of log file. Don't be used.
  */
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef INCLUDES_LOGGER_HPP_
+#define INCLUDES_LOGGER_HPP_
 
 #include <stdarg.h>
 #include <stdio.h>
 #include <string>
-#include <chrono>
+#include <chrono>     // NOLINT [build/c++11]
 #include <bitset>
-#include <mutex>
+#include <mutex>      // NOLINT [build/c++11]
 
-#define binaire(taille, variable) std::bitset<(taille)>(variable).to_string().c_str()       /*!< bianire  */
-
+#define binaire(taille, variable)                                              \
+  std::bitset<(taille)>(variable).to_string().c_str() /*!< bianire  */
 /**
  * @brief log class
  */
 class Logger {
-private:
+ private:
   /** 
    * @brief constructor 
    *  Constructor of class Logger
    */
-  Logger(){};
+  Logger() {}
 
   std::mutex printfMutex_;        /*!< print mutex */
   /**
@@ -39,7 +40,7 @@ private:
    */
   std::string ExtractFileName(const char* file);
 
-public:
+ public:
   /**
    * @brief unable copy with constructor or operator =
    */
@@ -63,7 +64,9 @@ public:
    * @param line index of line
    * @param msg message
    */
-  void LogERROR(const char* function, const char* file, long line, const char* msg, ...);
+  void LogERROR(const char* function,
+                const char* file, int64_t line,
+                const char* msg, ...);
   /**
    * @brief Log perror function
    * @param function name of function
@@ -71,7 +74,9 @@ public:
    * @param line index of line
    * @param libFunction lib function
    */
-  void LogPERROR(const char* function, const char* file, long line, const char* libFunction);
+  void LogPERROR(const char* function,
+                const char* file, int64_t line,
+                const char* libFunction);
   /**
    * @brief Log debug function
    * @param function name of function
@@ -79,7 +84,9 @@ public:
    * @param line index of line
    * @param msg message
    */
-  void LogDEBUG(const char* function, const char* file, long line, const char* msg, ...);
+  void LogDEBUG(const char* function,
+                const char* file,
+                int64_t line, const char* msg, ...);
   /**
    * @brief Log info function
    * @param tag tag
@@ -87,4 +94,4 @@ public:
    */
   void LogINFO(const char* tag, const char* msg, ...);
 };
-#endif
+#endif  // INCLUDES_LOGGER_HPP_

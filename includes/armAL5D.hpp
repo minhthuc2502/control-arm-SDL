@@ -1,34 +1,36 @@
 /**
+ * Copyright 2020 PHAM Minh Thuc
  * @file armAL5D.hpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File contains function to connect, initialize and write command to arm robotic ALD5
  * @see http://www.lynxmotion.com/c-130-al5d.aspx
  */
-#ifndef ARM_AL5D_H
-#define ARM_AL5D_H
+#ifndef INCLUDES_ARMAL5D_HPP_
+#define INCLUDES_ARMAL5D_HPP_
 
-#include "armI.hpp"
-#include "udevhandler.hpp"
-#include <string>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string>
+#include <vector>
+#include "armI.hpp"
+#include "udevhandler.hpp"
 
 #define SUBSYS      "tty"                   /*!< tty driver */
 #define ID_MODEL_P  "ID_MODEL"              /*!< property of ID_MODEL */
 #define ID_MODEL_V  "FT232R_USB_UART"       /*!< value for property ID_MODEL */
 #define ID_SERIAL_P "ID_SERIAL_SHORT"       /*!< property serial port */
-#define ID_SERIAL_V "A104X2IB"              /*!< value for property serial port */
+#define ID_SERIAL_V "A104X2IB"              /*!< value of serial port */
 
 #define BAUDRATE            B9600           /*!< BaudeRate */
 #define DISTANCE            50              /*!< distance each step */
 
-#define SERVO_SPEED_LOW			100             /*!< speed low of servo */
-#define SERVO_SPEED_MEDIUM	500             /*!< speed medium of servo */
-#define SERVO_SPEED_HIGH		1000            /*!< speed high of servo */
+#define SERVO_SPEED_LOW     100             /*!< speed low of servo */
+#define SERVO_SPEED_MEDIUM  500             /*!< speed medium of servo */
+#define SERVO_SPEED_HIGH    1000            /*!< speed high of servo */
 
 #define SERVO_0_LIMIT_H     2100            /*!< position high of servo 0*/
 #define SERVO_0_DEFAULT     1450            /*!< position default of servo 0*/
@@ -69,7 +71,7 @@ typedef struct {
  * @brief ArmAL5D robotique class
 */
 class ArmAL5D:public ArmI, public UdevHandler {
-protected:
+ protected:
   int fd_;                /*!< file descriptive of arm AL5D */
   ARM joints_[6];         /*!< characteristic of each joint */
   /** 
@@ -119,23 +121,24 @@ protected:
    */
   int GetSpeed(int value);
 
-public:
+ public:
   /** 
    * @brief constructor 
    * Constructor of class armAL5D
    * @sa FindDevnode
    */
-  ArmAL5D(): fd_(-1), pt2FindDevnode(std::bind(&ArmAL5D::FindDevnode, this, std::placeholders::_1)){
-  };
+  ArmAL5D(): fd_(-1), pt2FindDevnode(std::bind(&ArmAL5D::FindDevnode,
+                                                this,
+                                                std::placeholders::_1)) {}
   /**
    * @brief destructor
    * Destructeur of class ArmAL5D
    */
   ~ArmAL5D() {
-    if(IsOpen()){
+    if (IsOpen()) {
       this->Close();
     }
-  };
+  }
   /**
    * @brief method inherite from the arm interface, open device
    * @return true if open ArmAL5D sucessfully
@@ -147,7 +150,7 @@ public:
    * @return true if close ArmAL5D sucessfully
    *          false if failed to close ArmAL5D 
    */
-  bool Close(); 
+  bool Close();
   /**
    * @brief this method set arm positon to initial one
    * @return true if move to position initial sucessfully
@@ -163,4 +166,4 @@ public:
   bool Write(arm_event move);
 };
 
-#endif
+#endif  // INCLUDES_ARMAL5D_HPP_

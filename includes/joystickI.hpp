@@ -1,55 +1,57 @@
 /**
+ * Copyright 2020 PHAM Minh Thuc
  * @file joystickI.hpp
  * @author PHAM Minh Thuc
  * @date 7 april 2020
  * @brief File defines all features of a joystick (button). In the range of this project, we use 
  * play station 3 and nintendo switch
  */
-#ifndef JOYSTICK_I_H
-#define JOYSTICK_I_H
+#ifndef INCLUDES_JOYSTICKI_HPP_
+#define INCLUDES_JOYSTICKI_HPP_
 
 #include "armI.hpp"
 
 /**
  * @brief struct of parameter configuration for all buttons of joystick
  */
-typedef struct{
-  int BNorth;           /*!< button north */             
-  int BSouth;           /*!< button south */ 
-  int BEast;            /*!< button east */    
-  int BWest;            /*!< button west */    
-  int BUp;              /*!< button up */    
-  int BDown;            /*!< button down */    
-  int BLeft;            /*!< button left */    
-  int BRight;           /*!< button right */    
-  int BTl;              /*!< button TL */    
-  int BTr;              /*!< button TR */     
-  int BTl1;             /*!< button TL1 */    
-  int BTr1;             /*!< button TR1 */    
-  int BSelect;          /*!< button select */    
-  int BStart;           /*!< button start */    
-  int BHome;            /*!< button home */    
+typedef struct {
+  int BNorth;           /*!< button north */
+  int BSouth;           /*!< button south */
+  int BEast;            /*!< button east */
+  int BWest;            /*!< button west */
+  int BUp;              /*!< button up */
+  int BDown;            /*!< button down */
+  int BLeft;            /*!< button left */
+  int BRight;           /*!< button right */
+  int BTl;              /*!< button TL */
+  int BTr;              /*!< button TR */
+  int BTl1;             /*!< button TL1 */
+  int BTr1;             /*!< button TR1 */
+  int BSelect;          /*!< button select */
+  int BStart;           /*!< button start */
+  int BHome;            /*!< button home */
 } PARAM_CONFIG;
 
 /**
  * @brief JoystickI class for joystick in common
  */
 class JoystickI {
-protected:
+ protected:
   bool isOpen;              /*!< variable inform status of joystick */
   bool haveHat;             /*!< variable inform the joystick have button hat */
-  PARAM_CONFIG pconfigJoy;  /*!< parameter configuration for joystick */  
-public:
+  PARAM_CONFIG pconfigJoy;  /*!< parameter configuration for joystick */
+
+ public:
   /** 
    * @brief constructor 
    * Constructor of class JoystickI
    */
-  JoystickI(): isOpen(false){};
+  JoystickI(): isOpen(false) {}
   /** 
    * @brief destructor 
    * Destructor of class JoystickI
    */
-  virtual ~JoystickI() {};
+  virtual ~JoystickI() {}
 
   /** 
    * @brief virtual method that should return input_event
@@ -77,7 +79,7 @@ public:
   /** 
    * @brief getter for variable isOpen
    */
-  bool IsOpen(){return isOpen;};
+  bool IsOpen() {return isOpen;}
 };
 
-#endif
+#endif  // INCLUDES_JOYSTICKI_HPP_
