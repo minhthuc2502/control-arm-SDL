@@ -6,12 +6,16 @@ The project aims to control a robotic arm with all kind of joystick (home made a
 
 ## User-space applications
 
-The user-space applications can be built using CMake. Some of them have dependencies that you will need to install first: `libevdev-dev libsdl2-dev libudev-dev libboost-dev libmicrohttpd-dev`
+The user-space applications can be built using CMake. Some of them have dependencies that you will need to install first: `libevdev-dev libsdl2-dev libudev-dev libboost-dev libmicrohttpd-dev`. I provided a script to build environment by typing this command:
+
+```
+$ sudo ./get-dependencies.sh
+```
 
 After installing the packages above, if it exists an error not find directory, find directory `libmicrohttpd-dev.so` in your machine and change `include_directories : /usr/lib/x86_64-linux-gnu/` to your directory.
 
-The easiest way to build it is to move to dev/user and run `cmake . && make`. This method allows you to build out of source wherever you want.
-However, in each source directory, a `build.sh` script is provided for the sake of simplicity.
+The easiest way to build it is to move to root directory and run `cmake . && make`. This method allows you to build out of source wherever you want.
+However, in this source directory, a `build.sh .` script is provided for the sake of simplicity.
 
 ## Run applications
 - After compiling source code, you can run program by 2 method:

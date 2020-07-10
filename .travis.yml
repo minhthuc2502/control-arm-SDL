@@ -18,7 +18,7 @@ jobs:
             - libmicrohttpd-dev
       # Build code
       script:
-        - ./build.sh 
+        - ./build.sh .
     - name: cpplint test coding-style
       language: python
       python:

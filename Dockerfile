@@ -17,7 +17,7 @@ RUN apt-get install -y libevdev-dev
 RUN apt-get install -y libsdl2-dev
 RUN apt-get install -y libboost-dev
 RUN apt-get install -y libmicrohttpd-dev
-RUN ./build.sh
+RUN ./build.sh .
 
 ## This command runs your application for control by web app, can change port, and standard http or https
 CMD ["/bin/sh", "-c", "cd out/ && ./armDev -m server-web -p 3000 -s https"]
