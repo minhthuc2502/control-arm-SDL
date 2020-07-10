@@ -30,8 +30,8 @@ set(SOURCES
     src/httpserver.cpp
     )
 
-option(DEBUG "use debug file" OFF)
-if(${CMAKE_C_FLAGS_DEBUG} STREQUAL "-g")
+# option(DEBUG "use debug file" OFF)
+if(CMAKE_BUILD_TYPE MATCHES Debug)
   add_definitions(-DDEBUG)
 endif()
 
@@ -59,7 +59,7 @@ target_link_libraries(armDev
                       microhttpd
                       pthread
                       )
-
+# Install program into usr/local/bin by make install
 install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/armDev
     DESTINATION bin
   RENAME ${CMAKE_PROJECT_NAME}-armDev)
