@@ -1,7 +1,7 @@
 cmake_minimum_required( VERSION 3.1 )
 set (CMAKE_BUILD_TYPE Debug)
 project (C++_arm_PS3joystick)
-set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")  #-Werror -D_REENTRANT")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")  #-Werror -D_REENTRANT -g")
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/CMake)
 find_package(Libevdev REQUIRED)
 find_package(Libudev REQUIRED)
@@ -31,14 +31,14 @@ set(SOURCES
     )
 
 # option(DEBUG "use debug file" OFF)
-if(CMAKE_BUILD_TYPE MATCHES Debug)
+IF(CMAKE_BUILD_TYPE MATCHES Debug)
   add_definitions(-DDEBUG)
-endif()
+ENDIF()
 
 option(RPI "Compile for RPI" OFF)
-if(RPI)
+IF(RPI)
   add_definitions(-DRPI)
-endif()
+ENDIF()
 
 #
 # Define the relation between file execute and source file

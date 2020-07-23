@@ -105,16 +105,19 @@ bool JoystickPS3::GetConfig(char* fileConfig) {
   }
 }
 bool JoystickPS3::Open() {
-  SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+  if (!hotUnplug) {
+    _init();
+    SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+  }
   // Check for joystick
   if (SDL_NumJoysticks() > 0) {
     // open joystick
     joy = SDL_JoystickOpen(0);
     if (joy) {
-      SDL_Log("Opened Joystick\n");
-      SDL_Log("Name: %s\n", SDL_JoystickNameForIndex(0));
-      SDL_Log("Number of axes: %d\n", SDL_JoystickNumAxes(joy));
-      SDL_Log("Nummber of buttons: %d\n", SDL_JoystickNumButtons(joy));
+      LOG_I("Opened Joystick\n");
+      LOG_I("Name: %s\n", SDL_JoystickNameForIndex(0));
+      LOG_I("Number of axes: %d\n", SDL_JoystickNumAxes(joy));
+      LOG_I("Nummber of buttons: %d\n", SDL_JoystickNumButtons(joy));
     } else {
       isOpen = false;
       return false;
@@ -123,7 +126,6 @@ bool JoystickPS3::Open() {
   } else {
     return false;
   }
-  _init();
   return true;
 }
 
@@ -131,18 +133,19 @@ bool JoystickPS3::Open() {
  * Close the connection of joystick with server
 */
 bool JoystickPS3::Close() {
-  if (SDL_JoystickGetAttached(joy)) {       // if joystick have been attached
+  if (SDL_JoystickGetAttached(joy) == SDL_TRUE) {       // if joystick have been attached
     SDL_JoystickClose(joy);                 // close
-    SDL_Log("Joystick closed!");
-    isOpen = false;
+    SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
   }
+  LOG_I("Joystick closed!");
+  isOpen = false;
   return true;
 }
 
 /**
  * Read event on joystick
 */
-  arm_event JoystickPS3::Read() {
+arm_event JoystickPS3::Read() {
   arm_event newMovement = {};
   SDL_Event event;
   // Catch event
@@ -154,6 +157,14 @@ bool JoystickPS3::Close() {
     _set_movement(&event);
   }
   newMovement = _is_new_event();
+  // Handle hot unplugging
+  if (event.type == SDL_JOYDEVICEADDED && isOpen == false) {
+    Open();
+  }
+  if (event.type == SDL_JOYDEVICEREMOVED && isOpen == true) {
+    hotUnplug = true;;
+    Close();
+  }
   return newMovement;
 }
 
@@ -163,16 +174,16 @@ bool JoystickPS3::Close() {
 
 void JoystickPS3::_print_event(SDL_Event* ev) {
   if (ev->type == SDL_JOYAXISMOTION) {
-    printf("Event:  axis %d of joystick value: %d \n",
+    LOG_I("Event:  axis %d of joystick value: %d \n",
     ev->jaxis.axis,  // return axis correspondant on joystick
     ev->jaxis.value);  // return event value
   }
   if (ev->type == SDL_JOYBUTTONDOWN) {
-    printf("Event: button %d of joystick down \n",
+    LOG_I("Event: button %d of joystick down \n",
     ev->jbutton.button); /*return button correspondant on joystick*/
   }
   if (ev->type == SDL_JOYBUTTONUP) {
-    printf("Event: button %d of joystick up \n",
+    LOG_I("Event: button %d of joystick up \n",
     ev->jbutton.button); /*return button correspondant on joystick*/
   }
 }
@@ -185,208 +196,109 @@ void JoystickPS3::_set_movement(SDL_Event* ev) {
     // button South
     if (ev->jbutton.button == pconfigJoy.BSouth) {
       _apply_mask(movement_.BtnStatus, 1, mask_btn_south);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     // button East
     if (ev->jbutton.button == pconfigJoy.BEast) {
       _apply_mask(movement_.BtnStatus, 1, mask_btn_east);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     // button Nord
     if (ev->jbutton.button == pconfigJoy.BNorth) {
       _apply_mask(movement_.BtnStatus, 1, mask_btn_north);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     // button West
     if (ev->jbutton.button == pconfigJoy.BWest) {
-      _apply_mask(movement_.BtnStatus, 1, mask_btn_west);;
-      #ifdef DEBUG
-        LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
+      _apply_mask(movement_.BtnStatus, 1, mask_btn_west);
     }
     // button TL
     if (ev->jbutton.button == pconfigJoy.BTl) {
       _apply_mask(movement_.BtnStatus, 1, mask_btn_tl);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     // button TR
     if (ev->jbutton.button == pconfigJoy.BTr) {
       _apply_mask(movement_.BtnStatus, 1, mask_btn_tr);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     // button TL2 ou ZL
     if (ev->jbutton.button == pconfigJoy.BTl1) {
       _apply_mask(movement_.BtnStatus, 1, mask_btn_thumbl);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     // button TR2 ou ZR
     if (ev->jbutton.button == pconfigJoy.BTr1) {
       _apply_mask(movement_.BtnStatus, 1, mask_btn_thumbr);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     // button start
     if (ev->jbutton.button == pconfigJoy.BStart) {
       _apply_mask(movement_.BtnStatus, 1, mask_btn_start);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     // button Mo
     if (ev->jbutton.button == pconfigJoy.BHome) {
-      #ifdef DEBUG
-        LOG_D("event button %d (value=1)", ev->jbutton.button);
-      #endif
     }
     if (haveHat == false) {
       // button Up
       if (ev->jbutton.button == pconfigJoy.BUp) {
         _apply_mask(movement_.BtnStatus, 1, mask_btn_dpad_up);
-        #ifdef DEBUG
-          LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-        #endif
       }
       // button Down
       if (ev->jbutton.button == pconfigJoy.BDown) {
         _apply_mask(movement_.BtnStatus, 1, mask_btn_dpad_down);
-        #ifdef DEBUG
-          LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-        #endif
       }
       // button Left
       if (ev->jbutton.button == pconfigJoy.BLeft) {
         _apply_mask(movement_.BtnStatus, 1, mask_btn_dpad_left);
-        #ifdef DEBUG
-          LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-        #endif
       }
       // button Right
       if (ev->jbutton.button == pconfigJoy.BRight) {
         _apply_mask(movement_.BtnStatus, 1, mask_btn_dpad_right);
-        #ifdef DEBUG
-          LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-        #endif
       }
+#ifdef DEBUG
+        LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
+            binaire(16, movement_.BtnStatus));
+#endif
     }
   }
   if (ev->type == SDL_JOYBUTTONUP) {
     if (ev->jbutton.button == pconfigJoy.BSouth) {
       _apply_mask(movement_.BtnStatus, 0, mask_btn_south);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=0) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     if (ev->jbutton.button == pconfigJoy.BEast) {
       _apply_mask(movement_.BtnStatus, 0, mask_btn_east);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=0) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     if (ev->jbutton.button == pconfigJoy.BNorth) {
       _apply_mask(movement_.BtnStatus, 0, mask_btn_north);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=0) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     if (ev->jbutton.button == pconfigJoy.BWest) {
-      _apply_mask(movement_.BtnStatus, 0, mask_btn_west);;
-      #ifdef DEBUG
-        LOG_D("event button %d (value=0) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
+      _apply_mask(movement_.BtnStatus, 0, mask_btn_west);
     }
     if (ev->jbutton.button == pconfigJoy.BTl) {
       _apply_mask(movement_.BtnStatus, 0, mask_btn_tl);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=0) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     if (ev->jbutton.button == pconfigJoy.BTr) {
       _apply_mask(movement_.BtnStatus, 0, mask_btn_tr);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=0) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     if (ev->jbutton.button == pconfigJoy.BTl1) {
       _apply_mask(movement_.BtnStatus, 0, mask_btn_thumbl);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     if (ev->jbutton.button == pconfigJoy.BTr1) {
       _apply_mask(movement_.BtnStatus, 0, mask_btn_thumbr);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=1) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     if (ev->jbutton.button == pconfigJoy.BStart) {
       _apply_mask(movement_.BtnStatus, 0, mask_btn_start);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=0) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     if (ev->jbutton.button == pconfigJoy.BUp) {
       _apply_mask(movement_.BtnStatus, 0, mask_btn_dpad_up);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=0) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     if (ev->jbutton.button == pconfigJoy.BDown) {
       _apply_mask(movement_.BtnStatus, 0, mask_btn_dpad_down);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=0) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     if (ev->jbutton.button == pconfigJoy.BLeft) {
       _apply_mask(movement_.BtnStatus, 0, mask_btn_dpad_left);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=0) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
     if (ev->jbutton.button == pconfigJoy.BRight) {
       _apply_mask(movement_.BtnStatus, 0, mask_btn_dpad_right);
-      #ifdef DEBUG
-        LOG_D("event button %d (value=0) => %s", ev->jbutton.button,
-            binaire(16, movement_.BtnStatus));
-      #endif
     }
+#ifdef DEBUG
+    LOG_D("event button %d (value=0) => %s", ev->jbutton.button,
+        binaire(16, movement_.BtnStatus));
+#endif
   }
   if (ev->type == SDL_JOYHATMOTION) {
     if (ev->jhat.value == pconfigJoy.BUp) {

@@ -34,12 +34,10 @@
   LOG("WARNING", ExtractFileName(__FILE__),                                    \
       __VA_ARGS__) /*!< Log warning function */
 
-#ifdef DEBUG
 #define LOG_D(...)                                                             \
   LOG_TIME()                                                                   \
   LOG("DEBUG", ExtractFileName(__FILE__),                                      \
       __VA_ARGS__) /*!< Log debug function */
-#endif
 
 /**
  * @brief method extract file name

@@ -40,7 +40,6 @@ class JoystickI {
   bool isOpen;              /*!< variable inform status of joystick */
   bool haveHat;             /*!< variable inform the joystick have button hat */
   PARAM_CONFIG pconfigJoy;  /*!< parameter configuration for joystick */
-
  public:
   /** 
    * @brief constructor 

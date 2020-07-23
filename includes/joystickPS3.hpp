@@ -93,7 +93,7 @@ class JoystickPS3:public JoystickI {
  private:
   SDL_Joystick *joy;          /*!< joy object defined in SDL library */
   arm_event movement_ = {};   /*!< movement set by signal on joystick */
-
+  bool hotUnplug = false;
   /** 
    * @brief this method is call in joystick open to initialize
    *        the value of joystick

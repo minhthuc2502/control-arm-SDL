@@ -95,23 +95,31 @@ void TransmitionQueue::EventProducer() {
         break;
       }
     }
-
-    arm_event ae = useJoystick_->Read();
-    if (ae.BtnStatus != -1 && ae.AbsStatus != -1 && ae.AccStatus != -1) {
-      if ((ae.BtnStatus + ae.AbsStatus + ae.AccStatus) != 0) {
-        mutexQueue_.lock();
-        queue_.push(ae);
-        mutexQueue_.unlock();
+    if (useJoystick_->IsOpen()) {
+      arm_event ae = useJoystick_->Read();
+      if (ae.BtnStatus != -1 && ae.AbsStatus != -1 && ae.AccStatus != -1) {
+        if ((ae.BtnStatus + ae.AbsStatus + ae.AccStatus) != 0) {
+          mutexQueue_.lock();
+          queue_.push(ae);
+          mutexQueue_.unlock();
+        } else {
+          continue;
+        }
       } else {
-        continue;
+        LOG_E("Fail reading event, stopping thread producer_");
+        {
+          std::lock_guard<std::mutex> lock(mutexError_);
+          error_ = true;
+        }
+        break;
       }
-    } else {
-      LOG_E("Fail reading event, stopping thread producer_");
+    }
+    else {
+      LOG_I("Joystick is disconnected, reconnecting...");
+      while (!useJoystick_->IsOpen())
       {
-        std::lock_guard<std::mutex> lock(mutexError_);
-        error_ = true;
+        useJoystick_->Read();
       }
-      break;
     }
   }
 }

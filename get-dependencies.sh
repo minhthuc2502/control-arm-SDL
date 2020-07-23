@@ -9,6 +9,8 @@ echo "Verifing library installed..."
 listDependencies=(cmake libevdev-dev libsdl2-dev libboost-dev libboost-test-dev libmicrohttpd-dev)
 for dependencie in "${listDependencies[@]}"
 do
+    echo "Ugrade ..."
+    apt upgrade
     if [[ $(dpkg ${dependencie} &> /dev/null) -ne 0 ]]; then
         echo "Downloading ${dependencie}..."
         apt-get -y install ${dependencie}
