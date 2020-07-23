@@ -19,15 +19,16 @@ jobs:
       # Build code
       script:
         - ./build.sh .
-    - name: cpplint test coding-style
-      language: python
-      python:
-        - "3.8"
-      install:
-        - pip3 install cpplint
-      script: 
-        - cpplint --recursive --filter=-runtime/references ./src
-        - cpplint --recursive --filter=-runtime/references ./includes
+    # cpplint test, used in the past
+    # - name: cpplint test coding-style
+    #   language: python
+    #   python:
+    #     - "3.8"
+    #   install:
+    #     - pip3 install cpplint
+    #   script: 
+    #     - cpplint --recursive --filter=-runtime/references ./src
+    #     - cpplint --recursive --filter=-runtime/references ./includes
     - stage: deploy
       # Install dependencies
       addons:
