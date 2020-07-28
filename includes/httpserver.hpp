@@ -25,6 +25,8 @@ using std::string;
  */
 class HttpServer {
  public:
+    static ServerController server;
+    static bool evcatched;
     /** 
      * @brief constructor 
      * Constructor of class HttpServer
@@ -33,12 +35,48 @@ class HttpServer {
 
     /** 
      * @brief this function allows running server on port 3000
-     * @param port listening
-     * @param standard http/https
      */
-    bool HTTPServerRun(int port, char* standard);
-
+    bool HTTPServerRun();
+   /** 
+     * @brief this function allows stopping server on port 3000
+     */
+    bool HTTPServerStop();
+   /**
+    * @brief this function to set port
+    */
+   void setPort(int p) {
+      port = p;
+   }
+   /**
+    * @brief this function to set standard http/https
+    */
+   void setStandard(char *s) {
+      strcpy(standard, s);
+   }
+   /**
+    * @brief this function to get standard http/https
+    */
+   char * getStandard() {
+      return standard;
+   }
+   /**
+    * @brief this function return key_pem
+   */
+   char * getKeyPem() {
+      return key_pem;
+   }
+   /**
+    * @brief this function return cert_pem
+   */
+   char * getCertPem() {
+      return cert_pem;
+   }
  private:
+   char *key_pem;
+   char *cert_pem;
+   struct MHD_Daemon *d;
+   int port;
+   char * standard;
     /** 
      * @brief this function allows send bad response if it occurs problem on server 
      * @param connection pointer of the connection

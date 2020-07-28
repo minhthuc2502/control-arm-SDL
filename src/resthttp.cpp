@@ -71,30 +71,22 @@ bool RestHttp::_open_arm_rest(const string &url,
   ptree openroot;
   ptree open;
   ptree::iterator ptit = openroot.push_back(make_pair("open", open));
-  if (!(ret = server.Open())) {
-    ptit->second.push_back(make_pair("status", pt::ptree(string("Failed"))));
-    ptit->second.push_back(
-        make_pair("error", pt::ptree(string("try with sudo to run server"))));
-    _generate_json_output(&openroot, response);
-    return false;
-  } else {
-    ptit->second.push_back(make_pair(
-        "shoulder",
-        pt::ptree(to_string(server.GetJoint(SHOULDER).actualPosition))));
-    ptit->second.push_back(make_pair(
-        "elbow", pt::ptree(to_string(server.GetJoint(ELBOW).actualPosition))));
-    ptit->second.push_back(make_pair(
-        "base", pt::ptree(to_string(server.GetJoint(BASE).actualPosition))));
-    ptit->second.push_back(make_pair(
-        "gripper",
-        pt::ptree(to_string(server.GetJoint(GRIPPER).actualPosition))));
-    ptit->second.push_back(make_pair(
-        "wrist", pt::ptree(to_string(server.GetJoint(WRIST).actualPosition))));
-    ptit->second.push_back(make_pair(
-        "wristrotation",
-        pt::ptree(to_string(server.GetJoint(WRIST_ROT).actualPosition))));
-    ptit->second.push_back(make_pair("status", pt::ptree(string("OK"))));
-  }
+  ptit->second.push_back(make_pair(
+      "shoulder",
+      pt::ptree(to_string(server.GetJoint(SHOULDER).actualPosition))));
+  ptit->second.push_back(make_pair(
+      "elbow", pt::ptree(to_string(server.GetJoint(ELBOW).actualPosition))));
+  ptit->second.push_back(make_pair(
+      "base", pt::ptree(to_string(server.GetJoint(BASE).actualPosition))));
+  ptit->second.push_back(make_pair(
+      "gripper",
+      pt::ptree(to_string(server.GetJoint(GRIPPER).actualPosition))));
+  ptit->second.push_back(make_pair(
+      "wrist", pt::ptree(to_string(server.GetJoint(WRIST).actualPosition))));
+  ptit->second.push_back(make_pair(
+      "wristrotation",
+      pt::ptree(to_string(server.GetJoint(WRIST_ROT).actualPosition))));
+  ptit->second.push_back(make_pair("status", pt::ptree(string("OK"))));
   _generate_json_output(&openroot, response);
   return true;
 }
@@ -106,13 +98,7 @@ bool RestHttp::_close_arm_rest(const string &url,
   ptree closeroot;
   ptree close;
   ptree::iterator ptit = closeroot.push_back(make_pair("close", close));
-  if (!(ret = server.Close())) {
-    ptit->second.push_back(make_pair("status", pt::ptree(string("Failed"))));
-    _generate_json_output(&closeroot, response);
-    return false;
-  } else {
-    ptit->second.push_back(make_pair("status", pt::ptree(string("OK"))));
-  }
+  ptit->second.push_back(make_pair("status", pt::ptree(string("OK"))));
   _generate_json_output(&closeroot, response);
   return true;
 }

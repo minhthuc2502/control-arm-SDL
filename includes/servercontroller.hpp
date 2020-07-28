@@ -11,18 +11,42 @@
 
 #include "./log.h"
 #include "armAL5D.hpp"
-#include "joystickPS3.hpp"
+
+/**
+ * @brief button type
+ */
+typedef enum {
+  BUTTONNORTH,           /*!< button north */
+  BUTTONSOUTH,           /*!< button south */
+  BUTTONEAST,            /*!< button east */
+  BUTTONWEST,            /*!< button west */
+  BUTTONUP,              /*!< button up */
+  BUTTONDOWN,            /*!< button down */
+  BUTTONLEFT,            /*!< button left */
+  BUTTONRIGHT,           /*!< button right */
+  BUTTONTL,              /*!< button TL */
+  BUTTONTR,              /*!< button TR */
+  BUTTONTL1,             /*!< button TL1 */
+  BUTTONTR1,             /*!< button TR1 */
+  BUTTONSELECT,          /*!< button select */
+  BUTTONSTART,           /*!< button start */
+  BUTTONHOME,            /*!< button home */
+}BTN_ID;
 
 /**
  * @brief ServerController class provide functions independent which control each joint of arm AL5D 
  */
-class ServerController: public ArmAL5D {
+class ServerController {
+ private:
+    ARM joints_[6];         /*!< characteristic of each joint (using instead of mechnisme notifying in the future)*/
  public:
+    int direction;
+    int buttonID;
     /** 
      * @brief constructor 
      * Constructor of class ServerController
      */
-    ServerController() {}
+    ServerController(): direction(0), buttonID(0) {}
     /**
      * @brief destructor
      * Destructeur of class ServerController
@@ -82,5 +106,9 @@ class ServerController: public ArmAL5D {
      * @return joint corresponding
      */
     ARM GetJoint(int index);
+    /** 
+     * @brief to keep position actual of arm AL5D, replace potentially for mechanisme notifying from arm
+     */
+    bool MoveToInitialPosition();
 };
 #endif  // INCLUDES_SERVERCONTROLLER_HPP_

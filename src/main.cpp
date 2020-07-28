@@ -146,7 +146,9 @@ int main(int argc, char *argv[]) {
       LOG_I("Launching Server");
       // for web service
       HttpServer httpserver;
-      httpserver.HTTPServerRun(port, standard);
+      httpserver.setPort(port);
+      httpserver.setStandard(standard);
+      httpserver.HTTPServerRun();
       LOG_I("Program end!");
     }
   }
