@@ -51,6 +51,7 @@ bool ArmAL5D::Close() {
     return false;
   }
   isOpen = false;
+  LOG_I("Arm AL5D closed!");
   return true;
 }
 

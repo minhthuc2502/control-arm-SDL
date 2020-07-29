@@ -122,7 +122,9 @@ bool ServerController::MoveToInitialPosition() {
       joints_[i].limitLow = SERVO_5_LIMIT_L;
       break;
     }
+    joints_[i].actualPosition = joints_[i].initPosition;
   }
   buttonID = BUTTONSTART;
+  return true;
 }
 ARM ServerController::GetJoint(int index) { return joints_[index]; }

@@ -32,6 +32,17 @@ class HttpServer {
      * Constructor of class HttpServer
      */
     HttpServer() {}
+    /** 
+     * @brief Destructor 
+     * Desstructor of class HttpServer
+     */
+    ~ HttpServer() {
+       if (standard != NULL)
+       {
+          delete standard;
+          standard = NULL;
+       }
+    }
 
     /** 
      * @brief this function allows running server on port 3000
@@ -51,6 +62,7 @@ class HttpServer {
     * @brief this function to set standard http/https
     */
    void setStandard(char *s) {
+      standard = new char[strlen(s)];
       strcpy(standard, s);
    }
    /**

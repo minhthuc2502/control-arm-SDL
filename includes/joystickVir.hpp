@@ -36,11 +36,9 @@ typedef enum {
  */
 class JoystickVir:public JoystickI {
  private:
-  int dir;
   int button;
   bool serverStarted;
   arm_event movement_ = {};   /*!< movement set by signal on joystick */
-  HttpServer m_httpserver;
   /** 
    * @brief this method is call in joystick open to initialize
    *        the value of joystick
@@ -53,13 +51,19 @@ class JoystickVir:public JoystickI {
    * @param mask to apply
    */
   void _apply_mask(int32_t &statusRegistre, int value, int mask);
-
+  /** 
+   * @brief this method avoid event repetition in queue, return null event
+   *        or current movment_ value
+   * @return new event
+   */
+  arm_event _is_new_event();
  public:
+  HttpServer m_httpserver;
   /** 
    * @brief constructor 
    *  Constructor of class JoystickPS3
    */
-  JoystickVir(): dir(0), button(0), serverStarted(false) {}
+  JoystickVir(): button(0), serverStarted(false) {}
   /**
    * @brief destructor
    * Destructeur of class JoystickPS3
@@ -87,6 +91,11 @@ class JoystickVir:public JoystickI {
    * @return event read from joystick
    */
   arm_event Read();
+  /** 
+   * @brief method inherite from the joystick interface, get the parameters configuration
+   * @param fileConfig pointer to config file
+   */
+  bool GetConfig(char* fileConfig) {return true;}
 };
 
 #endif // INCLUDES_JOYSTICKVIR_HPP_

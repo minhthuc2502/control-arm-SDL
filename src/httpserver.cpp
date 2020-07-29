@@ -14,6 +14,8 @@
 const char *badpage =
     "<html><head><title></title></head><body><h1>A error occur on "
     "server</h1></body></html>"; /*!< bad response HTML */
+ServerController HttpServer::server;
+bool HttpServer::evcatched;
 
 /** 
  * @brief this function get size of file
@@ -101,7 +103,6 @@ bool HttpServer::HTTPServerRun() {
       }
       return false;
     }
-    //(void) getc(stdin);
     return true;
 }
 
@@ -111,6 +112,7 @@ bool HttpServer::HTTPServerStop() {
       free(cert_pem);
     }
     MHD_stop_daemon(d);
+    return true;
 }
 int HttpServer::_send_bad_response(struct MHD_Connection * connection) {
     static char * bad_response = const_cast<char *>(badpage);
@@ -174,7 +176,9 @@ int HttpServer::_answer_request(void* cls, struct MHD_Connection * connection,
     return _send_bad_response(connection);
   }
   // call api to control arm
-  apicontrol.ResponseRestRequest(url, url_arg, respdata, server);
+  if (apicontrol.ResponseRestRequest(url, url_arg, respdata, server)) {
+    evcatched = true;
+  }
   *ptr = NULL;
   respbuffer = reinterpret_cast<char*>(malloc(respdata.size()+1));
   if (respbuffer == 0) {
@@ -199,6 +203,5 @@ int HttpServer::_answer_request(void* cls, struct MHD_Connection * connection,
   if (respbuffer == 0) {
     return MHD_NO;
   }
-  evcatched = true;
   return ret;
 }

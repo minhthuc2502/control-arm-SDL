@@ -71,6 +71,11 @@ bool RestHttp::_open_arm_rest(const string &url,
   ptree openroot;
   ptree open;
   ptree::iterator ptit = openroot.push_back(make_pair("open", open));
+  if (!(ret = server.MoveToInitialPosition())) {
+    ptit->second.push_back(make_pair("status", pt::ptree(string("Failed"))));
+    _generate_json_output(&openroot, response);
+    return false;
+  }
   ptit->second.push_back(make_pair(
       "shoulder",
       pt::ptree(to_string(server.GetJoint(SHOULDER).actualPosition))));
@@ -94,7 +99,6 @@ bool RestHttp::_open_arm_rest(const string &url,
 bool RestHttp::_close_arm_rest(const string &url,
                                const map<string, string> &argval,
                                string &response, ServerController &server) {
-  int ret;
   ptree closeroot;
   ptree close;
   ptree::iterator ptit = closeroot.push_back(make_pair("close", close));
