@@ -162,7 +162,7 @@ arm_event JoystickPS3::Read() {
     Open();
   }
   if (event.type == SDL_JOYDEVICEREMOVED && isOpen == true) {
-    hotUnplug = true;;
+    hotUnplug = true;
     Close();
   }
   return newMovement;

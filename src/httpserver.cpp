@@ -11,10 +11,11 @@
 #define SERVERKEYFILE "../server.key"   /*!< path of private key */
 #define SERVERCERTFILE "../server.pem"  /*!< path of certificate self-signed */
 
-ServerController server;
 const char *badpage =
     "<html><head><title></title></head><body><h1>A error occur on "
     "server</h1></body></html>"; /*!< bad response HTML */
+ServerController HttpServer::server;
+bool HttpServer::evcatched;
 
 /** 
  * @brief this function get size of file
@@ -73,11 +74,7 @@ static char * load_file(const char *filename) {
   return buffer;
 }
 
-bool HttpServer::HTTPServerRun(int port, char * standard) {
-    struct MHD_Daemon * d;
-    char *key_pem;
-    char *cert_pem;
-
+bool HttpServer::HTTPServerRun() {
     key_pem = load_file(SERVERKEYFILE);
     cert_pem = load_file(SERVERCERTFILE);
     if (!strcmp(standard, "http")) {
@@ -106,7 +103,10 @@ bool HttpServer::HTTPServerRun(int port, char * standard) {
       }
       return false;
     }
-    (void) getc(stdin);
+    return true;
+}
+
+bool HttpServer::HTTPServerStop() {
     if (!strcmp(standard, "https")) {
       free(key_pem);
       free(cert_pem);
@@ -114,7 +114,6 @@ bool HttpServer::HTTPServerRun(int port, char * standard) {
     MHD_stop_daemon(d);
     return true;
 }
-
 int HttpServer::_send_bad_response(struct MHD_Connection * connection) {
     static char * bad_response = const_cast<char *>(badpage);
     int bad_response_len = strlen(bad_response);
@@ -177,7 +176,9 @@ int HttpServer::_answer_request(void* cls, struct MHD_Connection * connection,
     return _send_bad_response(connection);
   }
   // call api to control arm
-  apicontrol.ResponseRestRequest(url, url_arg, respdata, server);
+  if (apicontrol.ResponseRestRequest(url, url_arg, respdata, server)) {
+    evcatched = true;
+  }
   *ptr = NULL;
   respbuffer = reinterpret_cast<char*>(malloc(respdata.size()+1));
   if (respbuffer == 0) {

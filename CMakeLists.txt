@@ -28,6 +28,7 @@ set(SOURCES
     src/servercontroller.cpp
     src/resthttp.cpp
     src/httpserver.cpp
+    src/joystickVir.cpp
     )
 
 # option(DEBUG "use debug file" OFF)
