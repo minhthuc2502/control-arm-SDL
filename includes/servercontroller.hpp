@@ -34,7 +34,8 @@ typedef enum {
 }BTN_ID;
 
 /**
- * @brief ServerController class provide functions independent which control each joint of arm AL5D 
+ * @brief ServerController class provide functions independent which fake position of each joint of arm AL5D
+ * because in this version, there is not mechanisme notifying from arm to joystick in order to indicate position of joints 
  */
 class ServerController {
  private:

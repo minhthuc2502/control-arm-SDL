@@ -37,7 +37,6 @@ typedef enum {
 class JoystickVir:public JoystickI {
  private:
   int button;
-  bool serverStarted;
   arm_event movement_ = {};   /*!< movement set by signal on joystick */
   /** 
    * @brief this method is call in joystick open to initialize
@@ -61,12 +60,12 @@ class JoystickVir:public JoystickI {
   HttpServer m_httpserver;
   /** 
    * @brief constructor 
-   *  Constructor of class JoystickPS3
+   *  Constructor of class JoystickVir
    */
-  JoystickVir(): button(0), serverStarted(false) {}
+  JoystickVir(): button(0) {}
   /**
    * @brief destructor
-   * Destructeur of class JoystickPS3
+   * Destructeur of class JoystickVir
    */
   ~JoystickVir() {
     if (IsOpen()) {
@@ -93,6 +92,7 @@ class JoystickVir:public JoystickI {
   arm_event Read();
   /** 
    * @brief method inherite from the joystick interface, get the parameters configuration
+   * This function not used for joystick virtual in this time
    * @param fileConfig pointer to config file
    */
   bool GetConfig(char* fileConfig) {return true;}
